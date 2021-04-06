@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     titlePaper: {
       backgroundColor: theme.palette.onSurface.highEmphasis,
-      width: '100%',
+      width: 'fit-content',
       textAlign: 'center',
       marginInline: 'auto',
       marginTop: '3px',

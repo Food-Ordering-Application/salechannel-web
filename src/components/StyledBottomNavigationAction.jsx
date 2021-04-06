@@ -16,7 +16,7 @@ const StyledBottomNavigationAction = withStyles((theme) => ({
     lineHeight: '20px',
     letterSpacing: '0.4px',
     '&$selected': {
-      fontSize: '12px',
+      fontSize: '11px',
     }
   },
 }))(BottomNavigationAction);
