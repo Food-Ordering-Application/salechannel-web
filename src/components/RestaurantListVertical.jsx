@@ -2,6 +2,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
 import RestaurantItemLarge from "./RestaurantItemLarge";
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,11 +57,12 @@ const mockedData = [
 
 export default function RestaurantListVertical() {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     mockedData.map((data, index) => (
         <div key={index} className={classes.item}>
-          <RestaurantItemLarge {...data} onClick={() => alert('Clicked!')}/>
+          <RestaurantItemLarge {...data} onClick={() => history.push(`/store`)}/>
         </div>
       )
     )

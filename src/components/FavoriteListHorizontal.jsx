@@ -1,6 +1,7 @@
 import React from "react";
 import {GridList, makeStyles} from "@material-ui/core";
 import FavoriteItemMedium from "./FavoriteItemMedium";
+import {useHistory} from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
     root: {
@@ -42,14 +43,16 @@ const mockedData = [
 
 export default function FavoriteListHorizontal() {
   const classes = useStyle();
+  const history = useHistory();
+
   return (
     <div className={classes.root}>
-      <GridList className={classes.list} spacing={0} >
+      <GridList className={classes.list} spacing={0}>
         {mockedData.map((data, index) =>
           <FavoriteItemMedium
             key={index}
             {...data}
-            onClick={() => alert('Clicked!')}
+            onClick={() => history.push(`/store`)}
           />
         )}
       </GridList>
