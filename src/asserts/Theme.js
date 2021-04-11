@@ -27,10 +27,10 @@ const theme = createMuiTheme({
     h3: {
       fontFamily: `Roboto`,
       fontStyle: `normal`,
-      fontWeight: `normal`,
-      fontSize: `48px`,
-      lineHeight: `56px`,
-      color: `#c4c4c4`,
+      fontWeight: `700`,
+      fontSize: `20px`,
+      lineHeight: `22px`,
+      color: `rgba(0, 0, 0, 0.87)`,
     },
     h4: {
       fontFamily: `Poppins`,
@@ -40,7 +40,7 @@ const theme = createMuiTheme({
       lineHeight: `20px`,
       letterSpacing: `-0.25px`,
       color: `rgba(0, 0, 0, 0.87)`,
-},
+    },
     h5: {
       fontFamily: `Poppins`,
       fontStyle: `normal`,
@@ -96,13 +96,13 @@ const theme = createMuiTheme({
       color: `#c4c4c4`,
     },
     button: {
-      fontFamily: `Roboto`,
+      fontFamily: `Poppins`,
       fontStyle: `normal`,
-      fontWeight: 500,
-      fontSize: `14px`,
-      lineHeight: `16px`,
-      letterSpacing: `1.25px`,
-      textTransform: `uppercase`,
+      fontWeight: 700,
+      fontSize: `16px`,
+      lineHeight: `24px`,
+      letterSpacing: `5%`,
+      textTransform: `capitalize`,
       color: `#c4c4c4`,
     },
     caption: {

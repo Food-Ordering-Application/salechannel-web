@@ -7,6 +7,9 @@ import RecommendedMenuHorizontal from "../components/RecommendedMenuHorizontal";
 import MenuVertical from "../components/MenuVertical";
 import ScrollToShowBackground from "../components/ScrollToShowBackground";
 import CategoryMenu from "../components/CategoryMenu";
+import {Box} from "@material-ui/core";
+import CartSummaryBottom from "../components/CartSummaryBottom";
+import theme from "../asserts/Theme";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -40,13 +43,19 @@ const useStyles = makeStyles(theme => ({
     },
     fab: {
       position: `fixed`,
-      bottom: theme.spacing(2),
       left: 0,
       right: 0,
       display: `flex`,
       justifyContent: `center`,
       zIndex: 1,
     },
+    cart: {
+      position: `fixed`,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 5,
+    }
   })
 );
 
@@ -162,11 +171,16 @@ const categoryList = Object.keys(productList).map(name => ({name: name, count: p
 export default function Restaurant() {
   const classes = useStyles();
   const [info, setInfo] = useState(mockedData);
+  const [cart, setToCart] = useState([]);
 
   const handleFavoriteChange = () => {
     const newInfo = {...info};
     newInfo.isFavorite = !info.isFavorite;
     setInfo(newInfo);
+  };
+  const handleAddToCart = (product) => {
+    const newCart = [...cart, product];
+    setToCart(newCart);
   }
 
   return (
@@ -179,10 +193,13 @@ export default function Restaurant() {
           />
         </div>
       </ScrollToShowBackground>
-
-      <div className={classes.fab}>
+      <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
         <CategoryMenu categoryList={categoryList} onclick={(index) => alert(index)}/>
-      </div>
+      </Box>
+      <Box className={classes.cart} display={cart.length > 0 ? `flex` : `none`}>
+        <CartSummaryBottom cart={cart}/>
+      </Box>
+
       <img className={classes.cover} src={mockedData.cover} alt={mockedData.name}/>
       <div className={classes.content}>
         <div className={classes.info}>
@@ -195,7 +212,7 @@ export default function Restaurant() {
           <RecommendedMenuHorizontal/>
         </div>
         <div className={classes.menu}>
-          <MenuVertical productList={productList}/>
+          <MenuVertical productList={productList} onAddToCart={handleAddToCart}/>
         </div>
       </div>
     </>
