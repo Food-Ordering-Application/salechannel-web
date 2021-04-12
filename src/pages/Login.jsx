@@ -116,7 +116,7 @@ export default function Login() {
         <Grid container justify="center">
           <Grid item>
             <Typography variant="subtitle1" color="inherit">
-              <Box fontSize={14} pt={5}>Chưa có tài khoản? <StyledLink to="/register">Đăng nhập</StyledLink></Box>
+              <Box fontSize={14} pt={5}>Chưa có tài khoản? <StyledLink to="/register">Đăng ký</StyledLink></Box>
             </Typography>
           </Grid>
         </Grid>
