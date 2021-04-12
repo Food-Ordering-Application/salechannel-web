@@ -1,101 +1,126 @@
-import React from "react";
-import {Button, CssBaseline, Grid, Link, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, Button, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
+import {useHistory} from 'react-router-dom';
+import StyledLink from "../components/StyledLink";
+import {ChevronLeft} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
-    backgroundColor: theme.palette.primary.l0,
+  },
+  back: {
+    position: `absolute`,
+    top: 0,
+    left: 0,
+    color: theme.palette.surface.light,
+  },
+  label: {
+    height: `35vh`,
+    background: `linear-gradient(45deg,${theme.palette.primary.main},${theme.palette.primary.l2})`,
+    color: theme.palette.surface.light,
+    borderRadius: theme.spacing(0, 0, 8, 0),
     padding: theme.spacing(2),
   },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paperContainer:{
-    borderRadius: theme.spacing(2),
-    boxShadow: theme.effect.dp04.boxShadow,
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
+    padding: theme.spacing(2),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(1),
     color: theme.palette.surface.light,
-    borderRadius: theme.spacing(1.25),
-  },
+  }
 }));
 
 export default function Login() {
   const classes = useStyles();
+  const history = useHistory();
+  const [username, setUsername] = useState(``);
+  const [password, setPassword] = useState(``);
+
+  const handleNameChange = (e) => {
+    setUsername(`${e.target.value}`);
+  }
+  const handlePasswordChange = (e) => {
+    setPassword(`${e.target.value}`);
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({username, password});
+  }
+
   return (
-    <Grid container component="main" justify="center" alignItems="center" className={classes.root}>
-      <CssBaseline/>
-      <Grid item xs={false} sm={4} md={7} className={classes.image}/>
-      <Grid item xs={12} sm={8} md={5} component={Paper} className={classes.paperContainer}>
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h3">
-            SIGN IN
+    <Box className={classes.root}>
+      <Box className={classes.back}>
+        <IconButton color="inherit" onClick={() => history.goBack()}>
+          <ChevronLeft/>
+        </IconButton>
+      </Box>
+      <Grid container direction="column" justify="flex-end" className={classes.label}>
+        <Grid item>
+          <Typography variant="h2" color="inherit">
+            <Box fontSize={40}>Đăng nhập</Box>
           </Typography>
-          <form className={classes.form} noValidate>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign in
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
-        </div>
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle2" color="inherit">
+            <Box>Vui lòng điền tên tài khoản và mật khẩu</Box>
+          </Typography>
+        </Grid>
       </Grid>
-    </Grid>
+      <form noValidate className={classes.form}>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="username"
+          label="User Name"
+          name="username"
+          autoComplete="username"
+          autoFocus
+          value={username}
+          onChange={handleNameChange}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          onChange={handlePasswordChange}
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={handleSubmit}
+        >
+          Đăng nhập
+        </Button>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <Typography variant="subtitle1" color="inherit">
+              <Box fontSize={14}>
+                <StyledLink to="/reset-password">Quên mật khẩu</StyledLink>
+              </Box>
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container justify="center">
+          <Grid item>
+            <Typography variant="subtitle1" color="inherit">
+              <Box fontSize={14} pt={5}>Chưa có tài khoản? <StyledLink to="/register">Đăng nhập</StyledLink></Box>
+            </Typography>
+          </Grid>
+        </Grid>
+      </form>
+    </Box>
   );
 }
