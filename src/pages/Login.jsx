@@ -1,62 +1,101 @@
 import React from "react";
-// import '../notassets/css/notmain.css';
+import {Button, CssBaseline, Grid, Link, makeStyles, Paper, TextField, Typography} from "@material-ui/core";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    height: '100vh',
+    backgroundColor: theme.palette.primary.l0,
+    padding: theme.spacing(2),
+  },
+  image: {
+    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paperContainer:{
+    borderRadius: theme.spacing(2),
+    boxShadow: theme.effect.dp04.boxShadow,
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    color: theme.palette.surface.light,
+    borderRadius: theme.spacing(1.25),
+  },
+}));
 
 export default function Login() {
+  const classes = useStyles();
   return (
-    <form className="registration-form py-5" method="POST" id="loginForm"
-          style={{margin: "0 auto 20px auto"}}>
-      <div className="card mb-0">
-        <div className="card-body">
-          <div className="text-center mb-3">
-            <img
-              src="{{ substr(url('/'), 0, strrpos(url('/'), '/')) }}/assets/img/logos/{{ config('appSettings.storeLogo') }}"
-              alt="logo" className="img-fluid mb-3 mt-2" style={{width: "135px"}}/>
-            <h5 className="mb-0">Login to Dashboard</h5>
-            <span className="d-block text-muted">Enter your credentials below</span>
-          </div>
-          <div className="form-group form-group-feedback form-group-feedback-left">
-            <input type="email" className="form-control" placeholder="Email" name="email" value="{{ old('email') }}"/>
-            <div className="form-control-feedback">
-              <i className="icon-user text-muted"></i>
-            </div>
-          </div>
-          <div className="form-group form-group-feedback form-group-feedback-left">
-            <input type="password" className="form-control" placeholder="Password" name="password"/>
-            <div className="form-control-feedback">
-              <i className="icon-lock2 text-muted"></i>
-            </div>
-          </div>
-          <div className="form-group form-group-feedback form-group-feedback-left">
-            <label className="d-flex align-items-center">
-              <input type="checkbox" checked="checked" name="remember" className="mr-1"
-                     style={{height: "1rem", width: "1rem"}}/>
-              <span>Remember me?</span>
-            </label>
-
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-block"
-                      style={{height: "2.8rem", "font-size": "1rem"}}>
-                Log in
-                <i className="icon-circle-right2 ml-2"></i>
-              </button>
-            </div>
-
-
-            {/*@if(config('appSettings.enPassResetEmail') == 'true')*/}
-            {/*<div className="mb-2">*/}
-            {/*  <a href="/">Forgot Password?</a>*/}
-            {/*</div>*/}
-            {/*@endif*/}
-
-            <div className="content-divider text-muted form-group"><span> OR </span></div>
-            <div className="content d-flex justify-content-center align-items-center mt-3">
-              <a className="btn btn-lg btn-registerBtn mr-2" href="/">Register for Store</a>
-              <a className="btn btn-lg btn-registerBtn" href="/">Register for Delivery</a>
-            </div>
-          </div>
+    <Grid container component="main" justify="center" alignItems="center" className={classes.root}>
+      <CssBaseline/>
+      <Grid item xs={false} sm={4} md={7} className={classes.image}/>
+      <Grid item xs={12} sm={8} md={5} component={Paper} className={classes.paperContainer}>
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h3">
+            SIGN IN
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign in
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
         </div>
-        </div>
-    </form>
-);
+      </Grid>
+    </Grid>
+  );
 }
