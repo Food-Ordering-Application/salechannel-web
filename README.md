@@ -12,3 +12,5 @@ Please open [the link](https://smartfood.vercel.app/) in **_portrait view mode_*
 ![alt text](https://i.ibb.co/mBnFWfH/Smart-Food-Restaurant-Detail-v1-0.png "Restaurant Detail")
 ![alt text](https://i.ibb.co/fp8SPTv/Smart-Food-Food-Detail-v1-0.png "Product Detail")
 ![alt text](https://i.ibb.co/mG7Pb13/Smart-Food-Add-To-Cart-v1-0.png "Add product to card")
+![alt text](https://i.ibb.co/tZNHFyP/Smart-Food-Login-v1-0.png "Login")
+![alt text](https://i.ibb.co/SQqdpQs/Smart-Food-Register-v1-0.png "Register")

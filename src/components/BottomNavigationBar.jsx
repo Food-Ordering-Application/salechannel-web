@@ -8,6 +8,7 @@ import NotificationIcon from "../asserts/icons/Notification";
 import SearchIcon from "../asserts/icons/Search";
 import ShoppingBagIcon from "../asserts/icons/ShoppingBag";
 import UserIcon from "../asserts/icons/User";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -47,23 +48,37 @@ export default function BottomNavigationBar() {
         className={classes.root}
       >
         <StyledBottomNavigationAction label="Gần tôi"
-                                      icon={<LocationIcon/>}/>
+                                      icon={<LocationIcon/>}
+                                      component={Link}
+                                      to="/"
+        />
         <StyledBottomNavigationAction label="Thông báo"
+                                      component={Link}
+                                      to="/"
                                       icon={
                                         <StyledBadge badgeContent={1} color='primary'>
                                           <NotificationIcon/>
                                         </StyledBadge>
                                       }/>
         <StyledBottomNavigationAction label="Khám phá"
-                                      icon={<SearchIcon/>}/>
+                                      icon={<SearchIcon/>}
+                                      component={Link}
+                                      to="/"
+        />
         <StyledBottomNavigationAction label="Giỏ hàng"
                                       icon={
                                         <StyledBadge badgeContent={1} color='primary'>
                                           <ShoppingBagIcon/>
                                         </StyledBadge>
-                                      }/>
+                                      }
+                                      component={Link}
+                                      to="/"
+        />
         <StyledBottomNavigationAction label="Tài khoản"
-                                      icon={<UserIcon/>}/>
+                                      icon={<UserIcon/>}
+                                      component={Link}
+                                      to="/login"
+        />
       </BottomNavigation>
     </div>
   );

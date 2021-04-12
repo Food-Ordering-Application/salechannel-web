@@ -75,7 +75,7 @@ export default function Login() {
           required
           fullWidth
           id="username"
-          label="User Name"
+          label="Tên tài khoản"
           name="username"
           autoComplete="username"
           autoFocus
@@ -88,7 +88,7 @@ export default function Login() {
           required
           fullWidth
           name="password"
-          label="Password"
+          label="Mật khẩu"
           type="password"
           id="password"
           autoComplete="current-password"

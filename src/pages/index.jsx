@@ -4,6 +4,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Restaurant from "./Restaurant";
 import Register from "./Register";
+import Account from "./Account";
 
 
 export default function IndexComponent() {
@@ -13,6 +14,7 @@ export default function IndexComponent() {
       <Route exact path='/store'><Restaurant/></Route>
       <Route exact path='/login'><Login/></Route>
       <Route exact path='/register'><Register/></Route>
+      <Route exact path='/account'><Account/></Route>
     </Switch>
   );
 }
