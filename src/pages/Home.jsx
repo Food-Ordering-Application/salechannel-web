@@ -21,13 +21,13 @@ const useStyle = makeStyles((theme) => ({
       padding: theme.spacing(2),
     },
     label: {
-      paddingInline: theme.spacing(2),
+      padding: theme.spacing(0, 2),
     },
     categoryList: {
       padding: theme.spacing(1, 0, 2, 0),
     },
     restaurantList: {
-      paddingInline: theme.spacing(2),
+      padding: theme.spacing(0, 2),
     }
   })
 );

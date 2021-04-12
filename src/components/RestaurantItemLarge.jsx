@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '16px',
   },
   divider: {
-    marginBlock: '5px',
+    margin: theme.spacing(0.75, 0),
   },
   horizontalContent: {
     display: 'flex',

@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
       color: theme.palette.onSurface.disabled,
     },
     divider: {
-      marginBlock: theme.spacing(0.5),
+      margin: theme.spacing(0.5, 0),
     },
   })
 );

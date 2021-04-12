@@ -5,7 +5,7 @@ import {GridListTile, Paper, Typography, makeStyles} from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '75px',
-      marginInline: theme.spacing(1),
+      margin: theme.spacing(0, 1),
       '&:first-child': {
         marginLeft: theme.spacing(2),
       },
@@ -19,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.onSurface.highEmphasis,
       width: 'fit-content',
       textAlign: 'center',
-      marginInline: 'auto',
+      margin: theme.spacing(0, 'auto'),
       marginTop: '3px',
     },
     titleText: {
-      marginInline: '6px',
+      margin: theme.spacing(0, 0.75),
       color: theme.palette.surface.light,
       fontFamily: theme.font.family,
       letterSpacing: theme.font.letterSpacing,

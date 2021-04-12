@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
       zIndex: 10,
     },
     info: {
-      marginInline: `auto`,
+      margin: `0 auto`,
     },
     label: {
       padding: theme.spacing(2),
