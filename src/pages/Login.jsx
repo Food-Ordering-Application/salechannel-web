@@ -3,6 +3,7 @@ import {Box, Button, Grid, IconButton, makeStyles, TextField, Typography} from "
 import {useHistory} from 'react-router-dom';
 import StyledLink from "../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
+import OTPVerificationDialog from "../components/LoginPageComponents/OTPVerificationDialog";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,6 +38,7 @@ export default function Login() {
   const history = useHistory();
   const [username, setUsername] = useState(``);
   const [password, setPassword] = useState(``);
+  const [open, setOpen] = useState(true);
 
   const handleNameChange = (e) => {
     setUsername(`${e.target.value}`);
@@ -121,6 +123,7 @@ export default function Login() {
           </Grid>
         </Grid>
       </form>
+      <OTPVerificationDialog open={open} handleClose={() => setOpen(!open)}/>
     </Box>
   );
 }

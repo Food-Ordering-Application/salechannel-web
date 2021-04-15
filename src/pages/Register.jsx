@@ -3,6 +3,9 @@ import {Box, Button, Grid, IconButton, makeStyles, TextField, Typography} from "
 import {useHistory} from 'react-router-dom';
 import StyledLink from "../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
+import CustomerService from "../services/customerService"
+import {useDispatch} from "react-redux";
+import {showError} from "../redux/snackbar/snackbarSlice";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,12 +38,13 @@ const useStyles = makeStyles(theme => ({
 export default function Register() {
   const classes = useStyles();
   const history = useHistory();
-  const [username, setUsername] = useState(``);
+  const dispatch = useDispatch();
+  const [phoneNumber, setPhoneNumber] = useState(``);
   const [password1, setPassword1] = useState(``);
   const [password2, setPassword2] = useState(``);
 
-  const handleNameChange = (e) => {
-    setUsername(`${e.target.value}`);
+  const handlePhoneNumberChange = (e) => {
+    setPhoneNumber(`${e.target.value}`);
   }
   const handlePasswordChange1 = (e) => {
     setPassword1(`${e.target.value}`);
@@ -50,8 +54,10 @@ export default function Register() {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log({username, password1, password2});
+    CustomerService.register(phoneNumber, password1)
+      .then(data => console.log(data))
+      .catch(error => console.log(error));
+    dispatch(showError(`Some text`));
   }
 
   return (
@@ -69,7 +75,7 @@ export default function Register() {
         </Grid>
         <Grid item>
           <Typography variant="subtitle2" color="inherit">
-            <Box>Vui lòng nhập tên tài khoản và mật khẩu</Box>
+            <Box>Vui lòng nhập số điện thoại và mật khẩu</Box>
           </Typography>
         </Grid>
       </Grid>
@@ -79,13 +85,14 @@ export default function Register() {
           margin="normal"
           required
           fullWidth
-          id="username"
-          label="Tên tài khoản"
-          name="username"
-          autoComplete="username"
+          id="phoneNumber"
+          label="Số điện thoại"
+          name="phoneNumber"
+          autoComplete="phoneNumber"
           autoFocus
-          value={username}
-          onChange={handleNameChange}
+          type="number"
+          value={phoneNumber}
+          onChange={handlePhoneNumberChange}
         />
         <TextField
           variant="outlined"

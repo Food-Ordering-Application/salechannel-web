@@ -33,7 +33,7 @@ const theme = createMuiTheme({
       color: `rgba(0, 0, 0, 0.87)`,
     },
     h4: {
-      fontFamily: `Poppins`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
       fontWeight: `600`,
       fontSize: `18px`,
@@ -51,9 +51,9 @@ const theme = createMuiTheme({
       color: `rgba(0, 0, 0, 0.87)`,
     },
     h6: {
-      fontFamily: `Poppins`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: `14px`,
       lineHeight: `14px`,
       letterSpacing: `-0.25px`,

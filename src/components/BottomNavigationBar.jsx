@@ -77,7 +77,7 @@ export default function BottomNavigationBar() {
         <StyledBottomNavigationAction label="Tài khoản"
                                       icon={<UserIcon/>}
                                       component={Link}
-                                      to="/login"
+                                      to="/account"
         />
       </BottomNavigation>
     </div>
