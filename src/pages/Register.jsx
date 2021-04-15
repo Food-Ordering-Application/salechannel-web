@@ -5,7 +5,7 @@ import StyledLink from "../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
 import CustomerService from "../services/customerService"
 import {useDispatch} from "react-redux";
-import {showError} from "../redux/snackbar/snackbarSlice";
+import {showError, showSuccess} from "../redux/snackbar/snackbarSlice";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,9 +55,13 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     CustomerService.register(phoneNumber, password1)
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
-    dispatch(showError(`Some text`));
+      .then(() => {
+        dispatch(showSuccess(`Tạo tài khoản thành công`));
+        history.replace(`/login`);
+      })
+      .catch(error => {
+        dispatch(showError(error));
+      });
   }
 
   return (
@@ -90,7 +94,7 @@ export default function Register() {
           name="phoneNumber"
           autoComplete="phoneNumber"
           autoFocus
-          type="number"
+          type="tel"
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
         />

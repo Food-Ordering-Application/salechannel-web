@@ -4,6 +4,10 @@ import {useHistory} from 'react-router-dom';
 import StyledLink from "../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
 import OTPVerificationDialog from "../components/LoginPageComponents/OTPVerificationDialog";
+import CustomerService from "../services/customerService";
+import {useDispatch} from "react-redux";
+import {showError, showSuccess} from "../redux/snackbar/snackbarSlice";
+import {setCustomer} from "../redux/customer/customerSlice";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,19 +40,33 @@ const useStyles = makeStyles(theme => ({
 export default function Login() {
   const classes = useStyles();
   const history = useHistory();
-  const [username, setUsername] = useState(``);
+  const dispatch = useDispatch();
+  const [phoneNumber, setPhoneNumber] = useState(``);
   const [password, setPassword] = useState(``);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleNameChange = (e) => {
-    setUsername(`${e.target.value}`);
+    setPhoneNumber(`${e.target.value}`);
   }
   const handlePasswordChange = (e) => {
     setPassword(`${e.target.value}`);
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({username, password});
+    CustomerService.login(phoneNumber, password)
+      .then((data) => {
+        console.log(data);
+        dispatch(setCustomer(data));
+        if (!data.user.isPhoneNumberVerified) {
+          CustomerService.requestOTP(data.access_token)
+            .then(() => setOpen(true))
+            .catch(error => dispatch(showError(error)));
+        } else {
+          dispatch(showSuccess(`Đăng nhập thành công`));
+          history.replace("/");
+        }
+      })
+      .catch(error => dispatch(showError(error)));
   }
 
   return (
@@ -81,7 +99,7 @@ export default function Login() {
           name="username"
           autoComplete="username"
           autoFocus
-          value={username}
+          value={phoneNumber}
           onChange={handleNameChange}
         />
         <TextField

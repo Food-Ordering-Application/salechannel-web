@@ -29,5 +29,5 @@ export const snackbarSlice = createSlice({
   }
 });
 
-export const {showInfo, showError, hideSnackbar} = snackbarSlice.actions;
+export const {showInfo, showError, showSuccess, hideSnackbar} = snackbarSlice.actions;
 export default snackbarSlice.reducer;

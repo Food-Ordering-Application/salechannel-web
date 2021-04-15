@@ -7,7 +7,7 @@ const CustomerService = {
   register: async function (phoneNumber, password) {
     try {
       const res = await axios.post(`${BASEURL}/customer`, {phoneNumber, password});
-      return res.data;
+      return res.data.data;
     } catch (error) {
       const res = error.response;
       if (res.status === 409)
@@ -19,7 +19,7 @@ const CustomerService = {
   login: async function (phoneNumber, password) {
     try {
       const res = await axios.post(`${BASEURL}/customer/login`, {phoneNumber, password});
-      return res.data;
+      return res.data.data;
     } catch (error) {
       const res = error.response;
       if (res.status === 401)
@@ -39,7 +39,8 @@ const CustomerService = {
 
   submitOTP: async function (otp, token) {
     try {
-      await axios.post(`${BASEURL}/customer/send-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
+      const res = await axios.post(`${BASEURL}/customer/verify-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
+      console.log(res);
       return true;
     } catch (error) {
       const res = error.response;

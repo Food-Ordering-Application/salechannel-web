@@ -2,13 +2,22 @@ import {createSlice} from "@reduxjs/toolkit";
 
 export const customerSlice = createSlice({
   name: `customer`,
-  initialState: {},
+  initialState: {
+    user: null,
+    accessToken: null
+  },
   reducers: {
-    login: state => {
-
+    setCustomer: (state, action) => {
+      const {user, access_token} = action.payload;
+      state.user = user;
+      state.accessToken = access_token;
     },
-    logout: state => {
-
+    removeCustomer: state => {
+      state.user = undefined;
+      this.state.accessToken = undefined;
     }
   },
 });
+
+export const {setCustomer, removeCustomer} = customerSlice.actions;
+export default customerSlice.reducer;

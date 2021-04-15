@@ -9,19 +9,29 @@ import {
   TextField
 } from "@material-ui/core";
 import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import CustomerService from "../../../services/customerService";
+import {showError, showSuccess} from "../../../redux/snackbar/snackbarSlice";
 
 export default function OTPVerificationDialog({open, handleClose}) {
   const [otp, setOtp] = useState(``);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.customer.accessToken);
+  console.log(`Token ${token}`);
 
   const handleTextChange = (e) => {
     e.preventDefault();
     setOtp(`${e.target.value}`);
   }
   const handleSubmit = () => {
-    console.log(otp);
-    history.replace(`/`);
-    handleClose();
+    CustomerService.submitOTP(otp, token)
+      .then(() => {
+        dispatch(showSuccess(`Xác thực tài khoản thành công`));
+        handleClose();
+        history.replace(`/`);
+      })
+      .catch(error => dispatch(showError(error)));
   }
 
   return (
