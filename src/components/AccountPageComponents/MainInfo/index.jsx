@@ -1,8 +1,8 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar, Box, Button, Grid, Typography} from "@material-ui/core";
-import bl from "./bl";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MainInfo() {
   const classes = useStyles();
-  const userData = bl();
+  const userData = useSelector((state)=>state.customer.user);
 
   if (!userData)
     return (
@@ -49,7 +49,7 @@ export default function MainInfo() {
           </Box>
           <Box pt={1} className={classes.info}>
             <Typography variant="h5" color="inherit">
-              <Box fontSize={12}>0935123456</Box>
+              <Box fontSize={12}>{userData.phoneNumber}</Box>
             </Typography>
             <Typography variant="h5" color="inherit">
               <Box fontSize={12}>taobanmaya@3que.com</Box>

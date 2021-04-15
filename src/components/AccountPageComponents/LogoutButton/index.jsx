@@ -1,15 +1,18 @@
 import React from "react";
 import {Box, Button, Typography} from "@material-ui/core";
 import {ExitToApp} from "@material-ui/icons";
-import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {removeCustomer} from "../../../redux/customer/customerSlice";
 
 
 export default function LogoutButton() {
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.customer.user);
   const handleLogout = () => {
-
-    history.replace("/");
+    dispatch(removeCustomer());
   }
+
+  if (!user) return <></>;
 
   return (
     <Button variant="outlined" color="primary" fullWidth onClick={handleLogout}>

@@ -4,10 +4,14 @@ import {AccountBalanceWalletOutlined, EditOutlined, LocationOnOutlined, ReceiptO
 
 import CategoryLabel from "../../CategoryLabel";
 import StyledListItem from "./StyledListItem";
+import {useSelector} from "react-redux";
 
 
 export default function AccountActionList() {
   const [open, setOpen] = useState(true);
+  const user = useSelector((state => state.customer.user));
+
+  if (!user) return <></>;
 
   return (
     <>

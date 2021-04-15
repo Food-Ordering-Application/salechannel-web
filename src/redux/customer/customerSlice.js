@@ -12,9 +12,9 @@ export const customerSlice = createSlice({
       state.user = user;
       state.accessToken = access_token;
     },
-    removeCustomer: state => {
+    removeCustomer: (state) => {
       state.user = undefined;
-      this.state.accessToken = undefined;
+      state.accessToken = undefined;
     }
   },
 });
