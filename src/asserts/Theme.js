@@ -87,7 +87,7 @@ const theme = createMuiTheme({
       color: `#c4c4c4`,
     },
     body2: {
-      fontFamily: `Poppins`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
       fontWeight: `400`,
       fontSize: `11px`,
@@ -124,7 +124,7 @@ const theme = createMuiTheme({
       textTransform: 'uppercase',
       color: `#c4c4c4`,
     },
-    fontFamily: [`Poppins`, `Roboto`].join(`,`),
+    fontFamily: [`Lexend`, `Roboto`].join(`,`),
   },
 
   //Color Styles

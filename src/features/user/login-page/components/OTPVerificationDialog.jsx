@@ -10,15 +10,14 @@ import {
 } from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import CustomerService from "../../../services/customerService";
-import {showError, showSuccess} from "../../../redux/snackbar/snackbarSlice";
+import CustomerService from "../../../../services/customerService";
+import {showError, showSuccess} from "../../../common/Snackbar/SnackbarSlice";
 
 export default function OTPVerificationDialog({open, handleClose}) {
   const [otp, setOtp] = useState(``);
   const history = useHistory();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.customer.accessToken);
-  console.log(`Token ${token}`);
 
   const handleTextChange = (e) => {
     e.preventDefault();

@@ -1,13 +1,12 @@
-import React, {useState} from "react";
-import {Box, Button, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {Box, Button, CircularProgress, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
 import {useHistory} from 'react-router-dom';
-import StyledLink from "../components/StyledLink";
+import StyledLink from "../../../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
-import OTPVerificationDialog from "../components/LoginPageComponents/OTPVerificationDialog";
-import CustomerService from "../services/customerService";
-import {useDispatch} from "react-redux";
-import {showError, showSuccess} from "../redux/snackbar/snackbarSlice";
-import {setCustomer} from "../redux/customer/customerSlice";
+import OTPVerificationDialog from "./components/OTPVerificationDialog";
+import {useDispatch, useSelector} from "react-redux";
+import {clearState, loginUser, userSelector} from "../UserSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,30 +43,32 @@ export default function Login() {
   const [phoneNumber, setPhoneNumber] = useState(``);
   const [password, setPassword] = useState(``);
   const [open, setOpen] = useState(false);
+  const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified} = useSelector(userSelector);
 
-  const handleNameChange = (e) => {
-    setPhoneNumber(`${e.target.value}`);
-  }
-  const handlePasswordChange = (e) => {
-    setPassword(`${e.target.value}`);
-  }
   const handleSubmit = (e) => {
     e.preventDefault();
-    CustomerService.login(phoneNumber, password)
-      .then((data) => {
-        console.log(data);
-        dispatch(setCustomer(data));
-        if (!data.user.isPhoneNumberVerified) {
-          CustomerService.requestOTP(data.access_token)
-            .then(() => setOpen(true))
-            .catch(error => dispatch(showError(error)));
-        } else {
-          dispatch(showSuccess(`Đăng nhập thành công`));
-          history.replace("/");
-        }
-      })
-      .catch(error => dispatch(showError(error)));
+    dispatch(loginUser({phoneNumber, password}));
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(showError(errorMessage));
+      dispatch(clearState());
+    }
+    if (isSuccess) {
+      dispatch(clearState());
+      if (!isPhoneNumberVerified)
+        setOpen(true);
+      else
+        history.push('/');
+    }
+  }, [isError, isSuccess])
 
   return (
     <Box className={classes.root}>
@@ -94,13 +95,16 @@ export default function Login() {
           margin="normal"
           required
           fullWidth
-          id="username"
-          label="Tên tài khoản"
-          name="username"
-          autoComplete="username"
+          id="phonenumber"
+          label="Số điện thoại"
+          name="phonenumber"
+          autoComplete="phonenumber"
           autoFocus
           value={phoneNumber}
-          onChange={handleNameChange}
+          onChange={
+            (event) =>
+              setPhoneNumber(`${event.target.value}`)
+          }
         />
         <TextField
           variant="outlined"
@@ -112,7 +116,10 @@ export default function Login() {
           type="password"
           id="password"
           autoComplete="current-password"
-          onChange={handlePasswordChange}
+          onChange={
+            (event) =>
+              setPassword(`${event.target.value}`)
+          }
         />
         <Button
           type="submit"
@@ -121,13 +128,14 @@ export default function Login() {
           color="primary"
           className={classes.submit}
           onClick={handleSubmit}
+          disabled={isFetching}
         >
-          Đăng nhập
+          {isFetching ? <CircularProgress size={26}/> : `Đăng nhập`}
         </Button>
         <Grid container justify="flex-end">
           <Grid item>
             <Typography variant="subtitle1" color="inherit">
-              <Box fontSize={14}>
+              <Box fontSize={18}>
                 <StyledLink to="/reset-password">Quên mật khẩu</StyledLink>
               </Box>
             </Typography>

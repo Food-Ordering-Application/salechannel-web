@@ -5,7 +5,7 @@ import StyledLink from "../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
 import CustomerService from "../services/customerService"
 import {useDispatch} from "react-redux";
-import {showError, showSuccess} from "../redux/snackbar/snackbarSlice";
+import {showError, showSuccess} from "../features/common/Snackbar/SnackbarSlice";
 
 const useStyles = makeStyles(theme => ({
   root: {

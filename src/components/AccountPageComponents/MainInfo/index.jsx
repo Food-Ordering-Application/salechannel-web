@@ -1,8 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Avatar, Box, Button, Grid, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {Avatar, Box, Grid, Typography} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -14,29 +12,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MainInfo() {
+export default function MainInfo({avatar, name, phone, email}) {
   const classes = useStyles();
-  const userData = useSelector((state)=>state.customer.user);
-
-  if (!userData)
-    return (
-      <Grid container justify="center">
-        <Grid item xs="6">
-          <Button variant="contained" color="primary" component={Link} to="/login">
-            <Box color="surface.light">Đăng nhập</Box>
-          </Button>
-        </Grid>
-        <Grid item xs="auto">
-          <Button variant="outlined" color="primary" component={Link} to="/register">Đăng ký</Button>
-        </Grid>
-      </Grid>
-    )
 
   return (
     <Grid container alignItems="center">
       <Grid item>
-        <Avatar alt={"Huỳnh Hữu Đức"}
-                src={`https://yt3.ggpht.com/ytc/AAUvwngNYdyFVFpv4lmWF1piFUDHMHqVm5-yxDXUcpAV=s900-c-k-c0x00ffffff-no-rj`}
+        <Avatar alt={name}
+                src={avatar}
                 className={classes.avatar}
         />
       </Grid>
@@ -44,15 +27,15 @@ export default function MainInfo() {
         <Box pl={2}>
           <Box id="name">
             <Typography variant="h4" color="inherit">
-              <Box fontSize={18}>Nguyễn Văn Hai Dụ</Box>
+              <Box fontSize={18}>{name}</Box>
             </Typography>
           </Box>
           <Box pt={1} className={classes.info}>
             <Typography variant="h5" color="inherit">
-              <Box fontSize={12}>{userData.phoneNumber}</Box>
+              <Box fontSize={12}>{phone}</Box>
             </Typography>
             <Typography variant="h5" color="inherit">
-              <Box fontSize={12}>taobanmaya@3que.com</Box>
+              <Box fontSize={12}>{email}</Box>
             </Typography>
           </Box>
         </Box>

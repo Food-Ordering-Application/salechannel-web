@@ -11,8 +11,8 @@ const CustomerService = {
     } catch (error) {
       const res = error.response;
       if (res.status === 409)
-        throw `Tài khoản đã tồn tại`;
-      throw `Lỗi máy chủ. Vui lòng liên hệ quản trị viên.`;
+        throw new Error(`Tài khoản đã tồn tại`);
+      throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
     }
   },
 
@@ -23,8 +23,8 @@ const CustomerService = {
     } catch (error) {
       const res = error.response;
       if (res.status === 401)
-        throw `Số điện thoại hoặc mật khẩu không đúng`;
-      throw `Lỗi máy chủ. Vui lòng liên hệ quản trị viên.`;
+        throw new Error(`Số điện thoại hoặc mật khẩu không đúng`);
+      throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
     }
   },
 
@@ -33,20 +33,19 @@ const CustomerService = {
       await axios.post(`${BASEURL}/customer/send-otp`, {}, {headers: {"Authorization": `Bearer ${token}`}});
       return true;
     } catch (error) {
-      throw `Lỗi máy chủ. Vui lòng liên hệ quản trị viên.`;
+      throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
     }
   },
 
   submitOTP: async function (otp, token) {
     try {
-      const res = await axios.post(`${BASEURL}/customer/verify-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
-      console.log(res);
+      await axios.post(`${BASEURL}/customer/verify-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
       return true;
     } catch (error) {
       const res = error.response;
       if (res.status === 401)
-        throw `Mã OTP không đúng.`;
-      throw `Lỗi máy chủ. Vui lòng liên hệ quản trị viên.`;
+        throw new Error(`Mã OTP không đúng`);
+      throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
     }
   }
 
