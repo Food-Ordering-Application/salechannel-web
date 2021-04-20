@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, CircularProgress, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
 import {useHistory} from 'react-router-dom';
-import StyledLink from "../../../components/StyledLink";
-import {ChevronLeft} from "@material-ui/icons";
-import OTPVerificationDialog from "./components/OTPVerificationDialog";
 import {useDispatch, useSelector} from "react-redux";
+import {ChevronLeft} from "@material-ui/icons";
+
+import StyledLink from "../../../components/StyledLink";
+import OTPVerificationDialog from "./components/otpVerification-dialog/OTPVerificationDialog";
 import {clearState, loginUser, userSelector} from "../UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {otpSelector, requestOTP} from "./components/otpVerification-dialog/otpSlice";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,8 +45,8 @@ export default function Login() {
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState(``);
   const [password, setPassword] = useState(``);
-  const [open, setOpen] = useState(false);
-  const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified} = useSelector(userSelector);
+  const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified, accessToken} = useSelector(userSelector);
+  const {isRequesting} = useSelector(otpSelector);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,7 +67,7 @@ export default function Login() {
     if (isSuccess) {
       dispatch(clearState());
       if (!isPhoneNumberVerified)
-        setOpen(true);
+        dispatch(requestOTP(accessToken));
       else
         history.push('/');
     }
@@ -128,9 +131,9 @@ export default function Login() {
           color="primary"
           className={classes.submit}
           onClick={handleSubmit}
-          disabled={isFetching}
+          disabled={isFetching || isRequesting}
         >
-          {isFetching ? <CircularProgress size={26}/> : `Đăng nhập`}
+          {isFetching || isRequesting ? <CircularProgress size={26}/> : `Đăng nhập`}
         </Button>
         <Grid container justify="flex-end">
           <Grid item>
@@ -149,7 +152,7 @@ export default function Login() {
           </Grid>
         </Grid>
       </form>
-      <OTPVerificationDialog open={open} handleClose={() => setOpen(!open)}/>
+      <OTPVerificationDialog/>
     </Box>
   );
 }

@@ -5,6 +5,7 @@ import Home from "./Home";
 import Restaurant from "./Restaurant";
 import Register from "./Register";
 import Account from "./Account";
+import Notifications from "../features/notification/notification-page/Notification";
 
 
 export default function IndexComponent() {
@@ -15,6 +16,7 @@ export default function IndexComponent() {
       <Route exact path='/login'><Login/></Route>
       <Route exact path='/register'><Register/></Route>
       <Route exact path='/account'><Account/></Route>
+      <Route exact path='/notifications'><Notifications/></Route>
     </Switch>
   );
 }

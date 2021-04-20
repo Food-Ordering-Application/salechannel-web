@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-export default function BottomNavigationBar() {
+export default function BottomNavigationBar({initSate}) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(initSate || 0);
 
   return (
     <div className={classes.container}>
@@ -54,7 +54,7 @@ export default function BottomNavigationBar() {
         />
         <StyledBottomNavigationAction label="Thông báo"
                                       component={Link}
-                                      to="/"
+                                      to="/notifications"
                                       icon={
                                         <StyledBadge badgeContent={1} color='primary'>
                                           <NotificationIcon/>

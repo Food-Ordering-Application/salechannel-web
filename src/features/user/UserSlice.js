@@ -14,17 +14,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const requestOTP = createAsyncThunk(
-  `user/requestOTP`,
-  async (token, thunkAPI) => {
-    try {
-      await UserApi.requestOTP(token);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
 export const userSlice = createSlice({
   name: `user`,
   initialState: {
@@ -45,7 +34,10 @@ export const userSlice = createSlice({
     clearState: (state) => {
       state.isError = false;
       state.isSuccess = false;
-      state.isSuccess = false;
+      state.isFetching = false;
+      state.isOtpError = false;
+      state.isOtpSuccess = false;
+      state.isOtpFetching = false;
       return state;
     },
     setUser: (state, action) => {
@@ -56,7 +48,10 @@ export const userSlice = createSlice({
     removeUser: (state) => {
       state.phoneNumber = undefined;
       state.accessToken = undefined;
-    }
+    },
+    verifyOtpSuccess: (state) => {
+      state.isPhoneNumberVerified = true;
+    },
   },
   extraReducers: {
     [loginUser.fulfilled]: (state, {payload}) => {
@@ -81,20 +76,8 @@ export const userSlice = createSlice({
       state.isError = true;
       state.errorMessage = payload;
     },
-    [requestOTP.pending]: (state) => {
-      state.isFetching = true;
-    },
-    [requestOTP.fulfilled]: (state) => {
-      state.isFetching = false;
-      state.isSuccess = true;
-    },
-    [requestOTP.rejected]: (state, {payload}) => {
-      state.isFetching = false;
-      state.isError = false;
-      state.errorMessage = payload;
-    },
   }
 });
 
-export const {clearState, setUser, removeUser} = userSlice.actions;
+export const {clearState, setUser, removeUser, verifyOtpSuccess} = userSlice.actions;
 export const userSelector = (state) => state.user;

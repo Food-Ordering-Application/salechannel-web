@@ -7,7 +7,7 @@ const UserApi = {
 
   register: async function (phoneNumber, password) {
     try {
-      const res = await axios.post(`${BASEURL}/customer`, {phoneNumber, password});
+      const res = await axios.post(`${BASEURL}/user/customer`, {phoneNumber, password});
       return res.data.data;
     } catch (error) {
       const response = error.response;
@@ -23,7 +23,7 @@ const UserApi = {
 
   login: async function (phoneNumber, password) {
     try {
-      const res = await axios.post(`${BASEURL}/customer/login`, {phoneNumber, password});
+      const res = await axios.post(`${BASEURL}/user/customer/login`, {phoneNumber, password});
       return res.data.data;
     } catch (error) {
       const response = error.response;
@@ -39,7 +39,7 @@ const UserApi = {
 
   requestOTP: async function (token) {
     try {
-      await axios.post(`${BASEURL}/customer/send-otp`, {}, {headers: {"Authorization": `Bearer ${token}`}});
+      await axios.post(`${BASEURL}/user/customer/send-otp`, {}, {headers: {"Authorization": `Bearer ${token}`}});
       return true;
     } catch (error) {
       const response = error.response;
@@ -53,7 +53,7 @@ const UserApi = {
 
   submitOTP: async function (otp, token) {
     try {
-      await axios.post(`${BASEURL}/customer/verify-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
+      await axios.post(`${BASEURL}/user/customer/verify-otp`, {otp}, {headers: {"Authorization": `Bearer ${token}`}});
       return true;
     } catch (error) {
       const response = error.response;
