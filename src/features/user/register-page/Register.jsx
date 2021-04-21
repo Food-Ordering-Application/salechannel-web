@@ -1,11 +1,20 @@
-import React, {useState} from "react";
-import {Box, Button, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {Box, Button, CircularProgress, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
 import {useHistory} from 'react-router-dom';
-import StyledLink from "../components/StyledLink";
+import StyledLink from "../../../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
-import CustomerService from "../services/customerService"
-import {useDispatch} from "react-redux";
-import {showError, showSuccess} from "../features/common/Snackbar/SnackbarSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {showError, showSuccess} from "../../common/Snackbar/SnackbarSlice";
+import {clearUserState, registerUser, userSelector} from "../UserSlice";
+
+const passwordValidator = (password1, password2) => {
+  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+  if (!strongRegex.test(`${password1}`))
+    throw new Error("Mật khẩu tối thiểu 8 ký tự gồm chữ hoa, thường và số");
+  if (password1 !== password2)
+    throw new Error("Mật khẩu không trùng khớp");
+  return true;
+}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,6 +51,7 @@ export default function Register() {
   const [phoneNumber, setPhoneNumber] = useState(``);
   const [password1, setPassword1] = useState(``);
   const [password2, setPassword2] = useState(``);
+  const {isFetching, isError, isSuccess, errorMessage} = useSelector(userSelector);
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(`${e.target.value}`);
@@ -54,15 +64,24 @@ export default function Register() {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    CustomerService.register(phoneNumber, password1)
-      .then(() => {
-        dispatch(showSuccess(`Tạo tài khoản thành công`));
-        history.replace(`/login`);
-      })
-      .catch(error => {
-        dispatch(showError(error));
-      });
+    try {
+      passwordValidator(password1, password2);
+      dispatch(registerUser({phoneNumber: phoneNumber, password: password1}));
+    } catch (error) {
+      dispatch(showError(error.message));
+    }
   }
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(showError(errorMessage));
+    }
+    if (isSuccess) {
+      dispatch(showSuccess(`Đăng ký thành công`));
+      history.replace(`/login`);
+    }
+    dispatch(clearUserState());
+  }, [isError, isSuccess]);
 
   return (
     <Box className={classes.root}>
@@ -129,8 +148,9 @@ export default function Register() {
           color="primary"
           className={classes.submit}
           onClick={handleSubmit}
+          disabled={isFetching}
         >
-          Đăng ký ngay
+          {isFetching ? <CircularProgress size={26}/> : `Đăng ký ngay`}
         </Button>
         <Grid container justify="center">
           <Grid item>

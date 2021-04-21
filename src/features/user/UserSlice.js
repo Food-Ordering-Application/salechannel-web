@@ -14,6 +14,17 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const registerUser = createAsyncThunk(
+  `user/register`,
+  async ({phoneNumber, password}, thunkAPI) => {
+    try {
+      return await UserApi.register(phoneNumber, password);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message)
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: `user`,
   initialState: {
@@ -31,7 +42,7 @@ export const userSlice = createSlice({
     errorMessage: '',
   },
   reducers: {
-    clearState: (state) => {
+    clearUserState: (state) => {
       state.isError = false;
       state.isSuccess = false;
       state.isFetching = false;
@@ -76,8 +87,20 @@ export const userSlice = createSlice({
       state.isError = true;
       state.errorMessage = payload;
     },
+    [registerUser.pending]: (state) => {
+      state.isFetching = true;
+    },
+    [registerUser.rejected]: (state, {payload}) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload;
+    },
+    [registerUser.fulfilled]: (state) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+    }
   }
 });
 
-export const {clearState, setUser, removeUser, verifyOtpSuccess} = userSlice.actions;
+export const {clearUserState, setUser, removeUser, verifyOtpSuccess} = userSlice.actions;
 export const userSelector = (state) => state.user;

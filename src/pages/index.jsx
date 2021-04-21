@@ -1,9 +1,9 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Login from "../features/user/login-page/Login";
+import Register from "../features/user/register-page/Register";
 import Home from "./Home";
 import Restaurant from "./Restaurant";
-import Register from "./Register";
 import Account from "./Account";
 import Notifications from "../features/notification/notification-page/Notification";
 

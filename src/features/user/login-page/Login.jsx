@@ -6,7 +6,7 @@ import {ChevronLeft} from "@material-ui/icons";
 
 import StyledLink from "../../../components/StyledLink";
 import OTPVerificationDialog from "./components/otpVerification-dialog/OTPVerificationDialog";
-import {clearState, loginUser, userSelector} from "../UserSlice";
+import {clearUserState, loginUser, userSelector} from "../UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {otpSelector, requestOTP} from "./components/otpVerification-dialog/otpSlice";
 
@@ -55,17 +55,17 @@ export default function Login() {
 
   useEffect(() => {
     return () => {
-      dispatch(clearState());
+      dispatch(clearUserState());
     };
   }, [dispatch]);
 
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
-      dispatch(clearState());
+      dispatch(clearUserState());
     }
     if (isSuccess) {
-      dispatch(clearState());
+      dispatch(clearUserState());
       if (!isPhoneNumberVerified)
         dispatch(requestOTP(accessToken));
       else
