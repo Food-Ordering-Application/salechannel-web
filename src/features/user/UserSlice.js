@@ -7,6 +7,7 @@ export const loginUser = createAsyncThunk(
     try {
       const data = await UserApi.login(phoneNumber, password);
       localStorage.setItem(`token`, data.access_token);
+      localStorage.setItem(`user`, JSON.stringify(data.user));
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -25,9 +26,23 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const fetchUser = createAsyncThunk(
+  `user/fetch`,
+  async ({}, thunkAPI) => {
+    try {
+      const token = '';
+      const id = "";
+      return await UserApi.fetchUser(token, id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: `user`,
   initialState: {
+    isAuthenticated: false,
     id: '',
     phoneNumber: '',
     name: '',
@@ -57,8 +72,9 @@ export const userSlice = createSlice({
       state.accessToken = access_token;
     },
     removeUser: (state) => {
-      state.phoneNumber = undefined;
-      state.accessToken = undefined;
+      state = {};
+      state.isAuthenticated = false;
+      return state;
     },
     verifyOtpSuccess: (state) => {
       state.isPhoneNumberVerified = true;
@@ -67,6 +83,7 @@ export const userSlice = createSlice({
   extraReducers: {
     [loginUser.fulfilled]: (state, {payload}) => {
       const user = payload.user;
+      state.isAuthenticated = true;
       state.id = user.id;
       state.phoneNumber = user.phoneNumber;
       state.name = user.name;

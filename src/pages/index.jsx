@@ -4,7 +4,7 @@ import Login from "../features/user/login-page/Login";
 import Register from "../features/user/register-page/Register";
 import Home from "./Home";
 import Restaurant from "./Restaurant";
-import Account from "./Account";
+import Account from "../features/user/account-page/Account";
 import Notifications from "../features/notification/notification-page/Notification";
 
 

@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {Collapse, List, Typography} from "@material-ui/core";
 
-import CategoryLabel from "../../CategoryLabel";
-import StyledListItem from "../AccountActionList/StyledListItem";
+import CategoryLabel from "../../../../components/CategoryLabel";
+import StyledListItem from "./AccountActionList/StyledListItem";
 
 
-export default function FAQsActionList() {
-  const [open, setOpen] = useState(false);
+export default function FAQsActionList({initOpen = false}) {
+  const [open, setOpen] = useState(initOpen);
 
   return (
     <>

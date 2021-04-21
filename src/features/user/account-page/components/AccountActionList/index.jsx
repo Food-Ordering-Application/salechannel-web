@@ -2,16 +2,12 @@ import React, {useState} from "react";
 import {Collapse, List, Typography} from "@material-ui/core";
 import {AccountBalanceWalletOutlined, EditOutlined, LocationOnOutlined, ReceiptOutlined} from "@material-ui/icons";
 
-import CategoryLabel from "../../CategoryLabel";
+import CategoryLabel from "../../../../../components/CategoryLabel";
 import StyledListItem from "./StyledListItem";
-import {useSelector} from "react-redux";
 
 
-export default function AccountActionList() {
-  const [open, setOpen] = useState(true);
-  const user = useSelector((state => state.customer.user));
-
-  if (!user) return <></>;
+export default function AccountActionList({initOpen}) {
+  const [open, setOpen] = useState(initOpen || false);
 
   return (
     <>

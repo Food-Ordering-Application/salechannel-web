@@ -65,7 +65,22 @@ const UserApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
-  }
+  },
+
+  fetchUser: async function (token, id) {
+    try {
+      return (await axios.get(`${BASEURL}/user/customer/${id}`,{headers: {"Authorization": `Bearer ${token}`}})).data.data.user;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        if (response.status === 401 || response.status === 403)
+          throw new Error(`Token không hợp lệ`);
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
 
 }
 
