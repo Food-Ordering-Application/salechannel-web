@@ -5,10 +5,7 @@ export const loginUser = createAsyncThunk(
   `user/login`,
   async ({phoneNumber, password}, thunkAPI) => {
     try {
-      const data = await UserApi.login(phoneNumber, password);
-      localStorage.setItem(`token`, data.access_token);
-      localStorage.setItem(`user`, JSON.stringify(data.user));
-      return data;
+      return await UserApi.login(phoneNumber, password);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -61,9 +58,6 @@ export const userSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.isFetching = false;
-      state.isOtpError = false;
-      state.isOtpSuccess = false;
-      state.isOtpFetching = false;
       return state;
     },
     setUser: (state, action) => {

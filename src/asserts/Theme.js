@@ -25,7 +25,7 @@ const theme = createMuiTheme({
       color: `#c4c4c4`,
     },
     h3: {
-      fontFamily: `Roboto`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
       fontWeight: `700`,
       fontSize: `20px`,
@@ -42,7 +42,7 @@ const theme = createMuiTheme({
       color: `rgba(0, 0, 0, 0.87)`,
     },
     h5: {
-      fontFamily: `Poppins`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
       fontWeight: 500,
       fontSize: `16px`,

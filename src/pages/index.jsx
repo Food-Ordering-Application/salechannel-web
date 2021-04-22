@@ -6,6 +6,7 @@ import Home from "./Home";
 import Restaurant from "./Restaurant";
 import Account from "../features/user/account-page/Account";
 import Notifications from "../features/notification/notification-page/Notification";
+import Checkout from "../features/order/checkout-page/Checkout";
 
 
 export default function IndexComponent() {
@@ -17,6 +18,7 @@ export default function IndexComponent() {
       <Route exact path='/register'><Register/></Route>
       <Route exact path='/account'><Account/></Route>
       <Route exact path='/notifications'><Notifications/></Route>
+      <Route exact path='/checkout'><Checkout/></Route>
     </Switch>
   );
 }
