@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router-dom';
 import Login from "../features/user/login-page/Login";
 import Register from "../features/user/register-page/Register";
 import Home from "./Home";
-import Restaurant from "./Restaurant";
+import Restaurant from "../features/restaurant/restaurant-page/Restaurant";
 import Account from "../features/user/account-page/Account";
 import Notifications from "../features/notification/notification-page/Notification";
 import Checkout from "../features/order/checkout-page/Checkout";
@@ -14,7 +14,7 @@ export default function IndexComponent() {
   return (
     <Switch>
       <Route exact path='/'><Home/></Route>
-      <Route exact path='/store'><Restaurant/></Route>
+      <Route exact path='/store/:id'><Restaurant/></Route>
       <Route exact path='/login'><Login/></Route>
       <Route exact path='/register'><Register/></Route>
       <Route exact path='/account'><Account/></Route>

@@ -4,12 +4,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {Box, LinearProgress} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
+import {useHistory} from "react-router-dom";
 
 export default function Search() {
-  const {restaurants, isFetching, isError, isSuccess, errorMessage} = useSelector(restaurantsListSelector);
+  const {restaurants, isError, isSuccess, errorMessage} = useSelector(restaurantsListSelector);
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  console.log(isFetching);
+  const handleItemClick = (id) => {
+    history.push(`/store/${id}`);
+  }
 
   useEffect(() => {
     dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", category: "CAFEDESSERT"}));
@@ -26,8 +30,12 @@ export default function Search() {
     return (
       <Box>
         {
-          restaurants.map(({name, address, coverImageUrl}, index) => (
-            <RestaurantItemLarge key={index} name={`${name} - ${address}`} image={coverImageUrl}/>
+          restaurants.map(({id, name, address, coverImageUrl}, index) => (
+            <RestaurantItemLarge key={index}
+                                 name={`${name} - ${address}`}
+                                 image={coverImageUrl}
+                                 onClick={() => handleItemClick(id)}
+            />
           ))
         }
       </Box>

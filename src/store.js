@@ -7,12 +7,14 @@ import {userSlice} from "./features/user/UserSlice";
 import {otpSlice} from "./features/user/login-page/components/otpVerification-dialog/otpSlice";
 import {orderSlice} from "./features/order/OrderSlice";
 import {restaurantsListSlice} from "./features/restaurant/RestaurantsListSlice";
+import {restaurantSlice} from "./features/restaurant/RestaurantSlice";
 
 const reducer = combineReducers({
   snackbar: snackbarSlice.reducer,
   user: userSlice.reducer,
   order: orderSlice.reducer,
   otp: otpSlice.reducer,
+  restaurant: restaurantSlice.reducer,
   restaurants: restaurantsListSlice.reducer,
 });
 

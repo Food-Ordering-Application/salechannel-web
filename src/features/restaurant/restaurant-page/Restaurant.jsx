@@ -1,15 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import TopNavigationBar from "../components/TopNavigationBar";
-import RestaurantInfoSumary from "../components/RestaurantInfoSumary";
-import Label from "../components/Label";
-import RecommendedMenuHorizontal from "../components/RecommendedMenuHorizontal";
-import MenuVertical from "../components/MenuVertical";
-import ScrollToShowBackground from "../components/ScrollToShowBackground";
-import CategoryMenu from "../components/CategoryMenu";
-import {Box} from "@material-ui/core";
-import CartSummaryBottom from "../components/CartSummaryBottom";
-import theme from "../asserts/Theme";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import TopNavigationBar from "../../../components/TopNavigationBar";
+import RestaurantInfoSumary from "../../../components/RestaurantInfoSumary";
+import Label from "../../../components/Label";
+import RecommendedMenuHorizontal from "../../../components/RecommendedMenuHorizontal";
+import MenuVertical from "../../../components/MenuVertical";
+import ScrollToShowBackground from "../../../components/ScrollToShowBackground";
+import CategoryMenu from "../../../components/CategoryMenu";
+import {Box, LinearProgress} from "@material-ui/core";
+import CartSummaryBottom from "../../../components/CartSummaryBottom";
+import theme from "../../../asserts/Theme";
+import {fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -172,6 +176,10 @@ export default function Restaurant() {
   const classes = useStyles();
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
+  const {restaurant, isFetching, isError, isSuccess, errorMessage} = useSelector(restaurantSelector);
+  const dispatch = useDispatch();
+  const {id} = useParams();
+  console.log(id);
 
   const handleFavoriteChange = () => {
     const newInfo = {...info};
@@ -183,38 +191,54 @@ export default function Restaurant() {
     setToCart(newCart);
   }
 
-  return (
-    <>
-      <ScrollToShowBackground>
-        <div className={classes.topNavigationBar}>
-          <TopNavigationBar
-            onFavoriteClick={handleFavoriteChange}
-            {...info}
-          />
-        </div>
-      </ScrollToShowBackground>
-      <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
-        <CategoryMenu categoryList={categoryList} onclick={(index) => alert(index)}/>
-      </Box>
-      <Box className={classes.cart} display={cart.length > 0 ? `flex` : `none`}>
-        <CartSummaryBottom cart={cart}/>
-      </Box>
+  useEffect(() => {
+    dispatch(fetchRestaurant({id: id}));
+  }, []);
 
-      <img className={classes.cover} src={mockedData.cover} alt={mockedData.name}/>
-      <div className={classes.content}>
-        <div className={classes.info}>
-          <RestaurantInfoSumary {...mockedData}/>
+  useEffect(() => {
+    if (isError)
+      dispatch(showError(errorMessage));
+  }, [isError]);
+
+  if (isSuccess)
+    return (
+      <>
+        <ScrollToShowBackground>
+          <div className={classes.topNavigationBar}>
+            <TopNavigationBar
+              onFavoriteClick={handleFavoriteChange}
+              {...info}
+            />
+          </div>
+        </ScrollToShowBackground>
+        <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
+          <CategoryMenu categoryList={categoryList} onclick={(index) => alert(index)}/>
+        </Box>
+        <Box className={classes.cart} display={cart.length > 0 ? `flex` : `none`}>
+          <CartSummaryBottom cart={cart}/>
+        </Box>
+
+        <img className={classes.cover} src={restaurant.coverImageUrl} alt={mockedData.name}/>
+        <div className={classes.content}>
+          <div className={classes.info}>
+            <RestaurantInfoSumary name={`${restaurant.name} - ${restaurant.address}`}
+                                  address={restaurant.address}
+                                  distance={2.5}
+            />
+          </div>
+          <div className={classes.label}>
+            <Label uppercase>Recommended</Label>
+          </div>
+          <div className={classes.recommendMenu}>
+            <RecommendedMenuHorizontal/>
+          </div>
+          <div>{JSON.stringify(restaurant)}</div>
+          <div className={classes.menu}>
+            <MenuVertical productList={productList} onAddToCart={handleAddToCart}/>
+          </div>
         </div>
-        <div className={classes.label}>
-          <Label uppercase>Recommended</Label>
-        </div>
-        <div className={classes.recommendMenu}>
-          <RecommendedMenuHorizontal/>
-        </div>
-        <div className={classes.menu}>
-          <MenuVertical productList={productList} onAddToCart={handleAddToCart}/>
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+
+  return <LinearProgress color="primary"/>
 }
