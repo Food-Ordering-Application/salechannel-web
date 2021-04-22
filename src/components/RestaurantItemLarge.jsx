@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function RestaurantItemLarge({image, name, description, rating, timeToPrepare, averagePrice, onClick}) {
+export default function RestaurantItemLarge({image, name, description, rating=0, timeToPrepare=0, averagePrice=0, onClick}) {
   const classes = useStyles();
 
   return (

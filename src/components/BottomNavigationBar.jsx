@@ -63,7 +63,7 @@ export default function BottomNavigationBar({initSate}) {
         <StyledBottomNavigationAction label="Khám phá"
                                       icon={<SearchIcon/>}
                                       component={Link}
-                                      to="/"
+                                      to="/search"
         />
         <StyledBottomNavigationAction label="Giỏ hàng"
                                       icon={
