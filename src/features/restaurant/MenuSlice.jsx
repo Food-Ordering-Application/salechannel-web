@@ -1,30 +1,28 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import RestaurantApi from "../../api/RestaurantApi";
+import {MenuApi} from "../../api/MenuApi";
 
-
-export const fetchRestaurant = createAsyncThunk(
-  `restaurant/fetch`,
+export const fetchMenu = createAsyncThunk(
+  `restaurant/fetchMenu`,
   async ({id}, thunkAPI) => {
     try {
-      return RestaurantApi.fetch(id);
+      return MenuApi.fetchMenu(id);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-
-export const restaurantSlice = createSlice({
-  name: `restaurant`,
+export const menuSlice = createSlice({
+  name: `menu`,
   initialState: {
-    restaurant: null,
+    menu: null,
     isFetching: false,
     isError: false,
     isSuccess: false,
     errorMessage: ``,
   },
   reducers: {
-    clearRestaurantState: (state) => {
+    clearMenuState: (state) => {
       state.isFetching = false;
       state.isError = false;
       state.isSuccess = false;
@@ -32,21 +30,21 @@ export const restaurantSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchRestaurant.pending]: (state) => {
+    [fetchMenu.pending]: (state) => {
       state.isFetching = true;
     },
-    [fetchRestaurant.rejected]: (state, {payload}) => {
+    [fetchMenu.rejected]: (state, {payload}) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload;
     },
-    [fetchRestaurant.fulfilled]: (state, {payload}) => {
+    [fetchMenu.fulfilled]: (state, {payload}) => {
       state.isFetching = false;
       state.isSuccess = true;
-      state.restaurant = payload.restaurant;
+      state.menu = payload.menuGroups;
     }
   },
 });
 
-export const {clearRestaurantState} = restaurantSlice.actions;
-export const restaurantSelector = (state) => state.restaurant;
+export const {clearMenuState} = menuSlice.actions;
+export const menuSelector = (state) => state.menu;

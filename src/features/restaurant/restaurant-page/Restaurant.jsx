@@ -14,6 +14,7 @@ import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
 import {fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {fetchMenu, menuSelector} from "../MenuSlice";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -170,16 +171,16 @@ const productList = {
   ],
 };
 
-const categoryList = Object.keys(productList).map(name => ({name: name, count: productList[name].length}));
+const Mocked = Object.keys(productList).map(name => ({name: name, count: productList[name].length}));
 
 export default function Restaurant() {
   const classes = useStyles();
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
-  const {restaurant, isFetching, isError, isSuccess, errorMessage} = useSelector(restaurantSelector);
+  const restaurant = useSelector(restaurantSelector);
+  const menu = useSelector(menuSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
-  console.log(id);
 
   const handleFavoriteChange = () => {
     const newInfo = {...info};
@@ -193,14 +194,19 @@ export default function Restaurant() {
 
   useEffect(() => {
     dispatch(fetchRestaurant({id: id}));
+    dispatch(fetchMenu({id: id}));
   }, []);
 
   useEffect(() => {
-    if (isError)
-      dispatch(showError(errorMessage));
-  }, [isError]);
+    if (restaurant.isError)
+      dispatch(showError(restaurant.errorMessage));
+    if (menu.isError)
+      dispatch(showError(menu.errorMessage));
+  }, [restaurant.isError, menu.isError]);
 
-  if (isSuccess)
+  if (restaurant.isSuccess && menu.isSuccess) {
+    const categoryMenu = menu.menu.map(category => ({name: category.name, count: category.menuItems.length}));
+    const restaurantData = restaurant.restaurant;
     return (
       <>
         <ScrollToShowBackground>
@@ -212,17 +218,17 @@ export default function Restaurant() {
           </div>
         </ScrollToShowBackground>
         <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
-          <CategoryMenu categoryList={categoryList} onclick={(index) => alert(index)}/>
+          <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
         <Box className={classes.cart} display={cart.length > 0 ? `flex` : `none`}>
           <CartSummaryBottom cart={cart}/>
         </Box>
 
-        <img className={classes.cover} src={restaurant.coverImageUrl} alt={mockedData.name}/>
+        <img className={classes.cover} src={restaurantData.coverImageUrl} alt={mockedData.name}/>
         <div className={classes.content}>
           <div className={classes.info}>
-            <RestaurantInfoSumary name={`${restaurant.name} - ${restaurant.address}`}
-                                  address={restaurant.address}
+            <RestaurantInfoSumary name={`${restaurantData.name} - ${restaurantData.address}`}
+                                  address={restaurantData.address}
                                   distance={2.5}
             />
           </div>
@@ -232,13 +238,13 @@ export default function Restaurant() {
           <div className={classes.recommendMenu}>
             <RecommendedMenuHorizontal/>
           </div>
-          <div>{JSON.stringify(restaurant)}</div>
           <div className={classes.menu}>
-            <MenuVertical productList={productList} onAddToCart={handleAddToCart}/>
+            <MenuVertical productList={menu.menu} onAddToCart={handleAddToCart}/>
           </div>
         </div>
       </>
     );
+  }
 
   return <LinearProgress color="primary"/>
 }

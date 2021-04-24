@@ -22,8 +22,7 @@ const mockedData = {
 }
 
 export default function MenuVertical({productList, onAddToCart}) {
-  const categoryList = Object.keys(productList);
-  const initArr = Array(categoryList.length).fill(true);
+  const initArr = Array(productList.length).fill(true);
   const [expand, setExpand] = useState(initArr);
   const [open, setOpen] = useState(false);
 
@@ -39,18 +38,22 @@ export default function MenuVertical({productList, onAddToCart}) {
   return (
     <>
       {
-        categoryList.map((category, index1) =>
+        productList.map((category, index1) =>
           <div key={index1} id={`category${index1}`}>
             <CategoryLabel open={expand[index1]} onClick={() => handleLabelClick(index1)}>
-              {category}
+              {category.name}
             </CategoryLabel>
             <Collapse in={expand[index1]}>
               <>
                 {
-                  productList[category].map((data, index2) =>
-                    <ProductItemLarge key={index2}
-                                      onClick={() => handleItemClick(index2)}
-                                      {...data}/>
+                  category.menuItems.map((data, index2) => (
+                      <ProductItemLarge key={index2}
+                                        onClick={() => handleItemClick(index2)}
+                                        name={data.name}
+                                        description={data.description}
+                                        price={data.price}
+                                        image={data.imageUrl}/>
+                    )
                   )
                 }
               </>

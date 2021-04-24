@@ -31,8 +31,12 @@ const useStyles = makeStyles(theme => ({
       lineHeight: '16px',
     },
     info: {
+      width: '275px',
       fontSize: '9px',
       lineHeight: '16px',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       color: theme.palette.onSurface.disabled,
     },
     divider: {

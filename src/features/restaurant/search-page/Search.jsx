@@ -26,7 +26,6 @@ export default function Search() {
   }, [isError, dispatch]);
 
   if (isSuccess) {
-    console.log(restaurants);
     return (
       <Box>
         {
