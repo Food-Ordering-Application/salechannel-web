@@ -17,14 +17,14 @@ script:
   - docker build -t vanhiep778/salechannel -f Dockerfile .
   - docker tag vanhiep778/salechannel registry.heroku.com/salechannel/web
 
-# deploy:
-#   provider: script
-#   script:
-#     # push to dockerhub & heroku
-#     docker push vanhiep778/salechannel;
-#     docker push registry.heroku.com/salechannel/web;
-#     heroku config:set API_URL=https://api-serverr.herokuapp.com;
-#     heroku config:set REACT_APP_API_URL=https://api-serverr.herokuapp.com;
-#     heroku container:release web --app salechannel
-#   on:
-#     branch: main
+deploy:
+  provider: script
+  script:
+    # push to dockerhub & heroku
+    docker push vanhiep778/salechannel;
+    docker push registry.heroku.com/salechannel/web;
+    heroku config:set API_URL=https://api-serverr.herokuapp.com;
+    heroku config:set REACT_APP_API_URL=https://api-serverr.herokuapp.com;
+    heroku container:release web --app salechannel;
+  on:
+    branch: main
