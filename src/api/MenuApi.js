@@ -18,7 +18,7 @@ export const MenuApi = {
 
   fetchTopping: async (menuItemId)=>{
     try {
-      return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {menuItemId})).data.data;
+      return (await axios.post(`${BASEURL}/restaurant/get-menu-item-topping-info`, {menuItemId})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);

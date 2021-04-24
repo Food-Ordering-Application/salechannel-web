@@ -13,9 +13,9 @@ import {
   Typography
 } from "@material-ui/core";
 import {HighlightOff} from "@material-ui/icons";
-import theme from "../asserts/Theme";
-import StyledFormControlLabel from "./StyledFormControlLabel";
-import QuantityButtonGroup from "./QuantityButtonGroup";
+import theme from "../../../asserts/Theme";
+import StyledFormControlLabel from "../../../components/StyledFormControlLabel";
+import QuantityButtonGroup from "../../../components/QuantityButtonGroup";
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -98,7 +98,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
         </IconButton>
         <img className={classes.image}
              alt={product.name}
-             src={product.image}/>
+             src={product.imageUrl}/>
         <Box id="container" p={2}>
           <Box id="Label" pb={2} display="flex" alignItems="center">
             <Box flexGrow={1}>
@@ -108,7 +108,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
             </Box>
             <Box>
               <Typography variant="h6">
-                <Box fontSize={14} color="onSurface.disabled">{product.pricePerUnit.toLocaleString()}đ</Box>
+                <Box fontSize={14} color="onSurface.disabled">{product.price.toLocaleString()}đ</Box>
               </Typography>
             </Box>
           </Box>
@@ -126,11 +126,12 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
           </Box>
           <Box id="Options">
             <RadioGroup value={value} onChange={handleChange}>{
-              product.options.map(({name, price}, index) => (
+              product.toppingGroups[0].toppingItems.map(({description, price}, index) => (
                 <>
-                  <StyledFormControlLabel value={name}
+                  <StyledFormControlLabel key={index}
+                                          value={description}
                                           control={<Radio color="primary"/>}
-                                          label={<RadioButtonLabel name={name} price={price}/>}/>
+                                          label={<RadioButtonLabel name={description} price={price}/>}/>
                   <Box mx={-2}>
                     <Divider variant="fullWidth"/>
                   </Box>
