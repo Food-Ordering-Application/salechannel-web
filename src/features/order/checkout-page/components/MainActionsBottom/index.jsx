@@ -74,7 +74,7 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
             </Typography>
           </Grid>
           <Grid item xs>
-            <Button variant="contained" color="primary" fullWidth>
+            <Button variant="contained" color="primary" fullWidth onClick={handleCheckout}>
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
           </Grid>

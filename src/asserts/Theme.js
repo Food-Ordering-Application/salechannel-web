@@ -236,6 +236,10 @@ const theme = createMuiTheme({
       background: `#C4C4C4`,
       boxShadow: `0px 9px 12px rgba(0, 0, 0, 0.14), 0px 3px 16px rgba(0, 0, 0, 0.12), 0px 5px 6px rgba(0, 0, 0, 0.2)`,
     },
+    dp10: {
+      background: `#FFFFFF`,
+      boxShadow: `0px 4px 10px rgba(0, 0, 0, 0.1)`,
+    },
     dp12: {
       background: `#C4C4C4`,
       boxShadow: `0px 12px 17px rgba(0, 0, 0, 0.14), 0px 5px 22px rgba(0, 0, 0, 0.12), 0px 7px 8px rgba(0, 0, 0, 0.2)`,

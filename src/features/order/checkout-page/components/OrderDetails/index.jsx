@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   }))
 ;
 
-export default function OrderDetails() {
+export default function OrderDetails({additionComponent}) {
   const classes = useStyles();
 
   return (
@@ -46,6 +46,9 @@ export default function OrderDetails() {
           <Box py={1.5}>
             <OrderCost subtotal={41000} distance={1.4} deliveryFees={17000}/>
           </Box>
+        </Box>
+        <Box>
+          {additionComponent}
         </Box>
       </Box>
     </div>

@@ -72,7 +72,7 @@ export default function BottomNavigationBar({initSate}) {
                                         </StyledBadge>
                                       }
                                       component={Link}
-                                      to="/"
+                                      to="/checkout"
         />
         <StyledBottomNavigationAction label="Tài khoản"
                                       icon={<UserIcon/>}

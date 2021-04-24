@@ -7,10 +7,11 @@ import OrderDetails from "./components/OrderDetails";
 import CouponList from "./components/CouponList";
 import MainActionsBottom from "./components/MainActionsBottom";
 import TopNavigationBar from "../../common/TopNavigationBar";
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
-  topNavigationBar:{
+  topNavigationBar: {
     position: `fixed`,
     top: 0,
     left: 0,
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Checkout() {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Box mt={6} p={1}>
@@ -44,7 +46,7 @@ export default function Checkout() {
       </Box>
       <Box py={10}/>
       <Box className={classes.mainActionsBottom}>
-        <MainActionsBottom totalCost={58000}/>
+        <MainActionsBottom totalCost={58000} handleCheckout={() => history.push(`/order`)}/>
       </Box>
     </Box>
   );
