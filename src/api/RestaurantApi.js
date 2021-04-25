@@ -3,12 +3,13 @@ import axios from "axios";
 const BASEURL = `http://localhost:8000`;
 
 const RestaurantApi = {
-  filter: async (pageIndex, area, category) => {
+  filter: async (pageIndex, area, category, name) => {
     try {
       return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {
         pageNumber: pageIndex,
         area: area,
-        category: category
+        category: category,
+        search: name,
       })).data.data;
     } catch (error) {
       if (error.response) {

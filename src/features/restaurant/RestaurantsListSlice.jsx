@@ -3,9 +3,10 @@ import RestaurantApi from "../../api/RestaurantApi";
 
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
-  async ({pageIndex, area, category}, thunkAPI) => {
+  async ({pageIndex, area, category, name}, thunkAPI) => {
     try {
-      return await RestaurantApi.filter(pageIndex, area, category);
+      console.log(pageIndex, area, category, name);
+      return await RestaurantApi.filter(pageIndex, area, category, name);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -15,7 +16,7 @@ export const filterRestaurant = createAsyncThunk(
 export const restaurantsListSlice = createSlice({
   name: `restaurants`,
   initialState: {
-    restaurants: [],
+    data: [],
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -41,7 +42,7 @@ export const restaurantsListSlice = createSlice({
     [filterRestaurant.fulfilled]: (state, {payload}) => {
       state.isFetching = false;
       state.isSuccess = true;
-      state.restaurants = payload.restaurants;
+      state.data = payload.restaurants;
     }
   },
 });

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopNavigationBar({label, leftIcon, leftAction, rightIcon, rightAction}) {
+export default function TopNavigationBar({label, leftIcon, leftAction, centerComponent, rightIcon, rightAction}) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -33,9 +33,11 @@ export default function TopNavigationBar({label, leftIcon, leftAction, rightIcon
         </IconButton>
       </Grid>
       <Grid item xs>
-        <Typography variant="h3">
-          <Box className={classes.label}>{label}</Box>
-        </Typography>
+        {centerComponent || (
+          <Typography variant="h3">
+            <Box className={classes.label}>{label}</Box>
+          </Typography>
+        )}
       </Grid>
       <Grid item>
         <IconButton color="primary" onClick={rightAction || rightActionDefault}>
