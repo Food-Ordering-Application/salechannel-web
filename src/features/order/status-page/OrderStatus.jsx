@@ -7,7 +7,7 @@ import RiderInfo from "./components/RiderInfo";
 import OrderDetails from "../checkout-page/components/OrderDetails";
 import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
-import HelpButton from "./components/HelpButton";
+import BottomButton from "../../common/BottomButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -60,9 +60,9 @@ export default function OrderStatus() {
         <OrderInfo/>
       </Box>
       <Box className={classes.helpBtn}>
-        <HelpButton>
+        <BottomButton variant="outlined">
           Gọi trợ giúp?
-        </HelpButton>
+        </BottomButton>
       </Box>
     </Box>
   );

@@ -3,6 +3,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Box} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import AddressItem from "./components/AddressItem";
+import BottomButton from "../../common/BottomButton";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   topNavigator: {
@@ -11,6 +13,14 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
   },
+  bottomButton: {
+    position: `fixed`,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: theme.spacing(0, 2, 2, 2),
+  },
+
 }));
 
 const mockedData = [
@@ -31,7 +41,7 @@ export default function AddressManagement() {
   }
 
   return (
-    <Box mt={8} mx={2}>
+    <Box my={8} mx={2}>
       <Box className={classes.topNavigator}>
         <TopNavigationBar label="Địa chỉ giao hàng"/>
       </Box>
@@ -44,6 +54,11 @@ export default function AddressManagement() {
           </Box>
         ))
       }
+      <Box className={classes.bottomButton}>
+        <BottomButton variant="contained" component={Link} to={"/address/add"}>
+          Thêm địa chỉ mới
+        </BottomButton>
+      </Box>
     </Box>
   );
 }
