@@ -12,9 +12,11 @@ import CategoryMenu from "../../../components/CategoryMenu";
 import {Box, LinearProgress} from "@material-ui/core";
 import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
-import {fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
+import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {fetchMenu, menuSelector} from "../MenuSlice";
+import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
+import Skeleton from "react-loading-skeleton";
+import ErrorPage from "../../common/ErrorPage";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -190,19 +192,26 @@ export default function Restaurant() {
   const handleAddToCart = (product) => {
     const newCart = [...cart, product];
     setToCart(newCart);
-  }
+  };
 
   useEffect(() => {
+    dispatch(clearRestaurantState());
+    dispatch(clearMenuState());
     dispatch(fetchRestaurant({id: id}));
     dispatch(fetchMenu({id: id}));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-    if (restaurant.isError)
+    if (restaurant.isError) {
       dispatch(showError(restaurant.errorMessage));
-    if (menu.isError)
+    }
+  }, [restaurant.isError]);
+
+  useEffect(() => {
+    if (menu.isError) {
       dispatch(showError(menu.errorMessage));
-  }, [restaurant.isError, menu.isError]);
+    }
+  }, [menu.isError]);
 
   if (restaurant.isSuccess && menu.isSuccess) {
     const categoryMenu = menu.menu.map(category => ({name: category.name, count: category.menuItems.length}));
@@ -224,7 +233,7 @@ export default function Restaurant() {
           <CartSummaryBottom cart={cart}/>
         </Box>
 
-        <img className={classes.cover} src={restaurantData.coverImageUrl} alt={mockedData.name}/>
+        <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>
         <div className={classes.content}>
           <div className={classes.info}>
             <RestaurantInfoSumary name={`${restaurantData.name} - ${restaurantData.address}`}

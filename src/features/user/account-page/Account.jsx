@@ -8,6 +8,7 @@ import FAQsActionList from "./components/FAQsActionList";
 import LogoutButton from "./components/LogoutButton";
 import {removeUser, userSelector} from "../UserSlice";
 import UserAuthButtonGroup from "../login-page/components/UserAuthButtonGroup";
+import TopNavigationBar from "../../common/TopNavigationBar";
 
 
 export default function Account() {
@@ -15,7 +16,10 @@ export default function Account() {
   const {isAuthenticated, phoneNumber, name, email, avatar} = useSelector(userSelector);
 
   return (
-    <Box p={2}>
+    <Box mt={8} mx={2}>
+      <Box position="fixed" top={0} left={0} right={0}>
+        <TopNavigationBar label="Tài khoản"/>
+      </Box>
       <Box py={2}>
         {isAuthenticated ?
           <MainInfo name={name} email={email} avatar={avatar} phone={phoneNumber}/> :

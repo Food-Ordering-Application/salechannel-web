@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {throttle} from "lodash";
 
-import {filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
+import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {Box, InputBase} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
@@ -58,6 +58,7 @@ export default function Search() {
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
+      dispatch(clearRestaurantsListState());
     }
     if (isSuccess) {
       setResult(data.map(({id, name, address, coverImageUrl}, index) => (
@@ -69,6 +70,7 @@ export default function Search() {
           />
         </Box>
       )));
+      dispatch(clearRestaurantsListState());
     }
     if (isFetching) {
       setResult(Array(10).fill((

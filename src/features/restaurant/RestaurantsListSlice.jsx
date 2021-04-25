@@ -5,7 +5,6 @@ export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
   async ({pageIndex, area, category, name}, thunkAPI) => {
     try {
-      console.log(pageIndex, area, category, name);
       return await RestaurantApi.filter(pageIndex, area, category, name);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

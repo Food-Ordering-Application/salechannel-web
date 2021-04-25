@@ -9,6 +9,7 @@ import Notifications from "../features/notification/notification-page/Notificati
 import Checkout from "../features/order/checkout-page/Checkout";
 import Search from "../features/restaurant/search-page/Search";
 import OrderStatus from "../features/order/status-page/OrderStatus";
+import AddressManagement from "../features/address/address-management-page/AddressManagement";
 
 
 export default function IndexComponent() {
@@ -23,6 +24,7 @@ export default function IndexComponent() {
       <Route exact path='/checkout'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
       <Route exact path='/order'><OrderStatus/></Route>
+      <Route exact path='/address'><AddressManagement/></Route>
     </Switch>
   );
 }

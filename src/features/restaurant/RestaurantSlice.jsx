@@ -8,6 +8,7 @@ export const fetchRestaurant = createAsyncThunk(
     try {
       return RestaurantApi.fetch(id);
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }

@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
       lineHeight: '16px',
     },
     info: {
-      width: '275px',
+      width: '100%',
       fontSize: '9px',
       lineHeight: '16px',
       whiteSpace: 'nowrap',

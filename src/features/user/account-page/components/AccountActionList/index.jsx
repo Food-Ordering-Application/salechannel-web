@@ -22,7 +22,7 @@ export default function AccountActionList({initOpen}) {
           />
           <StyledListItem label="Địa chỉ giao hàng"
                           icon={LocationOnOutlined}
-                          to="/"
+                          to="/address"
           />
           <StyledListItem label="Lịch sử đơn hàng"
                           icon={ReceiptOutlined}
