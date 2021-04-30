@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Grid, IconButton, Typography} from "@material-ui/core";
 import {Cancel} from "@material-ui/icons";
+import {currencyFormatter} from "../../../../../untils/formatter";
 
 export default function OrderItem({quantity, name, description, price, handleRemove}) {
   return (
@@ -21,7 +22,7 @@ export default function OrderItem({quantity, name, description, price, handleRem
         </Grid>
         <Grid item>
           <Typography variant="h6">
-            <Box fontSize={14} color="onSurface.disabled">{`${price.toLocaleString()}đ`}</Box>
+            <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(price)}</Box>
           </Typography>
         </Grid>
         <Grid item>

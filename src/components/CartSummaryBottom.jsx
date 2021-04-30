@@ -1,5 +1,6 @@
 import React from "react";
 import {Box, makeStyles, Typography} from "@material-ui/core";
+import {currencyFormatter} from "../untils/formatter";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,7 +34,7 @@ export default function CartSummaryBottom({cart}) {
       <Box id="CartInfo">
         <Typography variant="h3">
           <Box className={classes.text}>
-            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${totalCost.toLocaleString()} đ`}
+            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(totalCost)}`}
           </Box>
         </Typography>
       </Box>

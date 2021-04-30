@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import {currencyFormatter} from "../../../../../untils/formatter";
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -25,7 +26,7 @@ export default function MoneyItem({label, value}) {
       </Grid>
       <Grid item>
         <Typography variant="h6">
-          <Box className={classes.price}>{`${value.toLocaleString()}đ`}</Box>
+          <Box className={classes.price}>{currencyFormatter(value)}</Box>
         </Typography>
       </Grid>
     </Grid>

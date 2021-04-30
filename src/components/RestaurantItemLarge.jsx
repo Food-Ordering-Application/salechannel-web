@@ -1,6 +1,7 @@
 import React from "react";
 import {Card, CardContent, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
 import {AvTimer, CreditCard, Star} from "@material-ui/icons";
+import {currencyFormatter} from "../untils/formatter";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function RestaurantItemLarge({image, name, description, rating=0, timeToPrepare=0, averagePrice=0, onClick}) {
+export default function RestaurantItemLarge({
+                                              image,
+                                              name,
+                                              description,
+                                              rating = 0,
+                                              timeToPrepare = 0,
+                                              averagePrice = 0,
+                                              onClick
+                                            }) {
   const classes = useStyles();
 
   return (
@@ -87,7 +96,7 @@ export default function RestaurantItemLarge({image, name, description, rating=0,
             </div>
             <div className={`${classes.horizontalContent} ${classes.timeContent}`}>
               <CreditCard className={classes.timer}/>
-              <Typography className={classes.info}>{`${averagePrice.toLocaleString()}đ/2 phần`}</Typography>
+              <Typography className={classes.info}>{currencyFormatter(averagePrice)}</Typography>
             </div>
           </div>
         </CardContent>

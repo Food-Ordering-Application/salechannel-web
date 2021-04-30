@@ -2,6 +2,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, GridListTile, Typography} from "@material-ui/core";
 import RecommendIcon from "../asserts/icons/Recommend";
+import {currencyFormatter} from "../untils/formatter";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,7 +66,7 @@ export default function RecommendedItemMedium({key, image, name, price, onClick}
           </Typography>
         </div>
         <Typography variant="h4" align="right">
-          <Box className={classes.price}>{price.toLocaleString()}đ</Box>
+          <Box className={classes.price}>{currencyFormatter(price)}</Box>
         </Typography>
       </div>
     </GridListTile>

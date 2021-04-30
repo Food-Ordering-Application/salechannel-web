@@ -2,6 +2,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, Button, Divider, Grid, Typography} from "@material-ui/core";
 import {ExpandLess, PaymentOutlined} from "@material-ui/icons";
+import {currencyFormatter} from "../../../../../untils/formatter";
 
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   couponBtn: {
     fontSize: theme.spacing(2),
   },
-  paymentBtn:{
+  paymentBtn: {
     fontSize: theme.spacing(1.5),
     color: theme.palette.onSurface.highEmphasis,
   }
@@ -70,7 +71,7 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
               <Box className={classes.label}>Tổng cộng</Box>
             </Typography>
             <Typography variant="h4">
-              <Box className={classes.cost}>{`${totalCost.toLocaleString()}đ`}</Box>
+              <Box className={classes.cost}>{currencyFormatter(totalCost)}</Box>
             </Typography>
           </Grid>
           <Grid item xs>

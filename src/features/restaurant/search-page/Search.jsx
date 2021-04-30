@@ -33,7 +33,11 @@ export default function Search() {
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
 
-  const search = (name) => dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name}));
+  const search = (name) => {
+    dispatch(clearRestaurantsListState());
+    dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name}));
+  };
+
   const handleItemClick = (id) => history.push(`/store/${id}`);
   const handleSearchButtonClick = () => search(name);
   const handleTextChange = (event) => setName(`${event.target.value}`);
@@ -47,7 +51,11 @@ export default function Search() {
   );
 
   useEffect(() => {
-    dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", category: "CAFEDESSERT"}));
+    console.log(history);
+    if (data.length === 0) {
+      search();
+      //Cache history result when back from details
+    }
   }, []);
 
   useEffect(() => {
@@ -58,7 +66,6 @@ export default function Search() {
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
-      dispatch(clearRestaurantsListState());
     }
     if (isSuccess) {
       setResult(data.map(({id, name, address, coverImageUrl}, index) => (
@@ -70,7 +77,6 @@ export default function Search() {
           />
         </Box>
       )));
-      dispatch(clearRestaurantsListState());
     }
     if (isFetching) {
       setResult(Array(10).fill((
@@ -87,7 +93,8 @@ export default function Search() {
         <TopNavigationBar rightIcon={SearchIcon}
                           rightAction={handleSearchButtonClick}
                           centerComponent={(
-                            <InputBase className={classes.textField} placeholder="Tìm kiếm cửa hàng, món ăn"
+                            <InputBase className={classes.textField}
+                                       placeholder="Tìm kiếm cửa hàng, món ăn"
                                        onChange={handleTextChange} fullWidth/>
                           )}
         />

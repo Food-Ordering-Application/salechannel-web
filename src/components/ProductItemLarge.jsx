@@ -1,6 +1,7 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, Card, CardContent, CardMedia, Divider, Typography} from "@material-ui/core";
+import {currencyFormatter} from "../untils/formatter";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -61,7 +62,7 @@ export default function ProductItemLarge({image, name, description, price, onCli
             </Typography>
             <Divider variant='fullWidth' className={classes.divider}/>
             <Typography variant="h6">
-              <Box className={classes.name}>{price.toLocaleString()}đ</Box>
+              <Box className={classes.name}>{currencyFormatter(price)}</Box>
             </Typography>
           </CardContent>
         </div>

@@ -1,21 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  Divider,
-  IconButton,
-  Radio,
-  RadioGroup,
-  Slide,
-  Typography
-} from "@material-ui/core";
+import {Box, Button, Dialog, DialogContent, IconButton, Slide, Typography} from "@material-ui/core";
 import {HighlightOff} from "@material-ui/icons";
 import theme from "../../../asserts/Theme";
-import StyledFormControlLabel from "../../../components/StyledFormControlLabel";
 import QuantityButtonGroup from "../../../components/QuantityButtonGroup";
+import {currencyFormatter} from "../../../untils/formatter";
+import ToppingGroup from "./components/ToppingGroup";
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -50,9 +40,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ProductDetail({open, handleClose, product, onSubmit}) {
+  const {price: basePrice, toppingGroups} = product;
   const classes = useStyles();
   const [value, setValue] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [pricePerUnit, setPricePerUnit] = useState(basePrice);
+  const [toppings, setToppings] = useState([]);
+
+  console.log(toppings);
+
+  useEffect(() => {
+    setPricePerUnit(basePrice);
+  }, [basePrice]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -61,11 +60,26 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
     onSubmit({
       name: product.name,
       quantity: quantity,
-      price: product.pricePerUnit,
-      option: product.options.filter((option) => option.name === value)[0],
+      price: pricePerUnit,
+      // option: product.options.filter((option) => option.name === value)[0],
     });
     handleClose();
   };
+
+  const handleToppingChange = (groupIndex, selectedToppings) => {
+    const newArr = [...toppings];
+    newArr[groupIndex] = selectedToppings;
+    setToppings(newArr);
+
+    let toppingPrice = 0;
+    for (let i = 0; i < newArr.length; i++) {
+      for (let j = 0; newArr[i] && (j < newArr[i].length); j++) {
+        toppingPrice += newArr[i][j].price;
+      }
+    }
+
+    setPricePerUnit(basePrice + toppingPrice);
+  }
 
   const RadioButtonLabel = ({name, price}) => (
     <Box width={1} display="flex" alignItems="center">
@@ -76,7 +90,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       </Box>
       <Box>
         <Typography variant="h6">
-          <Box fontSize={14} color="onSurface.disabled">{price}đ</Box>
+          <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(price)}</Box>
         </Typography>
       </Box>
     </Box>
@@ -108,37 +122,33 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
             </Box>
             <Box>
               <Typography variant="h6">
-                <Box fontSize={14} color="onSurface.disabled">{product.price.toLocaleString()}đ</Box>
+                <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(product.price)}</Box>
               </Typography>
             </Box>
           </Box>
-          <Box id="Guideline" py={0.5} mx={-2} px={2} bgcolor="primary.l0">
-            <Box>
-              <Typography variant="h4">
-                <Box fontSize={14} lineHeight="24px" color="onSurface.mediumEmphasis">Chọn cơm</Box>
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="h6">
-                <Box fontSize={9} lineHeight="24px" color="error.main">Chỉ 1 lựa chọn</Box>
-              </Typography>
-            </Box>
+
+          <Box mx={-2}>
+            {toppingGroups.map((data, index) => <ToppingGroup key={index}
+                                                              toppingGroup={data}
+                                                              onChange={(selectedToppings) => handleToppingChange(index, selectedToppings)}/>
+            )}
           </Box>
-          <Box id="Options">
-            <RadioGroup value={value} onChange={handleChange}>{
-              product.toppingGroups[0].toppingItems.map(({description, price}, index) => (
-                <>
-                  <StyledFormControlLabel key={index}
-                                          value={description}
-                                          control={<Radio color="primary"/>}
-                                          label={<RadioButtonLabel name={description} price={price}/>}/>
-                  <Box mx={-2}>
-                    <Divider variant="fullWidth"/>
-                  </Box>
-                </>
-              ))
-            }</RadioGroup>
-          </Box>
+
+          {/*<Box id="Options" hidden>*/}
+          {/*  <RadioGroup value={value} onChange={handleChange}>{*/}
+          {/*    product.toppingGroups[0].toppingItems.map(({description, price}, index) => (*/}
+          {/*      <>*/}
+          {/*        <StyledFormControlLabel key={index}*/}
+          {/*                                value={description}*/}
+          {/*                                control={<Radio color="primary"/>}*/}
+          {/*                                label={<RadioButtonLabel name={description} price={price}/>}/>*/}
+          {/*        <Box mx={-2}>*/}
+          {/*          <Divider variant="fullWidth"/>*/}
+          {/*        </Box>*/}
+          {/*      </>*/}
+          {/*    ))*/}
+          {/*  }</RadioGroup>*/}
+          {/*</Box>*/}
           <Box id="QuantityController">
             <Box width={1} my={5} display="flex" justifyContent="center">
               <QuantityButtonGroup onChange={(value) => setQuantity(value)}/>
@@ -165,7 +175,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
                 <Box>
                   <Typography variant="h3">
                     <Box fontSize={theme.spacing(1.5)} color={theme.palette.surface.light}>
-                      {(quantity * product.pricePerUnit).toLocaleString()}đ
+                      {currencyFormatter(quantity * pricePerUnit)}
                     </Box>
                   </Typography>
                 </Box>
