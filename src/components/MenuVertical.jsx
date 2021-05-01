@@ -75,7 +75,9 @@ export default function MenuVertical({productList, onAddToCart}) {
         )
       }
       {selected && <ProductDetail open={open} handleClose={() => setOpen(false)} product={selected}
-                                  onSubmit={(data) => onAddToCart(data)}/>}
+                                  onSubmit={(data) => onAddToCart(data)}
+        // onSubmit={handleSubmit}
+      />}
     </>
   );
 }

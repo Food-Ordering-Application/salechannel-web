@@ -1,10 +1,22 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {OrderApi} from "../../api/OrderApi";
 
-const createOrder = createAsyncThunk(
+export const createOrder = createAsyncThunk(
   `order/create`,
-  async (payload, thunkAPI) => {
+  async ({restaurantId, userId, menuItem, topping}, thunkAPI) => {
     try {
-      return {};
+      return await OrderApi.createOrder(restaurantId, userId, menuItem, topping);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const addItem = createAsyncThunk(
+  `order/addItem`,
+  async ({}, thunkAPI) => {
+    try {
+      return await OrderApi.addItem()
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -29,7 +41,22 @@ export const orderSlice = createSlice({
       return state;
     },
   },
-  extraReducers: {},
+  extraReducers: {
+    [createOrder.fulfilled]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isSuccess = true;
+      console.log(payload);
+      state.data = payload;
+    },
+    [createOrder.pending]: (state) => {
+      state.isRequesting = true;
+    },
+    [createOrder.rejected]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    }
+  },
 });
 
 export const {clearOrderState} = orderSlice.actions;

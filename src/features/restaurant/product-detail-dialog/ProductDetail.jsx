@@ -6,6 +6,11 @@ import theme from "../../../asserts/Theme";
 import QuantityButtonGroup from "../../../components/QuantityButtonGroup";
 import {currencyFormatter} from "../../../untils/formatter";
 import ToppingGroup from "./components/ToppingGroup";
+import {useDispatch, useSelector} from "react-redux";
+import {addItem, clearOrderState, createOrder, orderSelector} from "../../order/OrderSlice";
+import {userSelector} from "../../user/UserSlice";
+import {restaurantSelector} from "../RestaurantSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -46,8 +51,10 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   const [quantity, setQuantity] = useState(1);
   const [pricePerUnit, setPricePerUnit] = useState(basePrice);
   const [toppings, setToppings] = useState([]);
-
-  console.log(toppings);
+  const {id: userId} = useSelector(userSelector);
+  const {restaurant} = useSelector(restaurantSelector);
+  const orderState = useSelector(orderSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setPricePerUnit(basePrice);
@@ -56,6 +63,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
   const handleAddToCart = () => {
     onSubmit({
       name: product.name,
@@ -63,8 +71,27 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       price: pricePerUnit,
       // option: product.options.filter((option) => option.name === value)[0],
     });
+    if (orderState.data.id) {
+      dispatch(addItem());
+    } else {
+      dispatch(createOrder({userId, restaurantId: restaurant.id, menuItem: product, topping: toppings}));
+    }
     handleClose();
   };
+
+  useEffect(() => {
+    if (orderState.isRequesting) {
+      console.log("Order requesting...");
+    }
+    if (orderState.isError) {
+      dispatch(showError(orderState.errorMessage));
+      dispatch(clearOrderState());
+    }
+    if (orderState.isSuccess) {
+      console.log(orderState.data);
+      dispatch(clearOrderState());
+    }
+  }, [orderState.isRequesting, orderState.isError, orderState.isSuccess]);
 
   const handleToppingChange = (groupIndex, selectedToppings) => {
     const newArr = [...toppings];
