@@ -71,5 +71,29 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+
+  increaseQuantity: async (orderId, orderItemId) => {
+    try {
+      return (await axios.post(`${BASEURL}/order/${orderId}/increase-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+    } catch (error) {
+      if (error.response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
+  decreaseQuantity: async (orderId, orderItemId) => {
+    try {
+      return (await axios.post(`${BASEURL}/order/${orderId}/reduce-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+    } catch (error) {
+      if (error.response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 }

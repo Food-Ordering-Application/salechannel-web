@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, makeStyles, Typography} from "@material-ui/core";
 import {currencyFormatter} from "../untils/formatter";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -20,14 +21,17 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function CartSummaryBottom({cart}) {
+export default function CartSummaryBottom({cart, toCheckout}) {
   const {orderItems = [], subTotal = 0} = cart;
-  const quantity = orderItems.length;
+  let quantity = 0;
+  for (const item of orderItems) {
+    quantity += item.quantity;
+  }
 
   const classes = useStyles();
 
   return (
-    <Box className={classes.container} onClick={() => alert(`Developing...`)}>
+    <Box className={classes.container} component={Link} to={toCheckout}>
       <Box id="CartInfo">
         <Typography variant="h3">
           <Box className={classes.text}>

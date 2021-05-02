@@ -34,6 +34,45 @@ export const fetchOrder = createAsyncThunk(
   }
 );
 
+export const increaseQuantity = createAsyncThunk(
+  `order/increaseQuantity`,
+  async ({orderId, orderItemId}, thunkAPI) => {
+    try {
+      return await OrderApi.increaseQuantity(orderId, orderItemId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const decreaseQuantity = createAsyncThunk(
+  `order/increaseQuantity`,
+  async ({orderId, orderItemId}, thunkAPI) => {
+    try {
+      return await OrderApi.decreaseQuantity(orderId, orderItemId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+const handlePendingDefault = (state) => {
+  state.isRequesting = true;
+};
+
+const handleRejectDefault = (state, {payload}) => {
+  state.isRequesting = false;
+  state.isError = true;
+  state.errorMessage = payload;
+};
+
+const handleFulfillDefault = (state, {payload}) => {
+  state.isRequesting = false;
+  state.isSuccess = true;
+  state.isEmpty = !payload.order;
+  state.data = payload.order;
+};
+
 export const orderSlice = createSlice({
   name: 'order',
   initialState: {
@@ -48,7 +87,6 @@ export const orderSlice = createSlice({
       state.isRequesting = false;
       state.isError = false;
       state.isSuccess = false;
-      state.isEmpty = false;
       return state;
     },
   },
@@ -57,7 +95,6 @@ export const orderSlice = createSlice({
       state.isRequesting = false;
       state.isSuccess = true;
       state.isEmpty = false;
-      console.log(payload);
       state.data = payload;
     },
     [createOrder.pending]: (state) => {
@@ -79,6 +116,7 @@ export const orderSlice = createSlice({
     [addItem.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
       state.isSuccess = true;
+      state.isEmpty = false;
       state.data = payload.order;
     },
     [fetchOrder.pending]: (state) => {
@@ -92,10 +130,15 @@ export const orderSlice = createSlice({
     [fetchOrder.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
       state.isSuccess = true;
-      console.log(`Last cart: ` + JSON.stringify(payload));
       state.isEmpty = payload.order === undefined;
       state.data = payload.order;
-    }
+    },
+    [increaseQuantity.pending]: handlePendingDefault,
+    [increaseQuantity.rejected]: handleRejectDefault,
+    [increaseQuantity.fulfilled]: handleFulfillDefault,
+    [decreaseQuantity.pending]: handlePendingDefault,
+    [decreaseQuantity.rejected]: handleRejectDefault,
+    [decreaseQuantity.fulfilled]: handleFulfillDefault,
   },
 });
 

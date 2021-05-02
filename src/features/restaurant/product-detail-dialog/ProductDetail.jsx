@@ -71,10 +71,10 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       price: pricePerUnit,
       // option: product.options.filter((option) => option.name === value)[0],
     });
-    if (orderState.data.id) {
-      dispatch(addItem({orderId: orderState.data.id, menuItem: product, topping: toppings}));
-    } else {
+    if (orderState.isEmpty) {
       dispatch(createOrder({userId, restaurantId: restaurant.id, menuItem: product, topping: toppings}));
+    } else {
+      dispatch(addItem({orderId: orderState.data.id, menuItem: product, topping: toppings}));
     }
     handleClose();
   };
@@ -88,7 +88,6 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       dispatch(clearOrderState());
     }
     if (orderState.isSuccess) {
-      console.log(orderState.data);
       dispatch(clearOrderState());
     }
   }, [orderState.isRequesting, orderState.isError, orderState.isSuccess]);

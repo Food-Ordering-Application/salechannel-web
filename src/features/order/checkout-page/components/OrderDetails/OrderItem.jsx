@@ -3,9 +3,9 @@ import {Box, Grid, IconButton, Typography} from "@material-ui/core";
 import {Cancel} from "@material-ui/icons";
 import {currencyFormatter} from "../../../../../untils/formatter";
 
-export default function OrderItem({quantity, name, description, price, handleRemove}) {
+export default function OrderItem({quantity, name, description, price, handleRemove, onClick}) {
   return (
-    <Box pb={1.5}>
+    <Box pb={1.5} onClick={onClick}>
       <Grid container alignItems="center" spacing={1}>
         <Grid item>
           <Typography variant="h6">

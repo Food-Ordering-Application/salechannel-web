@@ -22,7 +22,7 @@ export default function IndexComponent() {
       <Route exact path='/register'><Register/></Route>
       <Route exact path='/account'><Account/></Route>
       <Route exact path='/notifications'><Notifications/></Route>
-      <Route exact path='/checkout'><Checkout/></Route>
+      <Route exact path='/checkout/:id'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
       <Route exact path='/order'><OrderStatus/></Route>
       <Route exact path='/address'><AddressManagement/></Route>

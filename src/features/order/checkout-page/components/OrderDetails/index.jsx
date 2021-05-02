@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {Box, Divider, Typography} from "@material-ui/core";
 import OrderItem from "./OrderItem";
 import {makeStyles} from "@material-ui/core/styles";
 import OrderCost from "./OrderCost";
+import {useSelector} from "react-redux";
+import {orderSelector} from "../../../OrderSlice";
+import ProductDetail from "../../../../restaurant/product-detail-dialog/ProductDetail";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,12 +25,29 @@ const useStyles = makeStyles(theme => ({
         height: `32px`,
       }
     },
-
-  }))
-;
+  })
+);
 
 export default function OrderDetails({additionComponent}) {
   const classes = useStyles();
+  const {data: {orderItems, subTotal, shippingFee, serviceFee}} = useSelector(orderSelector);
+  const [open, setOpen] = useState(false);
+  const [selectedItem, setItem] = useState(null);
+
+  const orderItemsList = orderItems.map((item) => {
+    let itemPrice = item.price;
+    for (const topping of item.orderItemToppings) {
+      itemPrice += topping.price;
+    }
+    return <OrderItem quantity={item.quantity}
+                      name="Name from API's response"
+                      price={itemPrice}
+                      description="Description from API's response"
+                      onClick={() => {
+                        setItem(item);
+                        setOpen(true);
+                      }}/>
+  });
 
   return (
     <div className={classes.root}>
@@ -39,18 +59,21 @@ export default function OrderDetails({additionComponent}) {
         </Box>
         <Box>
           <Box py={1}>
-            <OrderItem quantity={1} name="Cơm gà xối mỡ" price={20000} description="Cam, Soda, Hoa cúc"/>
-            <OrderItem quantity={1} name="Cơm gà xối mắm tỏi" price={21000} description="Cam, Soda, Hoa cúc"/>
+            {orderItemsList}
           </Box>
           <Divider variant="fullWidth"/>
           <Box py={1.5}>
-            <OrderCost subtotal={41000} distance={1.4} deliveryFees={17000}/>
+            <OrderCost subtotal={subTotal} distance={1.4} deliveryFees={shippingFee + serviceFee}/>
           </Box>
         </Box>
         <Box>
           {additionComponent}
         </Box>
       </Box>
+      {selectedItem && <ProductDetail open={open}
+                                      handleClose={() => setOpen(false)}
+                                      product={selectedItem}/>
+      }
     </div>
   );
 }

@@ -184,6 +184,7 @@ export default function Restaurant() {
   const restaurant = useSelector(restaurantSelector);
   const menu = useSelector(menuSelector);
   const {isEmpty: cartIsEmpty, data: cartData} = useSelector(orderSelector);
+  const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
 
@@ -234,7 +235,7 @@ export default function Restaurant() {
           <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
         <Box className={classes.cart}>
-          {!cartIsEmpty && <CartSummaryBottom cart={cartData}/>}
+          {!cartIsEmpty && <CartSummaryBottom cart={cartData} toCheckout={`/checkout/${id}`}/>}
         </Box>
 
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>
@@ -252,7 +253,9 @@ export default function Restaurant() {
             <RecommendedMenuHorizontal/>
           </div>
           <div className={classes.menu}>
-            <MenuVertical productList={menu.menu} onAddToCart={handleAddToCart}/>
+            <MenuVertical productList={menu.menu}
+                          onAddToCart={handleAddToCart}
+                          orderItems={orderState.data && orderState.data.orderItems || []}/>
           </div>
         </div>
       </>
