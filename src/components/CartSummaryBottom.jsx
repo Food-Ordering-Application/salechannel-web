@@ -21,20 +21,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CartSummaryBottom({cart}) {
+  const {orderItems = [], subTotal = 0} = cart;
+  const quantity = orderItems.length;
+
   const classes = useStyles();
-  let quantity = 0;
-  let totalCost = 0;
-  cart.forEach((item) => {
-    quantity += item.quantity;
-    totalCost += item.quantity * item.price + (item.option ? item.option.price : 0);
-  });
 
   return (
     <Box className={classes.container} onClick={() => alert(`Developing...`)}>
       <Box id="CartInfo">
         <Typography variant="h3">
           <Box className={classes.text}>
-            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(totalCost)}`}
+            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(subTotal)}`}
           </Box>
         </Typography>
       </Box>

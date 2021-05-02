@@ -72,7 +72,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       // option: product.options.filter((option) => option.name === value)[0],
     });
     if (orderState.data.id) {
-      dispatch(addItem());
+      dispatch(addItem({orderId: orderState.data.id, menuItem: product, topping: toppings}));
     } else {
       dispatch(createOrder({userId, restaurantId: restaurant.id, menuItem: product, topping: toppings}));
     }

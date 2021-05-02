@@ -15,8 +15,7 @@ import theme from "../../../asserts/Theme";
 import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
-import Skeleton from "react-loading-skeleton";
-import ErrorPage from "../../common/ErrorPage";
+import {orderSelector} from "../../order/OrderSlice";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -181,6 +180,7 @@ export default function Restaurant() {
   const [cart, setToCart] = useState([]);
   const restaurant = useSelector(restaurantSelector);
   const menu = useSelector(menuSelector);
+  const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
 
@@ -229,8 +229,8 @@ export default function Restaurant() {
         <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
           <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
-        <Box className={classes.cart} display={cart.length > 0 ? `flex` : `none`}>
-          <CartSummaryBottom cart={cart}/>
+        <Box className={classes.cart} display={orderState.data.id ? `flex` : `none`}>
+          <CartSummaryBottom cart={orderState.data}/>
         </Box>
 
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>

@@ -40,7 +40,7 @@ export const OrderApi = {
       "price": toppingItem.price,
     }));
     const data = {
-      "orderItem": {
+      "sendItem": {
         "menuItemId": menuItem.id,
         "price": menuItem.price,
         "quantity": 1,
@@ -48,7 +48,7 @@ export const OrderApi = {
       },
     };
     try {
-      return (await axios.post(`${BASEURL}/order/${orderId}/add-new-item`, data, {headers: authHeader()})).data.data.order;
+      return (await axios.post(`${BASEURL}/order/${orderId}/add-new-item`, data, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);

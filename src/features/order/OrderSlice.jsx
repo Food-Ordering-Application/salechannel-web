@@ -14,9 +14,9 @@ export const createOrder = createAsyncThunk(
 
 export const addItem = createAsyncThunk(
   `order/addItem`,
-  async ({}, thunkAPI) => {
+  async ({orderId, menuItem, topping}, thunkAPI) => {
     try {
-      return await OrderApi.addItem()
+      return await OrderApi.addItem(orderId, menuItem, topping);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -55,6 +55,19 @@ export const orderSlice = createSlice({
       state.isRequesting = false;
       state.isError = true;
       state.errorMessage = payload.message;
+    },
+    [addItem.pending]: (state) => {
+      state.isRequesting = true;
+    },
+    [addItem.rejected]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    },
+    [addItem.fulfilled]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isSuccess = true;
+      state.data = payload.order;
     }
   },
 });
