@@ -56,6 +56,17 @@ export const decreaseQuantity = createAsyncThunk(
   }
 );
 
+export const removeItem = createAsyncThunk(
+  `order/removeItem`,
+  async ({orderId, orderItemId}, thunkAPI) => {
+    try {
+      return await OrderApi.removeItem(orderId, orderItemId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 const handlePendingDefault = (state) => {
   state.isRequesting = true;
 };
@@ -139,6 +150,9 @@ export const orderSlice = createSlice({
     [decreaseQuantity.pending]: handlePendingDefault,
     [decreaseQuantity.rejected]: handleRejectDefault,
     [decreaseQuantity.fulfilled]: handleFulfillDefault,
+    [removeItem.pending]: handlePendingDefault,
+    [removeItem.rejected]: handleRejectDefault,
+    [removeItem.fulfilled]: handleFulfillDefault,
   },
 });
 

@@ -95,5 +95,17 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
-  }
+  },
+
+  removeItem: async (orderId, orderItemId) => {
+    try {
+      return (await axios.post(`${BASEURL}/order/${orderId}/remove-orditem`, {orderItemId}, {headers: authHeader()})).data.data;
+    } catch (error) {
+      if (error.response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
 }
