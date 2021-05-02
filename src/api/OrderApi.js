@@ -56,5 +56,20 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+
+  getOrderAssociated: async (restaurantId, customerId) => {
+    try {
+      return (await axios.post(`${BASEURL}/order/get-order-associated`, {
+        restaurantId,
+        customerId
+      }, {headers: authHeader()})).data.data;
+    } catch (error) {
+      if (error.response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 }

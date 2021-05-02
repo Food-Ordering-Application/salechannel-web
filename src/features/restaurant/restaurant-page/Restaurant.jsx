@@ -15,7 +15,8 @@ import theme from "../../../asserts/Theme";
 import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
-import {orderSelector} from "../../order/OrderSlice";
+import {fetchOrder, orderSelector} from "../../order/OrderSlice";
+import {userSelector} from "../../user/UserSlice";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -61,6 +62,7 @@ const useStyles = makeStyles(theme => ({
       left: 0,
       right: 0,
       zIndex: 5,
+      display: `flex`,
     }
   })
 );
@@ -178,9 +180,10 @@ export default function Restaurant() {
   const classes = useStyles();
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
+  const {id: customerId} = useSelector(userSelector);
   const restaurant = useSelector(restaurantSelector);
   const menu = useSelector(menuSelector);
-  const orderState = useSelector(orderSelector);
+  const {isEmpty: cartIsEmpty, data: cartData} = useSelector(orderSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
 
@@ -199,6 +202,7 @@ export default function Restaurant() {
     dispatch(clearMenuState());
     dispatch(fetchRestaurant({id: id}));
     dispatch(fetchMenu({id: id}));
+    dispatch(fetchOrder({restaurantId: id, customerId: customerId}));
   }, [id]);
 
   useEffect(() => {
@@ -226,11 +230,11 @@ export default function Restaurant() {
             />
           </div>
         </ScrollToShowBackground>
-        <Box className={classes.fab} bottom={cart.length > 0 ? theme.spacing(8) : theme.spacing(2)}>
+        <Box className={classes.fab} bottom={cartIsEmpty > 0 ? theme.spacing(2) : theme.spacing(8)}>
           <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
-        <Box className={classes.cart} display={orderState.data.id ? `flex` : `none`}>
-          <CartSummaryBottom cart={orderState.data}/>
+        <Box className={classes.cart}>
+          {!cartIsEmpty && <CartSummaryBottom cart={cartData}/>}
         </Box>
 
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>

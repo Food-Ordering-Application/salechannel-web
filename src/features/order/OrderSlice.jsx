@@ -23,13 +23,24 @@ export const addItem = createAsyncThunk(
   }
 );
 
+export const fetchOrder = createAsyncThunk(
+  `order/getAssociated`,
+  async ({restaurantId, customerId}, thunkAPI) => {
+    try {
+      return await OrderApi.getOrderAssociated(restaurantId, customerId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 export const orderSlice = createSlice({
   name: 'order',
   initialState: {
     isRequesting: false,
     isError: false,
     isSuccess: false,
-    isEmpty: false,
+    isEmpty: true,
     data: {},
   },
   reducers: {
@@ -45,6 +56,7 @@ export const orderSlice = createSlice({
     [createOrder.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
       state.isSuccess = true;
+      state.isEmpty = false;
       console.log(payload);
       state.data = payload;
     },
@@ -67,6 +79,21 @@ export const orderSlice = createSlice({
     [addItem.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
       state.isSuccess = true;
+      state.data = payload.order;
+    },
+    [fetchOrder.pending]: (state) => {
+      state.isRequesting = true;
+    },
+    [fetchOrder.rejected]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    },
+    [fetchOrder.fulfilled]: (state, {payload}) => {
+      state.isRequesting = false;
+      state.isSuccess = true;
+      console.log(`Last cart: ` + JSON.stringify(payload));
+      state.isEmpty = payload.order === undefined;
       state.data = payload.order;
     }
   },

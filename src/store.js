@@ -23,7 +23,7 @@ const reducer = combineReducers({
 const persistedReducer = persistReducer({
   key: `root`,
   storage,
-  whitelist: [`user`, `order`],
+  whitelist: [`user`],
 }, reducer);
 
 export default configureStore({

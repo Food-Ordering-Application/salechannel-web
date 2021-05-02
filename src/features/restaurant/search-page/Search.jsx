@@ -51,7 +51,6 @@ export default function Search() {
   );
 
   useEffect(() => {
-    console.log(history);
     if (data.length === 0) {
       search();
       //Cache history result when back from details
