@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: `row`,
     alignItems: `center`,
     padding: theme.spacing(0, 2),
+    textDecoration: `none`,
   },
   text: {
     fontSize: theme.spacing(2),

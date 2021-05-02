@@ -80,9 +80,6 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   };
 
   useEffect(() => {
-    if (orderState.isRequesting) {
-      console.log("Order requesting...");
-    }
     if (orderState.isError) {
       dispatch(showError(orderState.errorMessage));
       dispatch(clearOrderState());
@@ -90,7 +87,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
     if (orderState.isSuccess) {
       dispatch(clearOrderState());
     }
-  }, [orderState.isRequesting, orderState.isError, orderState.isSuccess]);
+  }, [orderState.isError, orderState.isSuccess]);
 
   const handleToppingChange = (groupIndex, selectedToppings) => {
     const newArr = [...toppings];

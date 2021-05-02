@@ -67,12 +67,13 @@ export default function Search() {
       dispatch(showError(errorMessage));
     }
     if (isSuccess) {
-      setResult(data.map(({id, name, address, coverImageUrl}, index) => (
+      setResult(data.map(({id, name, address, coverImageUrl, rating}, index) => (
         <Box mb={2}>
           <RestaurantItemLarge key={index}
                                name={`${name} - ${address}`}
                                image={coverImageUrl}
                                onClick={() => handleItemClick(id)}
+                               rating={rating}
           />
         </Box>
       )));

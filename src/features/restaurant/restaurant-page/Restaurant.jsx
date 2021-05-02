@@ -31,11 +31,12 @@ const useStyles = makeStyles(theme => ({
     cover: {
       width: `100%`,
     },
-    content: {
+    content: ({cartIsAppear}) => ({
       transform: `translateY(-60px)`,
       width: `100%`,
       zIndex: 10,
-    },
+      marginBottom: cartIsAppear ? theme.spacing(6) : theme.spacing(2)
+    }),
     info: {
       margin: `0 auto`,
     },
@@ -177,7 +178,6 @@ const productList = {
 const Mocked = Object.keys(productList).map(name => ({name: name, count: productList[name].length}));
 
 export default function Restaurant() {
-  const classes = useStyles();
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
   const {id: customerId} = useSelector(userSelector);
@@ -187,6 +187,7 @@ export default function Restaurant() {
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
+  const classes = useStyles({cartIsAppear: !cartIsEmpty});
 
   const handleFavoriteChange = () => {
     const newInfo = {...info};
