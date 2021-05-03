@@ -1,10 +1,13 @@
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, ButtonBase, Grid, InputBase, Typography} from "@material-ui/core";
+import {Box, ButtonBase, CircularProgress, Divider, Grid, InputBase, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
 import AddressItem from "../address-management-page/components/AddressItem";
 import LocationIcon from "../../../asserts/icons/Location";
+import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete";
+import AddressItemLarge from "./components/AddressItemLarge";
+import Ribbon from "../../common/Ribbon";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -13,9 +16,18 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     right: 0,
+    zIndex: 1,
   },
   input: {
     fontSize: theme.spacing(1.5),
+    lineHeight: `${theme.spacing(2.5)}px`,
+    width: `100%`,
+  },
+  dropdownContainer: {
+    width: `inherit`,
+    position: `absolute`,
+    zIndex: 1,
+    backgroundColor: "aliceblue",
   }
 }));
 
@@ -28,40 +40,78 @@ const mockedData = [
 
 export default function AddressAdding() {
   const classes = useStyles();
+  const [suggestions, setSuggestion] = useState([]);
+  const [isFetching, setFetching] = useState(false);
   const handleSearch = () => {
-    alert(`Developping...`);
   };
   const [address, setAddress] = useState();
-  const handleTextChange = (event) => {
-    setAddress(`${event.target.value}`);
+  const handleTextChange = (address) => setAddress(address);
+  const handleSelect = (address) => {
+    console.log(address);
+    geocodeByAddress(address)
+      .then((geocode) => getLatLng(geocode[0]))
+      .then((location) => callAPI(address, location))
+      .catch((error) => console.log(error));
   };
+  const callAPI = (address, location) => {
+    alert(`${address} ${JSON.stringify(location)}`);
+  }
+
+  const centerComponent = (
+    <PlacesAutocomplete value={address}
+                        onChange={handleTextChange}
+                        onSelect={handleSelect}
+    >
+      {({getInputProps, suggestions, loading}) => {
+        setFetching(loading);
+        if (suggestions.length !== 0)
+          setSuggestion(suggestions);
+        return (
+          <InputBase className={classes.input}
+                     placeholder="Nhập địa chỉ"
+                     fullWidth
+                     {...getInputProps()}/>
+        );
+      }}
+    </PlacesAutocomplete>
+  );
+
+  console.log(suggestions);
 
   return (
     <Box mt={8} px={2}>
       <Box className={classes.topNavigator}>
-        <TopNavigationBar rightIcon={SearchIcon}
+        <TopNavigationBar rightIcon={isFetching ? CircularProgress : SearchIcon}
                           rightAction={handleSearch}
-                          centerComponent={
-                            <InputBase className={classes.input}
-                                       placeholder="Nhập địa chỉ"
-                                       onChange={handleTextChange}
-                                       fullWidth/>
-                          }
+                          centerComponent={centerComponent}
         />
       </Box>
-      <Box mb={2}>
+      <Box mb={1} display="flex" alignItems="flex-end" flexDirection="column">
         <ButtonBase>
           <Grid container spacing={1}>
-            <Grid item>
-              <Box fontSize={18} color="primary.main" component={LocationIcon}/>
-            </Grid>
             <Grid item>
               <Typography variant="h4">
                 <Box fontSize={12}>Lấy vị trí hiện tại</Box>
               </Typography>
             </Grid>
+            <Grid item>
+              <Box fontSize={18} color="primary.main" component={LocationIcon}/>
+            </Grid>
           </Grid>
         </ButtonBase>
+      </Box>
+      <Box mb={2} hidden={suggestions.length === 0}>
+        <Box mb={0.5}>
+          <Typography variant="h4">
+            <Box fontSize={12} color="onSurface.mediumEmphasis">Địa chỉ gợi ý</Box>
+          </Typography>
+        </Box>
+        {suggestions.map(({placeId, description, formattedSuggestion: {mainText, secondaryText}}) => (
+          <Ribbon key={placeId} onClick={() => handleSelect(description)}>
+            <AddressItemLarge primaryText={mainText} secondaryText={secondaryText}/>
+            <Divider variant="fullWidth"/>
+          </Ribbon>
+        ))}
       </Box>
       <Box mb={1}>
         <Typography variant="h4">
