@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, ButtonBase, CircularProgress, Divider, Grid, InputBase, Typography} from "@material-ui/core";
+import {Box, ButtonBase, Divider, Grid, InputBase, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
 import AddressItem from "../address-management-page/components/AddressItem";
@@ -8,6 +8,8 @@ import LocationIcon from "../../../asserts/icons/Location";
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete";
 import AddressItemLarge from "./components/AddressItemLarge";
 import Ribbon from "../../common/Ribbon";
+import Spinner from "../../common/Spinner";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -55,12 +57,13 @@ export default function AddressAdding() {
   };
   const callAPI = (address, location) => {
     alert(`${address} ${JSON.stringify(location)}`);
-  }
+  };
 
   const centerComponent = (
     <PlacesAutocomplete value={address}
                         onChange={handleTextChange}
                         onSelect={handleSelect}
+                        debounce={2000}
     >
       {({getInputProps, suggestions, loading}) => {
         setFetching(loading);
@@ -76,18 +79,16 @@ export default function AddressAdding() {
     </PlacesAutocomplete>
   );
 
-  console.log(suggestions);
-
   return (
     <Box mt={8} px={2}>
       <Box className={classes.topNavigator}>
-        <TopNavigationBar rightIcon={isFetching ? CircularProgress : SearchIcon}
+        <TopNavigationBar rightIcon={isFetching ? Spinner : SearchIcon}
                           rightAction={handleSearch}
                           centerComponent={centerComponent}
         />
       </Box>
       <Box mb={1} display="flex" alignItems="flex-end" flexDirection="column">
-        <ButtonBase>
+        <ButtonBase component={Link} to="/address/add/current-location">
           <Grid container spacing={1}>
             <Grid item>
               <Typography variant="h4">

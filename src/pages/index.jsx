@@ -11,6 +11,7 @@ import Search from "../features/restaurant/search-page/Search";
 import OrderStatus from "../features/order/status-page/OrderStatus";
 import AddressManagement from "../features/address/address-management-page/AddressManagement";
 import AddressAdding from "../features/address/address-adding-page/AddressAdding";
+import LocationAdding from "../features/address/current-location-adding-page/LocationAdding";
 
 
 export default function IndexComponent() {
@@ -27,6 +28,7 @@ export default function IndexComponent() {
       <Route exact path='/order'><OrderStatus/></Route>
       <Route exact path='/address'><AddressManagement/></Route>
       <Route exact path='/address/add'><AddressAdding/></Route>
+      <Route exact path='/address/add/current-location'><LocationAdding/></Route>
     </Switch>
   );
 }
