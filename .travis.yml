@@ -5,6 +5,7 @@ services:
   - docker
 env:
   - API_URL=https://api-serverr.herokuapp.com/
+  - REACT_APP_GOOGLE_API_KEY=AIzaSyDGGYtVIPXFYHJkU5AAVaC0naDfWWtXcfw
 
 before_install:
   # install heroku CLI
