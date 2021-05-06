@@ -8,5 +8,5 @@ export function getLocation(onSuccess) {
 }
 
 export async function getAddress(lng, lat){
-  return (await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=vi&key=${process.env.REACT_APP_LOCAL_API}`)).data;
+  return (await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=vi&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)).data;
 }
