@@ -6,20 +6,19 @@ import OrderCost from "./OrderCost";
 
 const useStyles = makeStyles(theme => ({
     root: {
-      borderRadius: theme.spacing(1),
-      boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.08)`,
-      background: `linear-gradient(-45deg, #ffffff 16px, transparent 0), linear-gradient(45deg, #ffffff 16px, transparent 0)`,
+      borderRadius: theme.spacing(1, 1, 0, 0),
+      boxShadow: theme.effect.dp10.boxShadow,
+      position: `relative`,
       "&::after": {
-        backgroundPosition: `left-bottom`,
-        backgroundRepeat: `repeat - x`,
-        backgroundSize: `32px 32px`,
-        content: " ",
-        display: `block`,
         position: `absolute`,
-        bottom: 0,
         left: 0,
+        bottom: theme.spacing(-0.5),
+        display: `block`,
         width: `100%`,
-        height: `32px`,
+        height: theme.spacing(1),
+        content: `""`,
+        background: `linear-gradient(45deg, white 33.33%, transparent 33.33%, transparent 66.66%, white 66.66%), linear-gradient(-45deg, white 33.33%, transparent 33.33%, transparent 66.66%, white 66.66%)`,
+        backgroundSize: theme.spacing(1, 2),
       }
     },
   })

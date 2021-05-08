@@ -35,7 +35,7 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
 
   return (
     <Box p={2} className={classes.root}>
-      <Box my={2}>
+      <Box mb={2}>
         <Grid container>
           <Grid item xs>
             <Button variant="text" fullWidth>

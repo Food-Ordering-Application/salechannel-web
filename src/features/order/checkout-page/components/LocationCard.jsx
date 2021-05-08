@@ -1,14 +1,24 @@
 import React from "react";
 import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    boxShadow: theme.effect.dp00.boxShadow,
+    borderRadius: theme.spacing(1),
+  }
+}));
+
 
 export default function LocationCard({location, handleChange}) {
   const str = `${location}`;
   const street = str.split(',')[0];
   const rest = str.slice(street.length + 1);
+  const classes = useStyles();
 
   return (
-    <Paper variant="elevation" elevation={2}>
-      <Box p={1}>
+    <Paper className={classes.root}>
+      <Box p={1.5}>
         <Typography variant="h4">
           <Box fontSize={12} color="onSurface.mediumEmphasis">Giao đến</Box>
         </Typography>

@@ -52,23 +52,22 @@ export default function Checkout() {
   const {id: orderId} = data;
 
   return (
-    <Box mt={6} p={1}>
+    <Box mt={6} mb={16.25} p={1.5}>
       <Box className={classes.topNavigationBar}>
         <TopNavigationBar label="Check out"/>
       </Box>
       <Box>
         <LocationCard location={"225 Nguyễn Văn Cừ, phường 4, quận 5, Thành phố Hồ Chí Minh"}/>
       </Box>
-      <Box my={2}>
+      <Box mt={2} mb={3}>
         <OrderDetails orderData={data}
                       handleRemoveItem={(orderItemId) => {
                         dispatch(removeItem({orderId, orderItemId}));
                       }}/>
       </Box>
-      <Box mx={-1}>
+      <Box mx={-1.5}>
         <CouponList/>
       </Box>
-      <Box py={10}/>
       <Box className={classes.mainActionsBottom}>
         <MainActionsBottom totalCost={58000} handleCheckout={() => history.push(`/order`)}/>
       </Box>

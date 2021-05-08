@@ -206,7 +206,7 @@ const theme = createMuiTheme({
   effect: {
     dp00: {
       background: `#C4C4C4`,
-      boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+      boxShadow: `0px 2px 8px rgba(0, 0, 0, 0.1)`,
     },
     dp01: {
       background: `#C4C4C4`,
