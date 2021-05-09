@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const BASEURL = `http://localhost:8000`;
-// const BASEURL = `http://192.168.137.1:8000`;
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
 const UserApi = {
 

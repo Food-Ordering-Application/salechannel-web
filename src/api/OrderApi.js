@@ -1,7 +1,8 @@
 import axios from "axios";
 import {authHeader} from "../helpers/header";
 
-const BASEURL = `http://localhost:8000`;
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
+
 
 //TODO: Optimize duplicate code
 export const OrderApi = {

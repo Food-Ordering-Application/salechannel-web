@@ -1,6 +1,9 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
+import {datetimeFormatter} from "../../../../../untils/formatter";
+import Ribbon from "../../../../common/Ribbon";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,7 +67,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: `20px`,
     padding: `5px`,
   },
-  ticketContentWrapper: {},
   button: {
     margin: `auto`,
     fontSize: theme.spacing(1.25),
@@ -79,28 +81,30 @@ export default function CouponItem({code, description, expireAt, handleShowDetai
     <Paper variant="outlined" className={classes.root}>
       <Grid container alignItems="center">
         <Grid item xs={9}>
-          <Box>
-            <Typography variant="h5">
-              <Box className={classes.code}>{code}</Box>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h4">
-              <Box className={classes.description}>{description}</Box>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h5">
-              <Box className={classes.expireDate}>{`EXP: ${new Date(expireAt).toDateString()}`}</Box>
-            </Typography>
-          </Box>
+          <Ribbon component={Link} to={`/coupon/${code}`}>
+            <Box>
+              <Typography variant="h5">
+                <Box className={classes.code}>{code}</Box>
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h4">
+                <Box className={classes.description}>{description}</Box>
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h5">
+                <Box className={classes.expireDate}>{`EXP: ${datetimeFormatter(expireAt)}`}</Box>
+              </Typography>
+            </Box>
+          </Ribbon>
         </Grid>
         <Grid item xs={3} alignSelf="center">
-            <Button variant="text" fullWidth>
-              <Typography variant="h5">
-                <Box className={classes.button}>Dùng</Box>
-              </Typography>
-            </Button>
+          <Button variant="text" fullWidth>
+            <Typography variant="h5">
+              <Box className={classes.button}>Dùng</Box>
+            </Typography>
+          </Button>
         </Grid>
       </Grid>
     </Paper>
