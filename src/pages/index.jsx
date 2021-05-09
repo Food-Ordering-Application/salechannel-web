@@ -12,6 +12,7 @@ import OrderStatus from "../features/order/status-page/OrderStatus";
 import AddressManagement from "../features/address/address-management-page/AddressManagement";
 import AddressAdding from "../features/address/address-adding-page/AddressAdding";
 import LocationAdding from "../features/address/current-location-adding-page/LocationAdding";
+import CouponDetails from "../features/promotion/coupon-details-page/CouponDetails";
 
 
 export default function IndexComponent() {
@@ -29,6 +30,7 @@ export default function IndexComponent() {
       <Route exact path='/address'><AddressManagement/></Route>
       <Route exact path='/address/add'><AddressAdding/></Route>
       <Route exact path='/address/add/current-location'><LocationAdding/></Route>
+      <Route exact path='/coupon/:id'><CouponDetails/></Route>
     </Switch>
   );
 }
