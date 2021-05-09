@@ -6,6 +6,11 @@ import {InfoWindow, Marker} from 'google-maps-react';
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {Done} from "@material-ui/icons";
+import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {addAddress, addressSelector, clearAddressState} from "../AddressSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {userSelector} from "../../user/UserSlice";
 
 const useStyles = makeStyles((theme) => ({
   topNavigator: {
@@ -18,13 +23,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LocationAdding() {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {id: userId} = useSelector(userSelector);
+  const {isPending, isError, isSuccess, errorMessage} = useSelector(addressSelector);
+
   const [location, setLocation] = useState({lat: 49.2827291, lng: -123.1207375,});
   const [address, setAddress] = useState(``);
-  const classes = useStyles();
   const [activeMarker, setMarker] = useState({});
 
   const handleSubmitLocation = () => {
-    alert(`${address} ${JSON.stringify(location)}`);
+    const {lng: longitude, lat: latitude} = location;
+    dispatch(addAddress({userId, address, longitude, latitude}));
   };
 
   const handleMapDrag = (mapProps, map) => {
@@ -33,12 +44,26 @@ export default function LocationAdding() {
   };
 
   useEffect(() => {
-    getLocation(({coords: {longitude: lng, latitude: lat}}) => setLocation({lat, lng}));
+    getLocation(({coords: {longitude: lng, latitude: lat}}) => setLocation({lng, lat}));
   }, []);
 
   useEffect(() => {
     getAddress(location.lng, location.lat).then(({results}) => setAddress(results[0].formatted_address));
   }, [location])
+
+  useEffect(() => {
+    if (isPending) {
+      console.log(`Saving...`);
+    }
+    if (isError) {
+      dispatch(showError(errorMessage));
+      dispatch(clearAddressState());
+    }
+    if (isSuccess) {
+      dispatch(clearAddressState());
+      history.replace(`/address`);
+    }
+  }, [isPending, isError, isSuccess, dispatch])
 
   return (
     <Box>
@@ -51,7 +76,7 @@ export default function LocationAdding() {
         <GoogleMap centerLocation={location} onDragend={handleMapDrag}>
           <Marker position={location}
                   onClick={(props, marker, e) => setMarker(marker)}/>
-          <InfoWindow visible={true} marker={activeMarker} >
+          <InfoWindow visible={true} marker={activeMarker}>
             <div>
               <p>{address}</p>
             </div>

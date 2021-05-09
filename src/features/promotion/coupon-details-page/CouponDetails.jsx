@@ -57,7 +57,7 @@ export default function CouponDetails() {
 
   return (
     <Box mt={6}>
-      <Box className={classes.topNavigator}>
+      <Box>
         <TopNavigationBar label="Coupon details"/>
       </Box>
 

@@ -9,6 +9,7 @@ import {orderSlice} from "./features/order/OrderSlice";
 import {restaurantsListSlice} from "./features/restaurant/RestaurantsListSlice";
 import {restaurantSlice} from "./features/restaurant/RestaurantSlice";
 import {menuSlice} from "./features/restaurant/MenuSlice";
+import {addressSlice} from "./features/address/AddressSlice";
 
 const reducer = combineReducers({
   snackbar: snackbarSlice.reducer,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   restaurant: restaurantSlice.reducer,
   restaurants: restaurantsListSlice.reducer,
   menu: menuSlice.reducer,
+  address: addressSlice.reducer,
 });
 
 const persistedReducer = persistReducer({

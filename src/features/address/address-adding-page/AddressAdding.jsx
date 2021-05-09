@@ -1,25 +1,21 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, ButtonBase, Divider, Grid, InputBase, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
-import AddressItem from "../address-management-page/components/AddressItem";
-import LocationIcon from "../../../asserts/icons/Location";
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete";
 import AddressItemLarge from "./components/AddressItemLarge";
 import Ribbon from "../../common/Ribbon";
 import Spinner from "../../common/Spinner";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {addAddress, addressSelector, clearAddressState} from "../AddressSlice";
+import {userSelector} from "../../user/UserSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {EditLocationOutlined, GpsFixed} from "@material-ui/icons";
+import PlaceHolder from "../../common/PlaceHolder";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
-  topNavigator: {
-    position: `fixed`,
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1,
-  },
   input: {
     fontSize: theme.spacing(1.5),
     lineHeight: `${theme.spacing(2.5)}px`,
@@ -30,18 +26,19 @@ const useStyles = makeStyles((theme) => ({
     position: `absolute`,
     zIndex: 1,
     backgroundColor: "aliceblue",
+  },
+  placeHolder: {
+    height: `50vh`,
   }
 }));
 
-const mockedData = [
-  `227 Nguyễn Văn Cừ, phường 4, quận 5, Thành phố Hồ Chính Minh`,
-  `25 Nguyễn Trãi, phường 2, quận 5, Thành phố Hồ Chính Minh`,
-  `26 Nguyễn Trãi, phường 2, quận 5, Thành phố Hồ Chính Minh`,
-  `27 Nguyễn Trãi, phường 2, quận 5, Thành phố Hồ Chính Minh`,
-]
-
 export default function AddressAdding() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {id: userId} = useSelector(userSelector);
+  const {isPending, isSuccess, isError, errorMessage} = useSelector(addressSelector);
+
   const [suggestions, setSuggestion] = useState([]);
   const [isFetching, setFetching] = useState(false);
   const handleSearch = () => {
@@ -49,21 +46,33 @@ export default function AddressAdding() {
   const [address, setAddress] = useState();
   const handleTextChange = (address) => setAddress(address);
   const handleSelect = (address) => {
-    console.log(address);
     geocodeByAddress(address)
       .then((geocode) => getLatLng(geocode[0]))
-      .then((location) => callAPI(address, location))
+      .then((location) => submitAddress(address, location))
       .catch((error) => console.log(error));
   };
-  const callAPI = (address, location) => {
-    alert(`${address} ${JSON.stringify(location)}`);
+
+  const submitAddress = (address, location) => {
+    const {lng: longitude, lat: latitude} = location;
+    dispatch(addAddress({userId, address, longitude, latitude}));
   };
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(showError(errorMessage));
+      dispatch(clearAddressState());
+    }
+    if (isSuccess) {
+      dispatch(clearAddressState());
+      history.goBack();
+    }
+  }, [dispatch, isError, isSuccess]);
 
   const centerComponent = (
     <PlacesAutocomplete value={address}
                         onChange={handleTextChange}
                         onSelect={handleSelect}
-                        debounce={2000}
+                        debounce={1000}
     >
       {({getInputProps, suggestions, loading}) => {
         setFetching(loading);
@@ -72,6 +81,7 @@ export default function AddressAdding() {
         return (
           <InputBase className={classes.input}
                      placeholder="Nhập địa chỉ"
+                     autoFocus={true}
                      fullWidth
                      {...getInputProps()}/>
         );
@@ -81,12 +91,11 @@ export default function AddressAdding() {
 
   return (
     <Box mt={8} px={2}>
-      <Box className={classes.topNavigator}>
-        <TopNavigationBar rightIcon={isFetching ? Spinner : SearchIcon}
-                          rightAction={handleSearch}
-                          centerComponent={centerComponent}
-        />
-      </Box>
+      <TopNavigationBar rightIcon={isFetching ? Spinner : SearchIcon}
+                        rightAction={handleSearch}
+                        centerComponent={centerComponent}
+                        isPending={isPending}
+      />
       <Box mb={1} display="flex" alignItems="flex-end" flexDirection="column">
         <ButtonBase component={Link} to="/address/add/current-location">
           <Grid container spacing={1}>
@@ -96,13 +105,13 @@ export default function AddressAdding() {
               </Typography>
             </Grid>
             <Grid item>
-              <Box fontSize={18} color="primary.main" component={LocationIcon}/>
+              <Box fontSize={18} color="primary.main" component={GpsFixed}/>
             </Grid>
           </Grid>
         </ButtonBase>
       </Box>
-      <Box mb={2} hidden={suggestions.length === 0}>
-        <Box mb={0.5}>
+      <Box hidden={suggestions.length === 0}>
+        <Box mb={2}>
           <Typography variant="h4">
             <Box fontSize={12} color="onSurface.mediumEmphasis">Địa chỉ gợi ý</Box>
           </Typography>
@@ -114,18 +123,9 @@ export default function AddressAdding() {
           </Ribbon>
         ))}
       </Box>
-      <Box mb={1}>
-        <Typography variant="h4">
-          <Box fontSize={12} color="onSurface.mediumEmphasis">Địa chỉ đã lưu</Box>
-        </Typography>
+      <Box hidden={suggestions.length > 0}>
+        <PlaceHolder icon={EditLocationOutlined} text="Nhập địa chỉ đi bạn ơi"/>
       </Box>
-      {
-        mockedData.map((data, index) => (
-          <Box mb={2}>
-            <AddressItem key={index} addressText={data}/>
-          </Box>
-        ))
-      }
     </Box>
   );
 }
