@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box} from "@material-ui/core";
 
@@ -11,6 +11,7 @@ import {useHistory, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearOrderState, orderSelector, removeItem} from "../OrderSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import AddressDialog from "./components/AddressDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +35,7 @@ export default function Checkout() {
   const history = useHistory();
   const dispatch = useDispatch();
   const {id: restaurantId} = useParams();
+  const [addressOpen, setAddressOpen] = useState(false);
 
   const {isEmpty, isError, errorMessage, data} = useSelector(orderSelector);
 
@@ -49,7 +51,7 @@ export default function Checkout() {
     return null;
   }
 
-  const {id: orderId} = data;
+  const {id: orderId, delivery: {address, total}} = data;
 
   return (
     <Box mt={6} mb={16.25} p={1.5}>
@@ -57,7 +59,8 @@ export default function Checkout() {
         <TopNavigationBar label="Check out"/>
       </Box>
       <Box>
-        <LocationCard location={"225 Nguyễn Văn Cừ, phường 4, quận 5, Thành phố Hồ Chí Minh"}/>
+        <LocationCard location={address}
+                      handleChange={() => setAddressOpen(true)}/>
       </Box>
       <Box mt={2} mb={3}>
         <OrderDetails orderData={data}
@@ -69,8 +72,9 @@ export default function Checkout() {
         <CouponList/>
       </Box>
       <Box className={classes.mainActionsBottom}>
-        <MainActionsBottom totalCost={58000} handleCheckout={() => history.push(`/order`)}/>
+        <MainActionsBottom totalCost={total} handleCheckout={() => history.push(`/order`)}/>
       </Box>
+      <AddressDialog open={addressOpen} onClose={() => setAddressOpen(false)}/>
     </Box>
   );
 }

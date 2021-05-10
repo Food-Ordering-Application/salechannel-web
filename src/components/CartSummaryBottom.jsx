@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CartSummaryBottom({cart, toCheckout}) {
-  const {orderItems = [], subTotal = 0} = cart;
+  const {orderItems = [], total = 0} = cart;
   let quantity = 0;
   for (const item of orderItems) {
     quantity += item.quantity;
@@ -36,7 +36,7 @@ export default function CartSummaryBottom({cart, toCheckout}) {
       <Box id="CartInfo">
         <Typography variant="h3">
           <Box className={classes.text}>
-            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(subTotal)}`}
+            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(total)}`}
           </Box>
         </Typography>
       </Box>

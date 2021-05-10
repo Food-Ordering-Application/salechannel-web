@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 export default function OrderDetails({additionComponent, orderData, handleRemoveItem}) {
   const classes = useStyles();
 
-  const {orderItems, subTotal, shippingFee, serviceFee} = orderData;
+  const {orderItems, total, delivery: {shippingFee}} = orderData;
 
   const orderItemsList = orderItems.map((item) => {
     const {id: orderItemId} = item;
@@ -57,7 +57,7 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
           </Box>
           <Divider variant="fullWidth"/>
           <Box py={1.5}>
-            <OrderCost subtotal={subTotal} distance={1.4} deliveryFees={shippingFee + serviceFee}/>
+            <OrderCost subtotal={total} distance={1.4} deliveryFees={shippingFee}/>
           </Box>
         </Box>
         <Box>

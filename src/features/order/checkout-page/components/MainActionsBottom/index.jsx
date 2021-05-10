@@ -1,7 +1,7 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, Button, Divider, Grid, Typography} from "@material-ui/core";
-import {ExpandLess, PaymentOutlined} from "@material-ui/icons";
+import {AttachMoneyRounded, ExpandLess} from "@material-ui/icons";
 import {currencyFormatter} from "../../../../../untils/formatter";
 
 
@@ -41,11 +41,11 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
             <Button variant="text" fullWidth>
               <Grid container alignItems="center">
                 <Grid item>
-                  <PaymentOutlined/>
+                  <AttachMoneyRounded/>
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h5">
-                    <Box className={classes.paymentBtn}>ATM</Box>
+                    <Box className={classes.paymentBtn}>CASH</Box>
                   </Typography>
                 </Grid>
                 <Grid item>

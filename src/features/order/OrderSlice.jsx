@@ -1,6 +1,31 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {OrderApi} from "../../api/OrderApi";
 
+/*
+DEFAULT HANDLERS
+ */
+
+const handlePendingDefault = (state) => {
+  state.isRequesting = true;
+};
+
+const handleRejectDefault = (state, {payload}) => {
+  state.isRequesting = false;
+  state.isError = true;
+  state.errorMessage = payload;
+};
+
+const handleFulfillDefault = (state, {payload}) => {
+  state.isRequesting = false;
+  state.isSuccess = true;
+  state.isEmpty = !payload.order;
+  state.data = payload.order;
+};
+
+/*
+REDUX THUNK
+ */
+
 export const createOrder = createAsyncThunk(
   `order/create`,
   async ({restaurantId, userId, menuItem, topping}, thunkAPI) => {
@@ -67,22 +92,20 @@ export const removeItem = createAsyncThunk(
   }
 );
 
-const handlePendingDefault = (state) => {
-  state.isRequesting = true;
-};
+export const updateAddress = createAsyncThunk(
+  `order/updateAddress`,
+  async ({customerId, orderId, customerAddressId}, thunkAPI) => {
+    try {
+      return await OrderApi.updateAddress(customerId, orderId, customerAddressId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 
-const handleRejectDefault = (state, {payload}) => {
-  state.isRequesting = false;
-  state.isError = true;
-  state.errorMessage = payload;
-};
-
-const handleFulfillDefault = (state, {payload}) => {
-  state.isRequesting = false;
-  state.isSuccess = true;
-  state.isEmpty = !payload.order;
-  state.data = payload.order;
-};
+/*
+REDUX SLICE
+ */
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -153,6 +176,13 @@ export const orderSlice = createSlice({
     [removeItem.pending]: handlePendingDefault,
     [removeItem.rejected]: handleRejectDefault,
     [removeItem.fulfilled]: handleFulfillDefault,
+    [updateAddress.pending]: handlePendingDefault,
+    [updateAddress.rejected]: handleRejectDefault,
+    [updateAddress.fulfilled]: (state, {payload: {order}}) => {
+      state.isRequesting = false;
+      state.isSuccess = true;
+      state.data = {...state.data, ...order};
+    },
   },
 });
 

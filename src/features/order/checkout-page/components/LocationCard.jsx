@@ -29,7 +29,7 @@ export default function LocationCard({location, handleChange}) {
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="text" color="primary">
+            <Button variant="text" color="primary" onClick={handleChange}>
               <Box fontSize={12} lineHeight="normal">Thay đổi</Box>
             </Button>
           </Grid>

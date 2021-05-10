@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import UserApi from "../../api/UserApi";
 
 /*
-DEFAULT HANDLER
+DEFAULT HANDLERS
  */
 
 const handlePendingDefault = (state) => {

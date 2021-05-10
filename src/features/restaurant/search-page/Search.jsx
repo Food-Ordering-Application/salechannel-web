@@ -30,8 +30,6 @@ export default function Search() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  console.log(localStorage.getItem(`persist:root`));
-
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
 
