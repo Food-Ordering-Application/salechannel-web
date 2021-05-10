@@ -68,6 +68,7 @@ export const userSlice = createSlice({
     removeUser: (state) => {
       state = {};
       state.isAuthenticated = false;
+      localStorage.removeItem(`token`);
       return state;
     },
     verifyOtpSuccess: (state) => {
@@ -88,6 +89,8 @@ export const userSlice = createSlice({
       state.accessToken = payload.access_token;
       state.isFetching = false;
       state.isSuccess = true;
+      localStorage.setItem(`id`, user.id);
+      localStorage.setItem(`token`, payload.access_token);
       return state;
     },
     [loginUser.pending]: (state) => {

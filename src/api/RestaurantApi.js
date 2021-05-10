@@ -2,12 +2,12 @@ import axios from "axios";
 
 const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
-
 const RestaurantApi = {
-  filter: async (pageIndex, area, category, name) => {
+  filter: async (pageIndex, rowsPerPage, area, category, name) => {
     try {
       return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {
-        pageNumber: pageIndex,
+        page: pageIndex,
+        size: rowsPerPage,
         area: area,
         category: category,
         search: name,

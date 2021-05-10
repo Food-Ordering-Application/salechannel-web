@@ -58,7 +58,7 @@ export default function ProductItemLarge({image, name, description, price, onCli
   return (
     <div className={classes.container}>
       <Card elevation={0} className={classes.root}>
-        <Grid container wrap="nowrap" zeroMinWidth>
+        <Grid container wrap="nowrap">
           <Grid item>
             <CardMedia
               className={classes.cover}

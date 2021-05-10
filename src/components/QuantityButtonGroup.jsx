@@ -1,19 +1,11 @@
-import React, {useState} from "react";
+import React from "react";
 import {Box, IconButton, Typography} from "@material-ui/core";
 import {Add, Remove} from "@material-ui/icons";
 
-export default function QuantityButtonGroup({onChange}) {
-  const [value, setValue] = useState(1);
+export default function QuantityButtonGroup({value = 1, onChange}) {
 
-  const handleIncrement = () => {
-    onChange(value + 1);
-    setValue(value + 1);
-  };
-
-  const handleDecrement = () => {
-    onChange(value - 1);
-    setValue(value - 1);
-  };
+  const handleIncrement = () => onChange(value + 1);
+  const handleDecrement = () => onChange(value - 1);
 
   return (
     <Box display="flex" flexDirection="row">

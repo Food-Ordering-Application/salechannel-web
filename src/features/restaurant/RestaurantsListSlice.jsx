@@ -3,9 +3,9 @@ import RestaurantApi from "../../api/RestaurantApi";
 
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
-  async ({pageIndex, area, category, name}, thunkAPI) => {
+  async ({pageIndex, rowsPerPage = 25, area, category, name}, thunkAPI) => {
     try {
-      return await RestaurantApi.filter(pageIndex, area, category, name);
+      return await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

@@ -35,7 +35,8 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
     for (const topping of item.orderItemToppings) {
       itemPrice += topping.price;
     }
-    return <OrderItem quantity={item.quantity}
+    return <OrderItem key={orderItemId}
+                      quantity={item.quantity}
                       name="Name from API's response"
                       price={itemPrice}
                       description="Description from API's response"

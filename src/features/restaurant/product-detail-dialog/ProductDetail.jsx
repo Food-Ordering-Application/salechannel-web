@@ -56,6 +56,8 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
 
+  console.log(toppingGroups);
+
   useEffect(() => {
     setPricePerUnit(basePrice);
   }, [basePrice]);
@@ -69,14 +71,16 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
       name: product.name,
       quantity: quantity,
       price: pricePerUnit,
-      // option: product.options.filter((option) => option.name === value)[0],
     });
+    const menuItem = {...product, quantity};
     if (orderState.isEmpty) {
-      dispatch(createOrder({userId, restaurantId: restaurant.id, menuItem: product, topping: toppings}));
+      dispatch(createOrder({userId, restaurantId: restaurant.id, menuItem, topping: toppings}));
     } else {
-      dispatch(addItem({orderId: orderState.data.id, menuItem: product, topping: toppings}));
+      dispatch(addItem({orderId: orderState.data.id, menuItem, topping: toppings}));
     }
     handleClose();
+    setQuantity(1);
+    setToppings([]);
   };
 
   useEffect(() => {
@@ -151,7 +155,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
           </Box>
 
           <Box mx={-2}>
-            {toppingGroups.map((data, index) => <ToppingGroup key={index}
+            {toppingGroups.map((data, index) => <ToppingGroup key={data.id}
                                                               toppingGroup={data}
                                                               onChange={(selectedToppings) => handleToppingChange(index, selectedToppings)}/>
             )}
@@ -174,7 +178,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
           {/*</Box>*/}
           <Box id="QuantityController">
             <Box width={1} my={5} display="flex" justifyContent="center">
-              <QuantityButtonGroup onChange={(value) => setQuantity(value)}/>
+              <QuantityButtonGroup value={quantity} onChange={(value) => setQuantity(value)}/>
             </Box>
           </Box>
           <Box id="Button">

@@ -73,7 +73,7 @@ const mockedData = {
   distance: 1.2,
   address: `224 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh`,
   cover: `https://images.foody.vn/res/g21/208155/prof/s576x330/foody-mobile-img_0954-jpg-344-635947742274439596.jpg`,
-  isFavorite: true,
+  isFavorite: false,
 }
 
 const productList = {
@@ -256,7 +256,7 @@ export default function Restaurant() {
           <div className={classes.menu}>
             <MenuVertical productList={menu.menu}
                           onAddToCart={handleAddToCart}
-                          orderItems={orderState.data && orderState.data.orderItems || []}/>
+                          orderItems={(orderState.data && orderState.data.orderItems) || []}/>
           </div>
         </div>
       </>

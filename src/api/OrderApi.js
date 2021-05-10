@@ -7,6 +7,8 @@ const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PR
 //TODO: Optimize duplicate code
 export const OrderApi = {
   createOrder: async (restaurantId, userId, menuItem, topping) => {
+    console.log(`Menu item`);
+    console.log(menuItem);
     const orderItemToppings = topping.flat().map((toppingItem) => ({
       "menuItemToppingId": toppingItem.id,
       "quantity": 1,
@@ -16,7 +18,7 @@ export const OrderApi = {
       "orderItem": {
         "menuItemId": menuItem.id,
         "price": menuItem.price,
-        "quantity": 1,
+        "quantity": menuItem.quantity,
         "orderItemToppings": orderItemToppings
       },
       "restaurantId": restaurantId,
@@ -44,12 +46,12 @@ export const OrderApi = {
       "sendItem": {
         "menuItemId": menuItem.id,
         "price": menuItem.price,
-        "quantity": 1,
+        "quantity": menuItem.quantity,
         "orderItemToppings": orderItemToppings
       },
     };
     try {
-      return (await axios.post(`${BASEURL}/order/${orderId}/add-new-item`, data, {headers: authHeader()})).data.data;
+      return (await axios.patch(`${BASEURL}/order/${orderId}/add-new-item`, data, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -76,7 +78,7 @@ export const OrderApi = {
 
   increaseQuantity: async (orderId, orderItemId) => {
     try {
-      return (await axios.post(`${BASEURL}/order/${orderId}/increase-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (await axios.patch(`${BASEURL}/order/${orderId}/increase-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -88,7 +90,7 @@ export const OrderApi = {
 
   decreaseQuantity: async (orderId, orderItemId) => {
     try {
-      return (await axios.post(`${BASEURL}/order/${orderId}/reduce-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (await axios.patch(`${BASEURL}/order/${orderId}/reduce-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -100,7 +102,7 @@ export const OrderApi = {
 
   removeItem: async (orderId, orderItemId) => {
     try {
-      return (await axios.post(`${BASEURL}/order/${orderId}/remove-orditem`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (await axios.patch(`${BASEURL}/order/${orderId}/remove-orditem`, {orderItemId}, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);

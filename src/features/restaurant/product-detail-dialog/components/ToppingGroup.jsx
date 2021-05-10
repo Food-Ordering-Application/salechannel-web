@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ToppingItem from "./ToppingItem";
 import {Box, Grid, Typography} from "@material-ui/core";
 
@@ -6,6 +6,9 @@ export default function ToppingGroup({toppingGroup, onChange}) {
   const {name, toppingItems: toppings} = toppingGroup;
   const [selected, setSelected] = useState(Array(toppings.length).fill(false));
 
+  useEffect(() => {
+    setSelected(Array(toppings.length).fill(false));
+  }, [toppings]);
 
   const handleClick = (index) => {
     const newArr = [...selected];
