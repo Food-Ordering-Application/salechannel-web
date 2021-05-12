@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-export default function OrderDetails({additionComponent, orderData, handleRemoveItem}) {
+export default function OrderDetails({additionComponent, orderData, handleRemoveItem, handleUpdateNote, note}) {
   const classes = useStyles();
 
   const {orderItems, subTotal, delivery: {distance, shippingFee}} = orderData;
@@ -44,9 +44,9 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
     }
     return <OrderItem key={orderItemId}
                       quantity={item.quantity}
-                      name="Name from API's response"
+                      name={item.name}
                       price={itemPrice}
-                      description="Description from API's response"
+                      description=""
                       onClick={() => handleRemoveItem(orderItemId)}/>
   });
 
@@ -68,9 +68,9 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
               <Box p={1} component={DescriptionOutlined} fontSize={20} color="onSurface.mediumEmphasis"/>
             </Grid>
             <Grid item xs>
-              <Ribbon p={1}>
+              <Ribbon p={1} onClick={handleUpdateNote}>
                 <Typography variant="h5">
-                  <Box className={classes.note}>Thêm ghi chú đơn hàng</Box>
+                  <Box className={classes.note}>{note || `Thêm ghi chú đơn hàng`}</Box>
                 </Typography>
               </Ribbon>
             </Grid>

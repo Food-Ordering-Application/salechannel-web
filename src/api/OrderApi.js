@@ -11,12 +11,14 @@ export const OrderApi = {
     console.log(menuItem);
     const orderItemToppings = topping.flat().map((toppingItem) => ({
       "menuItemToppingId": toppingItem.id,
+      "name": toppingItem.name,
       "quantity": 1,
       "price": toppingItem.price,
     }));
     const data = {
       "orderItem": {
         "menuItemId": menuItem.id,
+        "name": menuItem.name,
         "price": menuItem.price,
         "quantity": menuItem.quantity,
         "orderItemToppings": orderItemToppings
@@ -39,12 +41,14 @@ export const OrderApi = {
   addItem: async (orderId, menuItem, topping) => {
     const orderItemToppings = topping.flat().map((toppingItem) => ({
       "menuItemToppingId": toppingItem.id,
+      "name": toppingItem.name,
       "quantity": 1,
       "price": toppingItem.price,
     }));
     const data = {
       "sendItem": {
         "menuItemId": menuItem.id,
+        "name": menuItem.name,
         "price": menuItem.price,
         "quantity": menuItem.quantity,
         "orderItemToppings": orderItemToppings

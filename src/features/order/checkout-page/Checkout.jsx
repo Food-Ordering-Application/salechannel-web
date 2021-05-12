@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearOrderState, orderSelector, removeItem} from "../OrderSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import AddressDialog from "./components/AddressDialog";
+import NoteDialog from "./components/NoteDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,8 @@ export default function Checkout() {
   const dispatch = useDispatch();
   const {id: restaurantId} = useParams();
   const [addressOpen, setAddressOpen] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [note, setNote] = useState(``);
 
   const {isEmpty, isError, errorMessage, data} = useSelector(orderSelector);
 
@@ -64,6 +67,8 @@ export default function Checkout() {
       </Box>
       <Box mt={2} mb={3}>
         <OrderDetails orderData={data}
+                      handleUpdateNote={() => setNoteOpen(true)}
+                      note={note}
                       handleRemoveItem={(orderItemId) => {
                         dispatch(removeItem({orderId, orderItemId}));
                       }}/>
@@ -75,6 +80,10 @@ export default function Checkout() {
         <MainActionsBottom totalCost={grandTotal} handleCheckout={() => history.push(`/order`)}/>
       </Box>
       <AddressDialog open={addressOpen} onClose={() => setAddressOpen(false)}/>
+      <NoteDialog note={note}
+                  open={noteOpen}
+                  onClose={() => setNoteOpen(false)}
+                  onSubmit={(text) => setNote(text)}/>
     </Box>
   );
 }
