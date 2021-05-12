@@ -1,8 +1,10 @@
 import React from "react";
-import {Box, Divider, Typography} from "@material-ui/core";
+import {Box, Divider, Grid, Typography} from "@material-ui/core";
 import OrderItem from "./OrderItem";
 import {makeStyles} from "@material-ui/core/styles";
 import OrderCost from "./OrderCost";
+import {DescriptionOutlined} from "@material-ui/icons";
+import Ribbon from "../../../../common/Ribbon";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,13 +23,18 @@ const useStyles = makeStyles(theme => ({
         backgroundSize: theme.spacing(1, 2),
       }
     },
+    note: {
+      fontSize: theme.spacing(1.5),
+      color: theme.palette.onSurface.disabled,
+      textAlign: `end`,
+    },
   })
 );
 
 export default function OrderDetails({additionComponent, orderData, handleRemoveItem}) {
   const classes = useStyles();
 
-  const {orderItems, total, delivery: {shippingFee}} = orderData;
+  const {orderItems, subTotal, delivery: {distance, shippingFee}} = orderData;
 
   const orderItemsList = orderItems.map((item) => {
     const {id: orderItemId} = item;
@@ -56,8 +63,21 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
             {orderItemsList}
           </Box>
           <Divider variant="fullWidth"/>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Box p={1} component={DescriptionOutlined} fontSize={20} color="onSurface.mediumEmphasis"/>
+            </Grid>
+            <Grid item xs>
+              <Ribbon p={1}>
+                <Typography variant="h5">
+                  <Box className={classes.note}>Thêm ghi chú đơn hàng</Box>
+                </Typography>
+              </Ribbon>
+            </Grid>
+          </Grid>
+          <Divider variant="fullWidth"/>
           <Box py={1.5}>
-            <OrderCost subtotal={total} distance={1.4} deliveryFees={shippingFee}/>
+            <OrderCost subtotal={subTotal} distance={distance} deliveryFees={shippingFee}/>
           </Box>
         </Box>
         <Box>

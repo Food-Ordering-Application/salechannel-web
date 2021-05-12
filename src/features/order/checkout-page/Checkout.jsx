@@ -51,7 +51,7 @@ export default function Checkout() {
     return null;
   }
 
-  const {id: orderId, delivery: {address, total}} = data;
+  const {id: orderId, grandTotal, delivery: {customerAddress}} = data;
 
   return (
     <Box mt={6} mb={16.25} p={1.5}>
@@ -59,7 +59,7 @@ export default function Checkout() {
         <TopNavigationBar label="Check out"/>
       </Box>
       <Box>
-        <LocationCard location={address}
+        <LocationCard location={customerAddress}
                       handleChange={() => setAddressOpen(true)}/>
       </Box>
       <Box mt={2} mb={3}>
@@ -72,7 +72,7 @@ export default function Checkout() {
         <CouponList/>
       </Box>
       <Box className={classes.mainActionsBottom}>
-        <MainActionsBottom totalCost={total} handleCheckout={() => history.push(`/order`)}/>
+        <MainActionsBottom totalCost={grandTotal} handleCheckout={() => history.push(`/order`)}/>
       </Box>
       <AddressDialog open={addressOpen} onClose={() => setAddressOpen(false)}/>
     </Box>
