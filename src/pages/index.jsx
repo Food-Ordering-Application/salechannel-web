@@ -14,6 +14,7 @@ import AddressAdding from "../features/address/address-adding-page/AddressAdding
 import LocationAdding from "../features/address/current-location-adding-page/LocationAdding";
 import CouponDetails from "../features/promotion/coupon-details-page/CouponDetails";
 import OrderHistory from "../features/order/order-history-page/OrderHistory";
+import Coupon from "../features/promotion/coupon-page/Coupon";
 
 
 export default function IndexComponent() {
@@ -32,6 +33,7 @@ export default function IndexComponent() {
       <Route exact path='/address/add'><AddressAdding/></Route>
       <Route exact path='/address/add/current-location'><LocationAdding/></Route>
       <Route exact path='/coupon/:id'><CouponDetails/></Route>
+      <Route exact path='/coupons'><Coupon/></Route>
       <Route exact path='/orders'><OrderHistory/></Route>
     </Switch>
   );
