@@ -8,20 +8,21 @@ import store from "./store";
 import StyledSnackbar from "./features/common/Snackbar/StyledSnackbar";
 import {PersistGate} from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
+import SplashScreen from "./features/common/SplashScreen";
 
 
 export default function App() {
 
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistStore(store)}>
-        <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <PersistGate persistor={persistStore(store)} loading={<SplashScreen/>}>
           <BrowserRouter>
             <IndexComponent/>
             <StyledSnackbar/>
           </BrowserRouter>
-        </MuiThemeProvider>
-      </PersistGate>
-    </Provider>
+        </PersistGate>
+      </Provider>
+    </MuiThemeProvider>
   );
 }

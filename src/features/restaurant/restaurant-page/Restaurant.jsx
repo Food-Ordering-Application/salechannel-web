@@ -17,6 +17,7 @@ import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
 import {fetchOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
+import RestaurantClosedAlert from "./components/RestaurantCloseAlert";
 
 const useStyles = makeStyles(theme => ({
     container: {},
@@ -258,6 +259,7 @@ export default function Restaurant() {
                           onAddToCart={handleAddToCart}
                           orderItems={(orderState.data && orderState.data.orderItems) || []}/>
           </div>
+          <RestaurantClosedAlert open={!restaurant.restaurant.isActive}/>
         </div>
       </>
     );
