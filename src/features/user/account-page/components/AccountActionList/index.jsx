@@ -26,11 +26,11 @@ export default function AccountActionList({initOpen}) {
           />
           <StyledListItem label="Lịch sử đơn hàng"
                           icon={ReceiptOutlined}
-                          to="/"
+                          to="/orders"
           />
-          <StyledListItem label="Ví"
+          <StyledListItem label="Ví coupon"
                           icon={AccountBalanceWalletOutlined}
-                          to="/"
+                          to="/coupons"
           />
         </List>
       </Collapse>

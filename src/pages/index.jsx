@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Login from "../features/user/login-page/Login";
 import Register from "../features/user/register-page/Register";
 import Home from "./Home";
@@ -15,6 +15,7 @@ import LocationAdding from "../features/address/current-location-adding-page/Loc
 import CouponDetails from "../features/promotion/coupon-details-page/CouponDetails";
 import OrderHistory from "../features/order/order-history-page/OrderHistory";
 import Coupon from "../features/promotion/coupon-page/Coupon";
+import OrderHistoryDetails from "../features/order/order-history-details-page/OrderHistoryDetails";
 
 
 export default function IndexComponent() {
@@ -35,6 +36,7 @@ export default function IndexComponent() {
       <Route exact path='/coupon/:id'><CouponDetails/></Route>
       <Route exact path='/coupons'><Coupon/></Route>
       <Route exact path='/orders'><OrderHistory/></Route>
+      <Route exact path='/orders/history/:id'><OrderHistoryDetails/></Route>
     </Switch>
   );
 }

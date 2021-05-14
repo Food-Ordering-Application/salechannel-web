@@ -1,22 +1,32 @@
 const orderConstant = {
-  "DRAFT": {
+  DRAFT: {
+    code: "DRAFT",
     name: "Đơn nháp"
   },
-  "WAITING_DRIVER": {
+  WAITING_DRIVER: {
+    code: "WAITING_DRIVER",
     name: "Đang tìm tài xế"
   },
-  "CHECKING": {
+  CHECKING: {
+    code: "CHECKING",
     name: "Đang lấy món"
   },
-  "DELIVERING": {
+  DELIVERING: {
+    code: "DELIVERING",
     name: "Đang giao"
   },
-  "DELIVERIED": {
+  DELIVERIED: {
+    code: "DELIVERIED",
     name: "Giao thành công"
   },
-  "CANCELED": {
+  CANCELED: {
+    code: "CANCELED",
     name: "Đã hủy"
-  }
+  },
 };
+
+export const isDelivering = (status) => status === orderConstant.DELIVERING.code;
+export const isCompleted = (status) => status === orderConstant.DELIVERIED.code;
+export const isCanceled = (status) => status === orderConstant.CANCELED.code;
 
 export default orderConstant;

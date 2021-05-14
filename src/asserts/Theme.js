@@ -102,7 +102,6 @@ const theme = createMuiTheme({
       lineHeight: `normal`,
       letterSpacing: `5%`,
       textTransform: `capitalize`,
-      color: `#c4c4c4`,
     },
     caption: {
       fontFamily: `Poppins`,
@@ -199,6 +198,11 @@ const theme = createMuiTheme({
       l2: '#4F4F4FFF'
     },
     white: 'rgba(255, 255, 255)',
+    status: {
+      DELIVERING: `#ff9800`,
+      DELIVERIED: `#4caf50`,
+      CANCELED: `#f44336`,
+    }
   },
 
   //Effect Styles
@@ -258,6 +262,22 @@ const theme = createMuiTheme({
     letterSpacing: '-0.25px',
   },
 
+  //Override
+  overrides: {
+    MuiButton: {
+      containedPrimary: {
+        color: `white`,
+        borderRadius: `8px`,
+        paddingBottom: `12px`,
+        paddingTop: `12px`,
+      },
+      outlinedPrimary: {
+        borderRadius: `8px`,
+        paddingBottom: `12px`,
+        paddingTop: `12px`,
+      }
+    },
+  },
 });
 
 export default theme;
