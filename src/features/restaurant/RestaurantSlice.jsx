@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import RestaurantApi from "../../api/RestaurantApi";
+import {checkRestaurantOpen} from "../../untils/timeChecker";
 
 
 export const fetchRestaurant = createAsyncThunk(
@@ -22,6 +23,7 @@ export const restaurantSlice = createSlice({
     isFetching: false,
     isError: false,
     isSuccess: false,
+    isOpen: true,
     errorMessage: ``,
   },
   reducers: {
@@ -45,6 +47,7 @@ export const restaurantSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       state.restaurant = payload.restaurant;
+      state.isOpen = checkRestaurantOpen(payload.restaurant.openHours);
     }
   },
 });

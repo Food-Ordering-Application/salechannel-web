@@ -1,13 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {throttle} from "lodash";
 
 import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {Box, InputBase} from "@material-ui/core";
+import {Box, Button, InputBase} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
@@ -32,6 +31,8 @@ export default function Search() {
 
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
+
+  const ref = useRef();
 
   const search = (name) => {
     dispatch(clearRestaurantsListState());
@@ -63,42 +64,41 @@ export default function Search() {
   }, [name]);
 
   useEffect(() => {
-    if (isError) {
-      dispatch(showError(errorMessage));
+      if (isError) {
+        dispatch(showError(errorMessage));
+      }
+      if (isSuccess) {
+        const temp = data.map(({id, name, address, coverImageUrl, rating}, index) => (
+          <Box mb={2}>
+            <RestaurantItemLarge key={index}
+                                 name={`${name} - ${address}`}
+                                 image={coverImageUrl}
+                                 onClick={() => handleItemClick(id)}
+                                 rating={rating}
+            />
+          </Box>
+        ));
+        temp.push(
+          <Button key={"14225362"} onClick={() => {
+            dispatch(clearRestaurantsListState());
+            dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name, append: true}));
+          }}>Load more</Button>
+        );
+        setResult(temp);
+      }
     }
-    if (isSuccess) {
-      setResult(data.map(({id, name, address, coverImageUrl, rating}, index) => (
-        <Box mb={2}>
-          <RestaurantItemLarge key={index}
-                               name={`${name} - ${address}`}
-                               image={coverImageUrl}
-                               onClick={() => handleItemClick(id)}
-                               rating={rating}
-          />
-        </Box>
-      )));
-    }
-    if (isFetching) {
-      setResult(Array(10).fill((
-        <Box mb={2}>
-          <Skeleton height={82}/>
-        </Box>
-      )));
-    }
-  }, [isError, isSuccess, isFetching]);
+    , [isError, isSuccess]);
 
   return (
     <Box>
-      <Box className={classes.topNavigator}>
-        <TopNavigationBar rightIcon={SearchIcon}
-                          rightAction={handleSearchButtonClick}
-                          centerComponent={(
-                            <InputBase className={classes.textField}
-                                       placeholder="Tìm kiếm cửa hàng, món ăn"
-                                       onChange={handleTextChange} fullWidth/>
-                          )}
-        />
-      </Box>
+      <TopNavigationBar rightIcon={SearchIcon}
+                        rightAction={handleSearchButtonClick}
+                        centerComponent={(
+                          <InputBase className={classes.textField}
+                                     placeholder="Tìm kiếm cửa hàng, món ăn"
+                                     onChange={handleTextChange} fullWidth/>
+                        )}
+      />
       <Box mt={8} mx={2}>{result}</Box>
     </Box>
   );

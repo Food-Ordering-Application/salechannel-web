@@ -259,7 +259,7 @@ export default function Restaurant() {
                           onAddToCart={handleAddToCart}
                           orderItems={(orderState.data && orderState.data.orderItems) || []}/>
           </div>
-          <RestaurantClosedAlert open={!restaurant.restaurant.isActive}/>
+          <RestaurantClosedAlert open={!restaurant.isOpen}/>
         </div>
       </>
     );
