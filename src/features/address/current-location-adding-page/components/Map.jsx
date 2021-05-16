@@ -8,6 +8,7 @@ export function MapContainer({centerLocation, ...props}) {
         google={props.google}
         initialCenter={centerLocation}
         center={centerLocation}
+        onClick={(data) => console.log(data)}
         {...props}
       >
         {props.children}

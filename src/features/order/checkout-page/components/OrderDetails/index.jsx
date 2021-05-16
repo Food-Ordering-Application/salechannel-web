@@ -37,17 +37,19 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
   const {orderItems, subTotal, delivery: {distance, shippingFee}} = orderData;
 
   const orderItemsList = orderItems.map((item) => {
-    const {id: orderItemId} = item;
-    let itemPrice = item.price;
-    for (const topping of item.orderItemToppings) {
-      itemPrice += topping.price;
+    let {id, price, orderItemToppings} = item;
+    if (orderItemToppings) {
+      for (const topping of item.orderItemToppings) {
+        price += topping[`price`];
+      }
     }
-    return <OrderItem key={orderItemId}
-                      quantity={item.quantity}
-                      name={item.name}
-                      price={itemPrice}
+
+    return <OrderItem key={id}
+                      quantity={item[`quantity`]}
+                      name={item[`name`]}
+                      price={price}
                       description=""
-                      onClick={() => handleRemoveItem(orderItemId)}/>
+                      onClick={() => handleRemoveItem(id)}/>
   });
 
   return (

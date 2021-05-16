@@ -137,7 +137,7 @@ export const orderSlice = createSlice({
     [createOrder.rejected]: (state, {payload}) => {
       state.isRequesting = false;
       state.isError = true;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload;
     },
     [addItem.pending]: (state) => {
       state.isRequesting = true;
@@ -145,7 +145,7 @@ export const orderSlice = createSlice({
     [addItem.rejected]: (state, {payload}) => {
       state.isRequesting = false;
       state.isError = true;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload;
     },
     [addItem.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
@@ -159,7 +159,7 @@ export const orderSlice = createSlice({
     [fetchOrder.rejected]: (state, {payload}) => {
       state.isRequesting = false;
       state.isError = true;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload;
     },
     [fetchOrder.fulfilled]: (state, {payload}) => {
       state.isRequesting = false;
