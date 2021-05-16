@@ -69,6 +69,7 @@ export const userSlice = createSlice({
       state = {};
       state.isAuthenticated = false;
       localStorage.removeItem(`token`);
+      localStorage.removeItem(`id`);
       return state;
     },
     verifyOtpSuccess: (state) => {

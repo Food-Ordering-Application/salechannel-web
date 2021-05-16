@@ -1,7 +1,14 @@
 import React from 'react';
 import {GoogleApiWrapper, Map} from 'google-maps-react';
 
+const styles = {
+  position: `relative`,
+  width: `100%`,
+  height: `50vh`,
+};
+
 export function MapContainer({centerLocation, ...props}) {
+
   return (
     <div id='googleMaps'>
       <Map
@@ -9,6 +16,7 @@ export function MapContainer({centerLocation, ...props}) {
         initialCenter={centerLocation}
         center={centerLocation}
         {...props}
+        containerStyle={styles}
       >
         {props.children}
       </Map>
@@ -16,6 +24,8 @@ export function MapContainer({centerLocation, ...props}) {
   )
 }
 
-export default GoogleApiWrapper({
+const RestaurantLocation = GoogleApiWrapper({
   apiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`
 })(MapContainer);
+
+export default RestaurantLocation;

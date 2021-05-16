@@ -1,15 +1,16 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {throttle} from "lodash";
 
 import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {Box, Button, InputBase} from "@material-ui/core";
+import {Box, InputBase} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
+import Skeleton from "react-loading-skeleton";
 
 const useStyles = makeStyles((theme) => ({
   topNavigator: {
@@ -32,7 +33,6 @@ export default function Search() {
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
 
-  const ref = useRef();
 
   const search = (name) => {
     dispatch(clearRestaurantsListState());
@@ -78,16 +78,27 @@ export default function Search() {
             />
           </Box>
         ));
-        temp.push(
-          <Button key={"14225362"} onClick={() => {
-            dispatch(clearRestaurantsListState());
-            dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name, append: true}));
-          }}>Load more</Button>
-        );
+        // temp.push(
+        //   <Button key={"14225362"} onClick={() => {
+        //     dispatch(clearRestaurantsListState());
+        //     dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name, append: true}));
+        //   }}>Load more</Button>
+        // );
         setResult(temp);
       }
+      if (isFetching) {
+        setResult(
+          <Box mb={2}>
+            {Array(10).fill(
+              <Box mb={2}>
+                <Skeleton height={82}/>
+              </Box>
+            )}
+          </Box>
+        );
+      }
     }
-    , [isError, isSuccess]);
+    , [isError, isSuccess, isFetching]);
 
   return (
     <Box>

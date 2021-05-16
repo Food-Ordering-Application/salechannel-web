@@ -8,6 +8,8 @@ import OrderDetails from "../checkout-page/components/OrderDetails";
 import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import BottomButton from "../../common/BottomButton";
+import {useSelector} from "react-redux";
+import {orderSelector} from "../OrderSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -29,11 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OrderStatus() {
   const classes = useStyles();
+  const {data} = useSelector(orderSelector);
   //TODO: display payment method
   return (
     <Box my={6} p={2}>
       <Box className={classes.topNavigator}>
-        <TopNavigationBar label="order status"/>
+        <TopNavigationBar label="Trạng thái đơn hàng"/>
       </Box>
       <Box py={2}>
         <StatusCard statusText="Đơn hàng đã được lấy"
@@ -44,7 +47,7 @@ export default function OrderStatus() {
         <RiderInfo/>
       </Box>
       <Box pb={2}>
-        <OrderDetails additionComponent={
+        <OrderDetails orderData={data} additionComponent={
           <>
             <Divider variant="fullWidth"/>
             <Box py={1.5}>

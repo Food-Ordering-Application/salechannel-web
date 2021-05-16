@@ -1,6 +1,8 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, Paper, Typography} from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
+import Ribbon from "../features/common/Ribbon";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,17 +25,17 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-export default function RestaurantInfoSumary({name, address, distance}) {
+export default function RestaurantInfoSumary({id, name, address, distance}) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root}>
+    <Ribbon paper className={classes.root} component={Link} to={`/store/${id}/info`}>
       <Typography variant="h4">
         <Box textAlign="center">{name}</Box>
       </Typography>
-      <Typography variant="body2" component= "div">
+      <Typography variant="body2" component="div">
         <Box className={classes.address}>{distance} km - {address}</Box>
       </Typography>
-    </Paper>
+    </Ribbon>
   );
 }

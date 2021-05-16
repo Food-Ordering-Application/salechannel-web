@@ -25,7 +25,7 @@ export default function OrderItem({quantity, name, description, price, handleRem
             <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(price)}</Box>
           </Typography>
         </Grid>
-        <Grid item>
+        <Grid item hidden={!handleRemove}>
           <IconButton size="small" onClick={handleRemove}>
             <Cancel fontSize="inherit" color="inherit"/>
           </IconButton>

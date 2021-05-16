@@ -16,12 +16,14 @@ import CouponDetails from "../features/promotion/coupon-details-page/CouponDetai
 import OrderHistory from "../features/order/order-history-page/OrderHistory";
 import Coupon from "../features/promotion/coupon-page/Coupon";
 import OrderHistoryDetails from "../features/order/order-history-details-page/OrderHistoryDetails";
+import RestaurantInfo from "../features/restaurant/restaurant-info-page/RestaurantInfo";
 
 
 export default function IndexComponent() {
   return (
     <Switch>
       <Route exact path='/'><Home/></Route>
+      <Route exact path='/store/:id/info'><RestaurantInfo/></Route>
       <Route exact path='/store/:id'><Restaurant/></Route>
       <Route exact path='/login'><Login/></Route>
       <Route exact path='/register'><Register/></Route>

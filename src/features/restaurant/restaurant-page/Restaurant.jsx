@@ -77,107 +77,6 @@ const mockedData = {
   isFavorite: false,
 }
 
-const productList = {
-  "Tráng miệng": [
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-  ],
-  "Món đặc trưng": [
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-  ],
-  "Thức uống": [
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-    {
-      name: `Cơm gà xối mỡ`,
-      description: `Cam, Soda, Hoa cúc`,
-      price: 59000,
-      image: `https://hoangviettravel.vn/wp-content/uploads/2020/10/com-ga-xoi-mo-quan12.jpg`,
-    },
-  ],
-};
-
-const Mocked = Object.keys(productList).map(name => ({name: name, count: productList[name].length}));
-
 export default function Restaurant() {
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
@@ -243,7 +142,8 @@ export default function Restaurant() {
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>
         <div className={classes.content}>
           <div className={classes.info}>
-            <RestaurantInfoSumary name={`${restaurantData.name} - ${restaurantData.address}`}
+            <RestaurantInfoSumary id={restaurantData["id"]}
+                                  name={`${restaurantData.name} - ${restaurantData.address}`}
                                   address={restaurantData.address}
                                   distance={2.5}
             />
