@@ -17,6 +17,24 @@ const GoogleMapConfig = {
   region: `VN`,
 };
 
+const GoogleMapOptions = {
+  styles: [
+    {
+      featureType: "transit.station.bus",
+      stylers: [
+        {visibility: "off"}
+      ]
+    },
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [
+        {visibility: "off"}
+      ]
+    },
+  ]
+}
+
 const useStyles = makeStyles((theme) => ({
   topNavigator: {
     position: `fixed`,
@@ -76,6 +94,7 @@ export default function LocationAdding() {
       <div style={{width: `100%`, height: `100vh`}}>
         <GoogleMapReact
           bootstrapURLKeys={GoogleMapConfig}
+          options={GoogleMapOptions}
           center={location}
           defaultZoom={15}
           onClick={handleMapClick}>

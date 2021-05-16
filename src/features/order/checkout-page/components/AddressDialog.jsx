@@ -1,9 +1,11 @@
-import {Dialog, DialogTitle, List, ListItem, ListItemText} from "@material-ui/core";
+import {Dialog, DialogTitle, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {addressSelector, fetchAddress} from "../../../address/AddressSlice";
 import {useEffect} from "react";
 import {userSelector} from "../../../user/UserSlice";
 import {clearOrderState, orderSelector, updateAddress} from "../../OrderSlice";
+import {Link} from "react-router-dom";
+import {AddCircle} from "@material-ui/icons";
 
 export default function AddressDialog({open, onClose}) {
   const {data: addresses} = useSelector(addressSelector);
@@ -37,6 +39,12 @@ export default function AddressDialog({open, onClose}) {
             <ListItemText primary={address}/>
           </ListItem>
         ))}
+        <ListItem component={Link} to={`/address`}>
+          <ListItemIcon>
+            <AddCircle color="primary"/>
+          </ListItemIcon>
+          <ListItemText primary={`Thêm địa chỉ mới`}/>
+        </ListItem>
       </List>
     </Dialog>
   );
