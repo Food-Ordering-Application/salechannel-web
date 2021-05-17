@@ -1,4 +1,14 @@
-import {Dialog, DialogTitle, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
+import {
+  Box,
+  Dialog,
+  DialogTitle, Divider,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {addressSelector, fetchAddress} from "../../../address/AddressSlice";
 import {useEffect} from "react";
@@ -8,9 +18,9 @@ import {Link} from "react-router-dom";
 import {AddCircle} from "@material-ui/icons";
 
 export default function AddressDialog({open, onClose}) {
-  const {data: addresses} = useSelector(addressSelector);
+  const {data: addresses, isPending: isFetchingAddress} = useSelector(addressSelector);
   const {id: userId} = useSelector(userSelector);
-  const {data: {id: orderId}, isSuccess} = useSelector(orderSelector)
+  const {data: {id: orderId}, isSuccess, isRequesting: isSubmittingAddress} = useSelector(orderSelector)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,20 +42,34 @@ export default function AddressDialog({open, onClose}) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Địa chỉ nhận hàng</DialogTitle>
-      <List>
-        {addresses.map(({address, id}) => (
-          <ListItem button key={id} onClick={() => handleItemClick(id)}>
-            <ListItemText primary={address}/>
+      <DialogTitle disableTypography>
+        <Typography variant="h4">
+          <Box textAlign="center" color="onSurface.highEmphasis">Địa chỉ nhận hàng</Box>
+        </Typography>
+      </DialogTitle>
+      <Divider variant="fullWidth"/>
+      <Box p={2} hidden={!isFetchingAddress}>
+        <LinearProgress hidden={!isFetchingAddress}/>
+      </Box>
+      <Box hidden={isFetchingAddress}>
+        <List>
+          {addresses.map(({address, id}) => (
+            <ListItem button key={id} onClick={() => handleItemClick(id)}>
+              <ListItemText primary={address}/>
+            </ListItem>
+          ))}
+          <Divider variant="fullWidth"/>
+          <ListItem component={Link} to={`/address`}>
+            <ListItemIcon>
+              <AddCircle color="primary"/>
+            </ListItemIcon>
+            <ListItemText primary={`Thêm địa chỉ mới`}/>
           </ListItem>
-        ))}
-        <ListItem component={Link} to={`/address`}>
-          <ListItemIcon>
-            <AddCircle color="primary"/>
-          </ListItemIcon>
-          <ListItemText primary={`Thêm địa chỉ mới`}/>
-        </ListItem>
-      </List>
+        </List>
+      </Box>
+      <Box position="absolute" left={0} right={0} bottom={0} hidden={!isSubmittingAddress}>
+        <LinearProgress/>
+      </Box>
     </Dialog>
   );
 }

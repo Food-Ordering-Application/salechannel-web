@@ -1,6 +1,7 @@
 import React from "react";
-import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
+import {Box, Button, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import Ribbon from "../../../common/Ribbon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,8 +18,16 @@ export default function LocationCard({location, handleChange}) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root}>
-      <Box p={1.5}>
+    <Ribbon className={classes.root} onClick={handleChange}>
+      {/*Location is null*/}
+      <Box p={1.5} hidden={location}>
+        <Typography variant="h4">
+          <Box fontSize={14} color="primary.main">Chọn địa chỉ giao hàng</Box>
+        </Typography>
+      </Box>
+
+      {/*Location is not null*/}
+      <Box p={1.5} hidden={!location}>
         <Typography variant="h4">
           <Box fontSize={12} color="onSurface.mediumEmphasis">Giao đến</Box>
         </Typography>
@@ -29,7 +38,7 @@ export default function LocationCard({location, handleChange}) {
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="text" color="primary" onClick={handleChange}>
+            <Button variant="text" color="primary">
               <Box fontSize={12} lineHeight="normal">Thay đổi</Box>
             </Button>
           </Grid>
@@ -37,10 +46,7 @@ export default function LocationCard({location, handleChange}) {
         <Typography variant="h6">
           <Box fontSize={11} color="onSurface.highEmphasis">{rest}</Box>
         </Typography>
-        <Button variant="text">
-          <Box p={0} fontSize={12} lineHeight="normal" fontWeight={300}>+ Thêm tên tòa nhà, tầng lầu, ...</Box>
-        </Button>
       </Box>
-    </Paper>
+    </Ribbon>
   );
 }

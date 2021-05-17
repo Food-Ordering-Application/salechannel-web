@@ -54,7 +54,7 @@ export default function Checkout() {
     return null;
   }
 
-  const {id: orderId, grandTotal, delivery: {customerAddress}} = data;
+  const {id: orderId, subTotal, delivery: {customerAddress, shippingFee}} = data;
 
   return (
     <Box mt={6} mb={16.25} p={1.5}>
@@ -77,7 +77,9 @@ export default function Checkout() {
         <CouponList/>
       </Box>
       <Box className={classes.mainActionsBottom}>
-        <MainActionsBottom totalCost={grandTotal} handleCheckout={() => history.push(`/order`)}/>
+        <MainActionsBottom totalCost={subTotal + shippingFee}
+                           handleCheckout={() => history.push(`/order`)}
+                           disablePlaceOrder={!customerAddress}/>
       </Box>
       <AddressDialog open={addressOpen} onClose={() => setAddressOpen(false)}/>
       <NoteDialog note={note}

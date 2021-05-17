@@ -81,8 +81,9 @@ const theme = createMuiTheme({
       fontFamily: `Lexend`,
       fontStyle: `normal`,
       fontWeight: 500,
-      fontSize: `16px`,
-      lineHeight: `24px`,
+      fontSize: `14px`,
+      lineHeight: `normal`,
+      letterSpacing: `-0.25px`,
       color: `rgba(0, 0, 0, 0.6)`,
     },
     body2: {

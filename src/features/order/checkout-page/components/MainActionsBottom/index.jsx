@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MainActionsBottom({totalCost, handleCheckout, handleAddPromo, handlePaymentChange}) {
+export default function MainActionsBottom({totalCost, handleCheckout, handleAddPromo, handlePaymentChange, disablePlaceOrder}) {
   const classes = useStyles();
 
   return (
@@ -75,7 +75,7 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
             </Typography>
           </Grid>
           <Grid item xs>
-            <Button variant="contained" color="primary" fullWidth onClick={handleCheckout}>
+            <Button variant="contained" color="primary" fullWidth onClick={handleCheckout} disabled={disablePlaceOrder}>
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
           </Grid>
