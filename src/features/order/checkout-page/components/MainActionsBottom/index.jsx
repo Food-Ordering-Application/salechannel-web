@@ -1,8 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Divider, Grid, Typography } from '@material-ui/core';
-import { AttachMoneyRounded, ExpandLess } from '@material-ui/icons';
-import { currencyFormatter } from '../../../../../untils/formatter';
+import {makeStyles} from '@material-ui/core/styles';
+import {Box, Button, Divider, Grid, Typography} from '@material-ui/core';
+import {ExpandLess} from '@material-ui/icons';
+import {currencyFormatter} from '../../../../../untils/formatter';
+import {useSelector} from "react-redux";
+import {orderSelector} from "../../../OrderSlice";
+import {paymentConstant} from "../../../../../constants/paymentConstant";
+import {mapPaymentIcon} from "../PaymentDialog";
+import PayPalButton from "../PayPalButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,37 +35,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MainActionsBottom({
-  totalCost,
-  handleCheckout,
-  handleAddPromo,
-  // handlePaymentChange,
-  disablePlaceOrder,
-}) {
+                                            totalCost,
+                                            handleCheckout,
+                                            handleAddPromo,
+                                            handlePaymentChange,
+                                            disablePlaceOrder,
+                                          }) {
   const classes = useStyles();
-  
+  const {data: {paymentType}} = useSelector(orderSelector);
+
   return (
     <Box p={2} className={classes.root}>
       <Box mb={2}>
         <Grid container>
           <Grid item xs>
-            <Button variant="text" fullWidth onClick={}>
+            <Button variant="text" fullWidth onClick={handlePaymentChange}>
               <Grid container alignItems="center">
                 <Grid item>
-                  <AttachMoneyRounded />
+                  <Box component={mapPaymentIcon(paymentType)}/>
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h5">
-                    <Box className={classes.paymentBtn}>CASH</Box>
+                    <Box className={classes.paymentBtn}>{paymentConstant[paymentType].name}</Box>
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <ExpandLess />
+                  <ExpandLess/>
                 </Grid>
               </Grid>
             </Button>
           </Grid>
           <Grid item>
-            <Divider orientation="vertical" />
+            <Divider orientation="vertical"/>
           </Grid>
           <Grid item xs>
             <Button
@@ -84,7 +90,7 @@ export default function MainActionsBottom({
               <Box className={classes.cost}>{currencyFormatter(totalCost)}</Box>
             </Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs hidden={paymentType !== paymentConstant.COD.code}>
             <Button
               variant="contained"
               color="primary"
@@ -94,6 +100,20 @@ export default function MainActionsBottom({
             >
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
+          </Grid>
+          <Grid item xs hidden={paymentType !== paymentConstant.CARD.code}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={handleCheckout}
+              disabled={disablePlaceOrder}
+            >
+              <Box className={classes.orderBtn}>Thanh toán</Box>
+            </Button>
+          </Grid>
+          <Grid item xs hidden={paymentType !== paymentConstant.PAYPAL.code}>
+            <PayPalButton/>
           </Grid>
         </Grid>
       </Box>

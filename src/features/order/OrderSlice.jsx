@@ -19,7 +19,7 @@ const handleFulfillDefault = (state, {payload}) => {
   state.isRequesting = false;
   state.isSuccess = true;
   state.isEmpty = !payload.order;
-  state.data = payload.order;
+  state.data = Object.assign({paymentType: `COD`}, payload.order);
 };
 
 /*
@@ -103,6 +103,17 @@ export const updateAddress = createAsyncThunk(
   }
 );
 
+export const confirmOrder = createAsyncThunk(
+  `order/confirmOrder`,
+  async ({ orderId, note, paymentType}, thunkAPI) => {
+    try {
+      return await OrderApi.confirmOrder(orderId, note, paymentType);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 /*
 REDUX SLICE
  */
@@ -115,6 +126,7 @@ export const orderSlice = createSlice({
     isSuccess: false,
     isEmpty: true,
     data: {},
+    orderSuccess: false,
   },
   reducers: {
     clearOrderState: (state) => {
@@ -123,6 +135,9 @@ export const orderSlice = createSlice({
       state.isSuccess = false;
       return state;
     },
+    setPaymentType: (state, {payload: paymentType}) => {
+      state.data = {...(state.data), paymentType};
+    }
   },
   extraReducers: {
     [createOrder.fulfilled]: (state, {payload}) => {
@@ -161,12 +176,7 @@ export const orderSlice = createSlice({
       state.isError = true;
       state.errorMessage = payload;
     },
-    [fetchOrder.fulfilled]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isSuccess = true;
-      state.isEmpty = payload.order === undefined;
-      state.data = payload.order;
-    },
+    [fetchOrder.fulfilled]: handleFulfillDefault,
     [increaseQuantity.pending]: handlePendingDefault,
     [increaseQuantity.rejected]: handleRejectDefault,
     [increaseQuantity.fulfilled]: handleFulfillDefault,
@@ -183,8 +193,15 @@ export const orderSlice = createSlice({
       state.isSuccess = true;
       state.data = {...state.data, ...order};
     },
+    [confirmOrder.pending]: handlePendingDefault,
+    [confirmOrder.rejected]: handleRejectDefault,
+    [confirmOrder.fulfilled]: (state) => {
+      state.isRequesting = false;
+      state.isSuccess = true;
+      state.orderSuccess = true;
+    }
   },
 });
 
-export const {clearOrderState} = orderSlice.actions;
+export const {clearOrderState, setPaymentType} = orderSlice.actions;
 export const orderSelector = (state) => state.order;

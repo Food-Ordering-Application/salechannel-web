@@ -133,5 +133,25 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
-  }
+  },
+
+  confirmOrder: async (orderId, note, paymentType) => {
+    try {
+      await axios.patch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
+        note,
+        paymentType
+      }, {headers: authHeader()});
+      return true;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        if (response.status === 403) {
+          throw new Error(`Máy chủ từ chối thao tác`);
+        }
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
 }

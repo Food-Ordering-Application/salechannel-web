@@ -1,5 +1,14 @@
 export const paymentConstant = {
-  "COD": {
-    name: "Tiền mặt"
+  COD: {
+    code: `COD`,
+    name: `Tiền mặt`
+  },
+  PAYPAL: {
+    code: `PAYPAL`,
+    name: `PayPal`,
+  },
+  CARD: {
+    code: `CARD`,
+    name: `Thẻ`
   }
 }

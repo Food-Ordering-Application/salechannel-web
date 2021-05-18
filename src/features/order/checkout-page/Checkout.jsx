@@ -9,10 +9,11 @@ import MainActionsBottom from "./components/MainActionsBottom";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {useHistory, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {clearOrderState, orderSelector, removeItem} from "../OrderSlice";
+import {clearOrderState, confirmOrder, orderSelector, removeItem, setPaymentType} from "../OrderSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import AddressDialog from "./components/AddressDialog";
 import NoteDialog from "./components/NoteDialog";
+import PaymentDialog from "./components/PaymentDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,24 +38,33 @@ export default function Checkout() {
   const dispatch = useDispatch();
   const {id: restaurantId} = useParams();
   const [addressOpen, setAddressOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
   const [note, setNote] = useState(``);
 
-  const {isEmpty, isError, errorMessage, data} = useSelector(orderSelector);
+  const {isEmpty, isError, errorMessage, data, orderSuccess} = useSelector(orderSelector);
+
+  const handlePaymentTypeChange = (paymentType) => {
+    dispatch(setPaymentType(paymentType));
+  }
 
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
       dispatch(clearOrderState());
     }
-  }, [isError, dispatch]);
+    if (orderSuccess) {
+      alert("Đặt hàng thành công!");
+      history.replace(`/checkout/${orderId}`);
+    }
+  }, [isError, dispatch, orderSuccess]);
 
   if (isEmpty) {
     history.push(`/store/${restaurantId}`);
     return null;
   }
 
-  const {id: orderId, subTotal, delivery: {customerAddress, shippingFee}} = data;
+  const {id: orderId, subTotal, delivery: {customerAddress, shippingFee}, paymentType} = data;
 
   return (
     <Box mt={6} mb={16.25} p={1.5}>
@@ -78,10 +88,14 @@ export default function Checkout() {
       </Box>
       <Box className={classes.mainActionsBottom}>
         <MainActionsBottom totalCost={subTotal + shippingFee}
-                           handleCheckout={() => history.push(`/order`)}
+                           handleCheckout={() => dispatch(confirmOrder({orderId, note, paymentType}))}
+                           handlePaymentChange={() => setPaymentOpen(true)}
                            disablePlaceOrder={!customerAddress}/>
       </Box>
       <AddressDialog open={addressOpen} onClose={() => setAddressOpen(false)}/>
+      <PaymentDialog open={paymentOpen}
+                     onClose={() => setPaymentOpen(false)}
+                     onChange={(paymentType) => handlePaymentTypeChange(paymentType)}/>
       <NoteDialog note={note}
                   open={noteOpen}
                   onClose={() => setNoteOpen(false)}
