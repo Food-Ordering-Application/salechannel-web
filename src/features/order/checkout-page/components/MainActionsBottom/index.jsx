@@ -1,11 +1,10 @@
-import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import {Box, Button, Divider, Grid, Typography} from "@material-ui/core";
-import {AttachMoneyRounded, ExpandLess} from "@material-ui/icons";
-import {currencyFormatter} from "../../../../../untils/formatter";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Button, Divider, Grid, Typography } from '@material-ui/core';
+import { AttachMoneyRounded, ExpandLess } from '@material-ui/icons';
+import { currencyFormatter } from '../../../../../untils/formatter';
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.surface.light,
   },
@@ -27,21 +26,27 @@ const useStyles = makeStyles(theme => ({
   paymentBtn: {
     fontSize: theme.spacing(1.5),
     color: theme.palette.onSurface.highEmphasis,
-  }
+  },
 }));
 
-export default function MainActionsBottom({totalCost, handleCheckout, handleAddPromo, handlePaymentChange, disablePlaceOrder}) {
+export default function MainActionsBottom({
+  totalCost,
+  handleCheckout,
+  handleAddPromo,
+  // handlePaymentChange,
+  disablePlaceOrder,
+}) {
   const classes = useStyles();
-
+  
   return (
     <Box p={2} className={classes.root}>
       <Box mb={2}>
         <Grid container>
           <Grid item xs>
-            <Button variant="text" fullWidth>
+            <Button variant="text" fullWidth onClick={}>
               <Grid container alignItems="center">
                 <Grid item>
-                  <AttachMoneyRounded/>
+                  <AttachMoneyRounded />
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h5">
@@ -49,16 +54,21 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <ExpandLess/>
+                  <ExpandLess />
                 </Grid>
               </Grid>
             </Button>
           </Grid>
           <Grid item>
-            <Divider orientation="vertical"/>
+            <Divider orientation="vertical" />
           </Grid>
           <Grid item xs>
-            <Button variant="text" color="primary" fullWidth className={classes.couponBtn}>
+            <Button
+              variant="text"
+              color="primary"
+              fullWidth
+              className={classes.couponBtn}
+            >
               Chọn Coupon
             </Button>
           </Grid>
@@ -75,7 +85,13 @@ export default function MainActionsBottom({totalCost, handleCheckout, handleAddP
             </Typography>
           </Grid>
           <Grid item xs>
-            <Button variant="contained" color="primary" fullWidth onClick={handleCheckout} disabled={disablePlaceOrder}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={handleCheckout}
+              disabled={disablePlaceOrder}
+            >
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
           </Grid>
