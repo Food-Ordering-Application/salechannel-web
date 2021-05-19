@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {OrderApi} from "../../api/OrderApi";
+import {paymentConstant} from "../../constants/paymentConstant";
 
 /*
 DEFAULT HANDLERS
@@ -19,7 +20,7 @@ const handleFulfillDefault = (state, {payload}) => {
   state.isRequesting = false;
   state.isSuccess = true;
   state.isEmpty = !payload.order;
-  state.data = Object.assign({paymentType: `COD`}, payload.order);
+  state.data = Object.assign(state.data, payload.order);
 };
 
 /*
@@ -105,9 +106,20 @@ export const updateAddress = createAsyncThunk(
 
 export const confirmOrder = createAsyncThunk(
   `order/confirmOrder`,
-  async ({ orderId, note, paymentType}, thunkAPI) => {
+  async ({orderId, note, paymentType}, thunkAPI) => {
     try {
       return await OrderApi.confirmOrder(orderId, note, paymentType);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const approvePaypal = createAsyncThunk(
+  `order/approvePaypal`,
+  async ({orderId, paypalOrderId}, thunkAPI) => {
+    try {
+      return await OrderApi.approvePaypal(orderId, paypalOrderId);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -119,89 +131,76 @@ REDUX SLICE
  */
 
 export const orderSlice = createSlice({
-  name: 'order',
-  initialState: {
-    isRequesting: false,
-    isError: false,
-    isSuccess: false,
-    isEmpty: true,
-    data: {},
-    orderSuccess: false,
-  },
-  reducers: {
-    clearOrderState: (state) => {
-      state.isRequesting = false;
-      state.isError = false;
-      state.isSuccess = false;
-      return state;
+    name: 'order',
+    initialState: {
+      isRequesting: false,
+      isError: false,
+      isSuccess: false,
+      isEmpty: true,
+      data: {
+        note: '',
+        paymentType: paymentConstant.COD.code
+      },
+      orderSuccess: false,
     },
-    setPaymentType: (state, {payload: paymentType}) => {
-      state.data = {...(state.data), paymentType};
-    }
-  },
-  extraReducers: {
-    [createOrder.fulfilled]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isSuccess = true;
-      state.isEmpty = false;
-      state.data = payload;
+    reducers: {
+      clearOrderState: (state) => {
+        state.isRequesting = false;
+        state.isError = false;
+        state.isSuccess = false;
+        return state;
+      },
+      setPaymentType: (state, {payload: paymentType}) => {
+        state.data = {...(state.data), paymentType};
+      },
+      setNote: (state, {payload: note}) => {
+        state.data.note = note;
+      }
     },
-    [createOrder.pending]: (state) => {
-      state.isRequesting = true;
+    extraReducers: {
+      [createOrder.fulfilled]: handleFulfillDefault,
+      [createOrder.pending]: handlePendingDefault,
+      [createOrder.rejected]: handleRejectDefault,
+      [addItem.pending]: handlePendingDefault,
+      [addItem.rejected]: handleRejectDefault,
+      [addItem.fulfilled]: handleFulfillDefault,
+      [fetchOrder.pending]: handlePendingDefault,
+      [fetchOrder.rejected]: handleRejectDefault,
+      [fetchOrder.fulfilled]: handleFulfillDefault,
+      [increaseQuantity.pending]: handlePendingDefault,
+      [increaseQuantity.rejected]: handleRejectDefault,
+      [increaseQuantity.fulfilled]: handleFulfillDefault,
+      [decreaseQuantity.pending]: handlePendingDefault,
+      [decreaseQuantity.rejected]: handleRejectDefault,
+      [decreaseQuantity.fulfilled]: handleFulfillDefault,
+      [removeItem.pending]: handlePendingDefault,
+      [removeItem.rejected]: handleRejectDefault,
+      [removeItem.fulfilled]: handleFulfillDefault,
+      [updateAddress.pending]: handlePendingDefault,
+      [updateAddress.rejected]: handleRejectDefault,
+      [updateAddress.fulfilled]: (state, {payload: {order}}) => {
+        state.isRequesting = false;
+        state.isSuccess = true;
+        state.data = {...state.data, ...order};
+      },
+      [confirmOrder.pending]: handlePendingDefault,
+      [confirmOrder.rejected]: handleRejectDefault,
+      [confirmOrder.fulfilled]: (state) => {
+        state.isRequesting = false;
+        state.isSuccess = true;
+        state.orderSuccess = state.data.paymentType === paymentConstant.COD.code;
+      },
+      [approvePaypal.pending]: handlePendingDefault,
+      [approvePaypal.rejected]: handleRejectDefault,
+      [approvePaypal.fulfilled]: (state, {payload}) => {
+        console.log(`Approve paypal: ` + payload);
+        state.isRequesting = false;
+        state.isSuccess = true;
+        state.orderSuccess = true;
+      }
     },
-    [createOrder.rejected]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isError = true;
-      state.errorMessage = payload;
-    },
-    [addItem.pending]: (state) => {
-      state.isRequesting = true;
-    },
-    [addItem.rejected]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isError = true;
-      state.errorMessage = payload;
-    },
-    [addItem.fulfilled]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isSuccess = true;
-      state.isEmpty = false;
-      state.data = payload.order;
-    },
-    [fetchOrder.pending]: (state) => {
-      state.isRequesting = true;
-    },
-    [fetchOrder.rejected]: (state, {payload}) => {
-      state.isRequesting = false;
-      state.isError = true;
-      state.errorMessage = payload;
-    },
-    [fetchOrder.fulfilled]: handleFulfillDefault,
-    [increaseQuantity.pending]: handlePendingDefault,
-    [increaseQuantity.rejected]: handleRejectDefault,
-    [increaseQuantity.fulfilled]: handleFulfillDefault,
-    [decreaseQuantity.pending]: handlePendingDefault,
-    [decreaseQuantity.rejected]: handleRejectDefault,
-    [decreaseQuantity.fulfilled]: handleFulfillDefault,
-    [removeItem.pending]: handlePendingDefault,
-    [removeItem.rejected]: handleRejectDefault,
-    [removeItem.fulfilled]: handleFulfillDefault,
-    [updateAddress.pending]: handlePendingDefault,
-    [updateAddress.rejected]: handleRejectDefault,
-    [updateAddress.fulfilled]: (state, {payload: {order}}) => {
-      state.isRequesting = false;
-      state.isSuccess = true;
-      state.data = {...state.data, ...order};
-    },
-    [confirmOrder.pending]: handlePendingDefault,
-    [confirmOrder.rejected]: handleRejectDefault,
-    [confirmOrder.fulfilled]: (state) => {
-      state.isRequesting = false;
-      state.isSuccess = true;
-      state.orderSuccess = true;
-    }
-  },
-});
+  })
+;
 
-export const {clearOrderState, setPaymentType} = orderSlice.actions;
+export const {clearOrderState, setPaymentType, setNote} = orderSlice.actions;
 export const orderSelector = (state) => state.order;

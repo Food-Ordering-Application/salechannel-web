@@ -154,4 +154,20 @@ export const OrderApi = {
       }
     }
   },
+  approvePaypal: async (orderId, paypalOrderId) => {
+    try {
+      const response = await axios.patch(`${BASEURL}/order/${orderId}/approve-paypal-order`, {paypalOrderId}, {headers: authHeader()});
+      return response.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        if (response.status === 403) {
+          throw new Error(`Máy chủ từ chối thao tác`);
+        }
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  }
 }

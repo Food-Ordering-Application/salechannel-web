@@ -42,7 +42,7 @@ export default function MainActionsBottom({
                                             disablePlaceOrder,
                                           }) {
   const classes = useStyles();
-  const {data: {paymentType}} = useSelector(orderSelector);
+  const {data: {id: orderId, paymentType}} = useSelector(orderSelector);
 
   return (
     <Box p={2} className={classes.root}>
@@ -101,7 +101,7 @@ export default function MainActionsBottom({
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
           </Grid>
-          <Grid item xs hidden={paymentType !== paymentConstant.CARD.code}>
+          <Grid item xs hidden={paymentType !== paymentConstant.VISA_MASTERCARD.code}>
             <Button
               variant="contained"
               color="primary"
@@ -113,7 +113,7 @@ export default function MainActionsBottom({
             </Button>
           </Grid>
           <Grid item xs hidden={paymentType !== paymentConstant.PAYPAL.code}>
-            <PayPalButton/>
+            <PayPalButton orderId={orderId} note={"note"}/>
           </Grid>
         </Grid>
       </Box>

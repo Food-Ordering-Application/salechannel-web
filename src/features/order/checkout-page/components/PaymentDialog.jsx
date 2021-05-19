@@ -14,7 +14,7 @@ import PayPalIcon from '../../../../asserts/icons/PayPalIcon';
 
 export const mapPaymentIcon = (paymentTypes) => {
   switch (paymentTypes) {
-    case paymentConstant.CARD.code:
+    case paymentConstant.VISA_MASTERCARD.code:
       return CreditCard;
     case paymentConstant.COD.code:
       return LocalAtm;

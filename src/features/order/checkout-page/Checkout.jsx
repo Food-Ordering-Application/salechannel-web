@@ -9,7 +9,7 @@ import MainActionsBottom from "./components/MainActionsBottom";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {useHistory, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {clearOrderState, confirmOrder, orderSelector, removeItem, setPaymentType} from "../OrderSlice";
+import {clearOrderState, confirmOrder, orderSelector, removeItem, setNote, setPaymentType} from "../OrderSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import AddressDialog from "./components/AddressDialog";
 import NoteDialog from "./components/NoteDialog";
@@ -40,7 +40,6 @@ export default function Checkout() {
   const [addressOpen, setAddressOpen] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
-  const [note, setNote] = useState(``);
 
   const {isEmpty, isError, errorMessage, data, orderSuccess} = useSelector(orderSelector);
 
@@ -64,7 +63,7 @@ export default function Checkout() {
     return null;
   }
 
-  const {id: orderId, subTotal, delivery: {customerAddress, shippingFee}, paymentType} = data;
+  const {id: orderId, subTotal, delivery: {customerAddress, shippingFee}, paymentType, note} = data;
 
   return (
     <Box mt={6} mb={16.25} p={1.5}>
@@ -99,7 +98,7 @@ export default function Checkout() {
       <NoteDialog note={note}
                   open={noteOpen}
                   onClose={() => setNoteOpen(false)}
-                  onSubmit={(text) => setNote(text)}/>
+                  onSubmit={(text) => dispatch(setNote(`${text}`))}/>
     </Box>
   );
 }

@@ -7,8 +7,8 @@ export const paymentConstant = {
     code: `PAYPAL`,
     name: `PayPal`,
   },
-  CARD: {
-    code: `CARD`,
+  VISA_MASTERCARD : {
+    code: `VISA_MASTERCARD`,
     name: `Thẻ`
-  }
+  },
 }
