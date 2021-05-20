@@ -8,6 +8,7 @@ import {orderSelector} from "../../../OrderSlice";
 import {paymentConstant} from "../../../../../constants/paymentConstant";
 import {mapPaymentIcon} from "../PaymentDialog";
 import PayPalButton from "../PayPalButton";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,8 +96,9 @@ export default function MainActionsBottom({
               variant="contained"
               color="primary"
               fullWidth
-              onClick={handleCheckout}
               disabled={disablePlaceOrder}
+              component={Link}
+              to={`/order/${orderId}`}
             >
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>

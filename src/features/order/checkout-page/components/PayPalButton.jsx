@@ -1,68 +1,44 @@
-import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { approvePaypal, confirmOrder, orderSelector } from '../../OrderSlice';
-import { paymentConstant } from '../../../../constants/paymentConstant';
+import React, {useEffect, useRef} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {orderSelector} from '../../OrderSlice';
+import {paymentConstant} from '../../../../constants/paymentConstant';
+import {OrderApi} from "../../../../api/OrderApi";
 
 // const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
-export default function PayPalButton({ note }) {
-  const dispatch = useDispatch();
+export default function PayPalButton({note}) {
   const {
     data: {
       id: orderId,
       subTotal,
-      delivery: { shippingFee },
+      delivery: {shippingFee},
+      paypalOrderId
     },
   } = useSelector(orderSelector);
   const paypal = useRef();
+
+  console.log(orderId);
+  console.log(note);
+  console.log(paypalOrderId);
 
   useEffect(() => {
     window.paypal
       .Buttons({
         createOrder: function (data, actions, err) {
-          dispatch(
-            confirmOrder({
-              orderId: orderId,
-              paymentType: paymentConstant.PAYPAL.code,
-              note,
-            })
-          );
-          // return fetch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
-          //   method: 'post',
-          //   headers: {
-          //     'content-type': 'application/json',
-          //   },
-          // })
-          //   .then(function (res) {
-          //     return res.json();
-          //   })
-          //   .then(function (data) {
-          //     return data.id; // Use the key sent by your server's response, ex. 'id' or 'token'
-          //   });
+          return OrderApi.confirmOrder(orderId, note, paymentConstant.PAYPAL.code).then(function (res) {
+            return res.json();
+          }).then(function (data) {
+            return data.id; // Use the key sent by your server's response, ex. 'id' or 'token'
+          });
         },
-        onApprove: async function (data, actions) {
-          dispatch(
-            approvePaypal({
-              orderId: orderId,
-              paypalOrderId: order['id'] || `somthing-like-that`,
+        onApprove: function (data, actions) {
+          return OrderApi.approvePaypal(paypalOrderId)
+            .then(function (res) {
+              return res.json();
             })
-          );
-          // return fetch(`${BASEURL}/order/${orderId}/approve-paypal-order`, {
-          //   headers: {
-          //     'content-type': 'application/json',
-          //   },
-          //   body: JSON.stringify({
-          //     orderID: data.orderID,
-          //   }),
-          // })
-          //   .then(function (res) {
-          //     return res.json();
-          //   })
-          //   .then(function (details) {
-          //     alert(
-          //       'Transaction funds captured from ' + details.payer_given_name
-          //     );
-          //   });
+            .then(function (details) {
+              alert('Transaction funds captured from ' + details.payer_given_name);
+            });
         },
         onError: (err) => {
           console.log(err);
@@ -73,7 +49,7 @@ export default function PayPalButton({ note }) {
 
   return (
     <div>
-      <div ref={paypal} />
+      <div ref={paypal}/>
     </div>
   );
 }

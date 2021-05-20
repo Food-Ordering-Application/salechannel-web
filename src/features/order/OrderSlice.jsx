@@ -20,7 +20,7 @@ const handleFulfillDefault = (state, {payload}) => {
   state.isRequesting = false;
   state.isSuccess = true;
   state.isEmpty = !payload.order;
-  state.data = Object.assign(state.data, payload.order);
+  state.data = Object.assign({note: '', paymentType: paymentConstant.COD.code}, payload.order);
 };
 
 /*
@@ -60,6 +60,17 @@ export const fetchOrder = createAsyncThunk(
   }
 );
 
+export const fetchOrderData = createAsyncThunk(
+  `order/fetch`,
+  async ({orderId}, thunkAPI) => {
+    try {
+      return await OrderApi.fetchOrderData(orderId);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 export const increaseQuantity = createAsyncThunk(
   `order/increaseQuantity`,
   async ({orderId, orderItemId}, thunkAPI) => {
@@ -72,7 +83,7 @@ export const increaseQuantity = createAsyncThunk(
 );
 
 export const decreaseQuantity = createAsyncThunk(
-  `order/increaseQuantity`,
+  `order/decreaseQuantity`,
   async ({orderId, orderItemId}, thunkAPI) => {
     try {
       return await OrderApi.decreaseQuantity(orderId, orderItemId);
@@ -197,7 +208,10 @@ export const orderSlice = createSlice({
         state.isRequesting = false;
         state.isSuccess = true;
         state.orderSuccess = true;
-      }
+      },
+      [fetchOrderData.pending]: handlePendingDefault,
+      [fetchOrderData.rejected]: handleRejectDefault,
+      [fetchOrderData.fulfilled]: handleFulfillDefault,
     },
   })
 ;

@@ -31,7 +31,7 @@ export default function IndexComponent() {
       <Route exact path='/notifications'><Notifications/></Route>
       <Route exact path='/checkout/:id'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
-      <Route exact path='/order'><OrderStatus/></Route>
+      <Route exact path='/order/:id'><OrderStatus/></Route>
       <Route exact path='/address'><AddressManagement/></Route>
       <Route exact path='/address/add'><AddressAdding/></Route>
       <Route exact path='/address/add/current-location'><LocationAdding/></Route>

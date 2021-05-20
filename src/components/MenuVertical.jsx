@@ -37,8 +37,8 @@ export default function MenuVertical({productList, onAddToCart, orderItems}) {
   };
   const handleDecreaseQuantity = (orderItemId) => {
     dispatch(decreaseQuantity({orderId: orderData.id, orderItemId: orderItemId}));
-
   };
+
   return (
     <>
       {

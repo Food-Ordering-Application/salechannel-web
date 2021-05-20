@@ -6,6 +6,18 @@ const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PR
 
 //TODO: Optimize duplicate code
 export const OrderApi = {
+  fetchOrderData: async (orderId) => {
+    try {
+      return (await axios.get(`${BASEURL}/order/${orderId}`, {headers: authHeader()})).data.data;
+    } catch (error) {
+      if (error.response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
   createOrder: async (restaurantId, userId, menuItem, topping) => {
     console.log(`Menu item`);
     console.log(menuItem);
@@ -28,7 +40,7 @@ export const OrderApi = {
     };
 
     try {
-      return (await axios.post(`${BASEURL}/order`, data, {headers: authHeader()})).data.data.order;
+      return (await axios.post(`${BASEURL}/order`, data, {headers: authHeader()})).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -137,11 +149,11 @@ export const OrderApi = {
 
   confirmOrder: async (orderId, note, paymentType) => {
     try {
-      await axios.patch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
+      const response = await axios.patch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
         note,
         paymentType
       }, {headers: authHeader()});
-      return true;
+      return response.data.data;
     } catch (e) {
       const response = e.response;
       if (response) {
