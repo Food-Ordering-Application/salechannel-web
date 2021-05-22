@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {
   Box,
@@ -16,6 +16,8 @@ import {
   Typography
 } from "@material-ui/core";
 import {genderConstant} from "../../../../constants/genderConstant";
+import {useDispatch} from "react-redux";
+import {updateUser} from "../../UserSlice";
 
 export const InputDialogType = {
   email: {
@@ -52,10 +54,15 @@ export const InputDialogType = {
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  title: {
+    textAlign: `center`,
+    color: theme.palette.onSurface.highEmphasis,
+  }
 }));
 
-function InputDialog({open, onClose, type, onSubmit}) {
+function InputDialog({open, onClose, initValue, type}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [value, setValue] = useState(null);
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState(null);
@@ -77,7 +84,7 @@ function InputDialog({open, onClose, type, onSubmit}) {
   const handleSubmit = () => {
     if (value) {
       if (value.match(type.validRegex)) {
-        onSubmit(value);
+        dispatch(updateUser({[type.code]: value}));
         handleClose();
       } else {
         alertError(type.errorInvalid);
@@ -87,18 +94,26 @@ function InputDialog({open, onClose, type, onSubmit}) {
     }
   }
 
+  useEffect(() => {
+    setValue(initValue);
+  }, [initValue]);
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle disableTypography>
         <Typography variant="h4">
-          <Box textAlign="center" color="onSurface.highEmphasis">{type.title}</Box>
+          <Box className={classes.title}>{type.title}</Box>
         </Typography>
       </DialogTitle>
       <DialogContent>
         <FormControl component="fieldset" error={error}>
           <Box hidden={type.type === `radio`}>
             <TextField variant="outlined"
+              //Auto focus and select all text
+                       autoFocus
+                       onFocus={(e) => e.target.select()}
                        type={type.type}
+                       value={value}
                        error={error}
                        onChange={handleChange}
                        placeholder={type.placeholder}/>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {authHeader} from "../helpers/header";
+import {authHeader, getUserId} from "../helpers/header";
 
 const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
@@ -70,6 +70,24 @@ const UserApi = {
   fetchUser: async function (id) {
     try {
       return (await axios.get(`${BASEURL}/user/customer/${id}`, {headers: authHeader()})).data.data;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        if (response.status === 401 || response.status === 403)
+          throw new Error(`Token không hợp lệ`);
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
+  updateUser: async function (name, avatar, email, gender) {
+    try {
+      const response = await axios.patch(`${BASEURL}/user/customer/${getUserId()}/update-info`,
+        {name, avatar, email, gender},
+        {headers: authHeader()});
+      return response.data;
     } catch (error) {
       const response = error.response;
       if (response) {

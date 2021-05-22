@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InfoItem({label, value, leftNode, rightNode, actionLabel, isLoading, disabled, onClick}) {
   const classes = useStyles({disabled});
+
   return (
     <Ribbon onClick={onClick} disabled={disabled}>
       <Grid container alignItems="center" className={classes.root}>
@@ -58,7 +59,7 @@ export default function InfoItem({label, value, leftNode, rightNode, actionLabel
           </Box>
         </Grid>
         <Grid item hidden={!isLoading}>
-          <Skeleton/>
+          <Skeleton height={16} width={"40vw"}/>
         </Grid>
         <Grid item>
           <Box className={classes.icon} component={ChevronRight}/>

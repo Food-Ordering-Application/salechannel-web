@@ -5,9 +5,10 @@ const handlePendingDefault = (state) => {
   state.isFetching = true;
 }
 
-const handleRejectedDefault = (state) => {
+const handleRejectedDefault = (state, {payload}) => {
   state.isFetching = false;
   state.isError = true;
+  state.errorMessage = payload;
 }
 
 const handleFulfilledDefault = (state, {payload}) => {
@@ -43,6 +44,17 @@ export const fetchUser = createAsyncThunk(
   async ({userId}, thunkAPI) => {
     try {
       return await UserApi.fetchUser(userId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  `user/update`,
+  async ({name, avatar, email, gender}, thunkAPI) => {
+    try {
+      return await UserApi.updateUser(name, avatar, email, gender);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -130,6 +142,16 @@ export const userSlice = createSlice({
     [fetchUser.pending]: handlePendingDefault,
     [fetchUser.rejected]: handleRejectedDefault,
     [fetchUser.fulfilled]: handleFulfilledDefault,
+    [updateUser.pending]: handlePendingDefault,
+    [updateUser.rejected]: handleRejectedDefault,
+    [updateUser.fulfilled]: (state, {payload: {data}}) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.avatar = data.avatar || state.avatar;
+      state.name = data.name || state.name;
+      state.email = data.email || state.email;
+      state.gender = data.gender || state.gender;
+    },
   }
 });
 
