@@ -3,7 +3,7 @@ import TopNavigationBar from "../../common/TopNavigationBar";
 import {Avatar, Box, Divider} from "@material-ui/core";
 import InfoItem from "./components/InfoItem";
 import {useDispatch, useSelector} from "react-redux";
-import {userSelector} from "../UserSlice";
+import {updateAvatar, userSelector} from "../UserSlice";
 import {genderConstant} from "../../../constants/genderConstant";
 import TipsItem from "./components/TipsItem";
 import {EmailOutlined, PersonOutlineOutlined} from "@material-ui/icons";
@@ -26,6 +26,11 @@ export default function EditAccount() {
   const [inputType, setType] = useState(InputDialogType.username);
   const [initValue, setInitValue] = useState(name);
 
+  const handleUpdateAvatar = async (e) => {
+    e.preventDefault();
+    dispatch(updateAvatar({file: e.target.files[0]}));
+  }
+
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
@@ -47,15 +52,21 @@ export default function EditAccount() {
           />
         </Box>
         <Box p={2}>
-          <InfoItem leftNode={(<Avatar src={avatar}/>)}
-                    actionLabel={`${avatar ? `Đổi` : `Thêm`} ảnh đại diện`}
-                    isLoading={isFetching}
-                    onClick={() => {
-                      setType(InputDialogType.email);
-                      setInitValue(email);
-                      setOpen(true);
-                    }}
-          />
+          <form>
+            <input id="file-input" type="file" accept="image/jpeg,image/png" hidden onChange={handleUpdateAvatar}/>
+            <label htmlFor="file-input">
+              {/*<Button component={"span"} type="submit">Upload</Button>*/}
+              <InfoItem leftNode={(<Avatar src={avatar}/>)}
+                        actionLabel={`${avatar ? `Đổi` : `Thêm`} ảnh đại diện`}
+                        isLoading={isFetching}
+                        onClick={() => {
+                          // setType(InputDialogType.email);
+                          // setInitValue(email);
+                          // setOpen(true);
+                        }}
+              />
+            </label>
+          </form>
           <Divider/>
           <InfoItem label={`Họ tên`}
                     value={name}

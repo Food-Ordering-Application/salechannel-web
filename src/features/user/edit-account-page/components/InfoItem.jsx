@@ -33,7 +33,7 @@ export default function InfoItem({label, value, leftNode, rightNode, actionLabel
   const classes = useStyles({disabled});
 
   return (
-    <Ribbon onClick={onClick} disabled={disabled}>
+    <Ribbon onClick={onClick} disabled={disabled} component="span">
       <Grid container alignItems="center" className={classes.root}>
         <Grid item xs>
           <Box hidden={leftNode}>

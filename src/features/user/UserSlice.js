@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import UserApi from "../../api/UserApi";
+import {ImageApi} from "../../api/ImageApi";
 
 const handlePendingDefault = (state) => {
   state.isFetching = true;
@@ -55,6 +56,18 @@ export const updateUser = createAsyncThunk(
   async ({name, avatar, email, gender}, thunkAPI) => {
     try {
       return await UserApi.updateUser(name, avatar, email, gender);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateAvatar = createAsyncThunk(
+  `user/updateAvatar`,
+  async ({file}, thunkAPI) => {
+    try {
+      const {thumb: {url: avatar}} = await ImageApi.upload(file);
+      return await UserApi.updateUser(undefined, avatar, undefined, undefined);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -152,6 +165,16 @@ export const userSlice = createSlice({
       state.email = data.email || state.email;
       state.gender = data.gender || state.gender;
     },
+    [updateAvatar.pending]: handlePendingDefault,
+    [updateAvatar.rejected]: handleRejectedDefault,
+    [updateAvatar.fulfilled]: (state, {payload: {data}}) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.avatar = data.avatar || state.avatar;
+      state.name = data.name || state.name;
+      state.email = data.email || state.email;
+      state.gender = data.gender || state.gender;
+    }
   }
 });
 
