@@ -1,6 +1,21 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import UserApi from "../../api/UserApi";
 
+const handlePendingDefault = (state) => {
+  state.isFetching = true;
+}
+
+const handleRejectedDefault = (state) => {
+  state.isFetching = false;
+  state.isError = true;
+}
+
+const handleFulfilledDefault = (state, {payload}) => {
+  state.isFetching = false;
+  state.isSuccess = true;
+  Object.assign(state, payload.user);
+}
+
 export const loginUser = createAsyncThunk(
   `user/login`,
   async ({phoneNumber, password}, thunkAPI) => {
@@ -25,11 +40,9 @@ export const registerUser = createAsyncThunk(
 
 export const fetchUser = createAsyncThunk(
   `user/fetch`,
-  async ({}, thunkAPI) => {
+  async ({userId}, thunkAPI) => {
     try {
-      const token = '';
-      const id = "";
-      return await UserApi.fetchUser(token, id);
+      return await UserApi.fetchUser(userId);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -113,7 +126,10 @@ export const userSlice = createSlice({
     [registerUser.fulfilled]: (state) => {
       state.isFetching = false;
       state.isSuccess = true;
-    }
+    },
+    [fetchUser.pending]: handlePendingDefault,
+    [fetchUser.rejected]: handleRejectedDefault,
+    [fetchUser.fulfilled]: handleFulfilledDefault,
   }
 });
 

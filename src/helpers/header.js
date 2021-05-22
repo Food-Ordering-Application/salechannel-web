@@ -6,3 +6,7 @@ export function authHeader() {
     return {};
   }
 }
+
+export function getUserId() {
+  return  localStorage.getItem(`id`);
+}

@@ -17,6 +17,7 @@ import OrderHistory from "../features/order/order-history-page/OrderHistory";
 import Coupon from "../features/promotion/coupon-page/Coupon";
 import OrderHistoryDetails from "../features/order/order-history-details-page/OrderHistoryDetails";
 import RestaurantInfo from "../features/restaurant/restaurant-info-page/RestaurantInfo";
+import EditAccount from "../features/user/edit-account-page/EditAccount";
 
 
 export default function IndexComponent() {
@@ -27,6 +28,7 @@ export default function IndexComponent() {
       <Route exact path='/store/:id'><Restaurant/></Route>
       <Route exact path='/login'><Login/></Route>
       <Route exact path='/register'><Register/></Route>
+      <Route exact path='/account/edit'><EditAccount/></Route>
       <Route exact path='/account'><Account/></Route>
       <Route exact path='/notifications'><Notifications/></Route>
       <Route exact path='/checkout/:id'><Checkout/></Route>

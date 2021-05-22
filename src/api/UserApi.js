@@ -67,9 +67,9 @@ const UserApi = {
     }
   },
 
-  fetchUser: async function (token, id) {
+  fetchUser: async function (id) {
     try {
-      return (await axios.get(`${BASEURL}/user/customer/${id}`, {headers: {"Authorization": `Bearer ${token}`}})).data.data.user;
+      return (await axios.get(`${BASEURL}/user/customer/${id}`, {headers: authHeader()})).data.data;
     } catch (error) {
       const response = error.response;
       if (response) {

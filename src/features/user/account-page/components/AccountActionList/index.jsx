@@ -18,7 +18,7 @@ export default function AccountActionList({initOpen}) {
         <List component="div" disablePadding>
           <StyledListItem label="Thông tin tài khoản"
                           icon={EditOutlined}
-                          to="/"
+                          to="/account/edit"
           />
           <StyledListItem label="Địa chỉ giao hàng"
                           icon={LocationOnOutlined}
