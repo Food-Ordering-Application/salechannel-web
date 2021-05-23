@@ -147,11 +147,12 @@ export const OrderApi = {
     }
   },
 
-  confirmOrder: async (orderId, note, paymentType) => {
+  confirmOrder: async (orderId, note, paymentMethod) => {
     try {
       const response = await axios.patch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
+        orderId,
         note,
-        paymentType
+        paymentMethod
       }, {headers: authHeader()});
       return response.data.data;
     } catch (e) {

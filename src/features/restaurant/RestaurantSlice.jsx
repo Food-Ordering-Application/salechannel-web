@@ -18,7 +18,7 @@ export const fetchRestaurant = createAsyncThunk(
 export const restaurantSlice = createSlice({
   name: `restaurant`,
   initialState: {
-    restaurant: null,
+    restaurant: {},
     isFetching: false,
     isError: false,
     isSuccess: false,

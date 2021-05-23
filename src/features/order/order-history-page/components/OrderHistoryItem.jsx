@@ -35,7 +35,7 @@ const mapStatusIcon = (status) => {
   return Autorenew;
 };
 
-export default function OrderHistoryItem({status, name, itemCount, date, cost, paymentType}) {
+export default function OrderHistoryItem({status, name, itemCount, date, cost, paymentMethod: paymentType}) {
   const classes = useStyles({status});
 
   return (

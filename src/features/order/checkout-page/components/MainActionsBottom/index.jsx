@@ -7,7 +7,7 @@ import {useSelector} from "react-redux";
 import {orderSelector} from "../../../OrderSlice";
 import {paymentConstant} from "../../../../../constants/paymentConstant";
 import {mapPaymentIcon} from "../PaymentDialog";
-import PayPalButton from "../PayPalButton";
+import PayPalButtonComponent from "../PayPalButton";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,7 @@ export default function MainActionsBottom({
                                             disablePlaceOrder,
                                           }) {
   const classes = useStyles();
-  const {data: {id: orderId, paymentType}} = useSelector(orderSelector);
+  const {data: {id: orderId, paymentType: paymentType}} = useSelector(orderSelector);
 
   return (
     <Box p={2} className={classes.root}>
@@ -115,7 +115,7 @@ export default function MainActionsBottom({
             </Button>
           </Grid>
           <Grid item xs hidden={paymentType !== paymentConstant.PAYPAL.code}>
-            <PayPalButton orderId={orderId} note={"note"}/>
+            <PayPalButtonComponent orderId={orderId} note={"note"}/>
           </Grid>
         </Grid>
       </Box>

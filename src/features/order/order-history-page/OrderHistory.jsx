@@ -10,7 +10,7 @@ const mockedData = [
     date: new Date(),
     itemCount: 6,
     cost: 57000,
-    paymentType: "COD"
+    payem: "COD"
   },
   {
     status: "DELIVERIED",

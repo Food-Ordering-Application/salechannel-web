@@ -1,27 +1,20 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import React, {Fragment, useEffect, useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import {Box} from '@material-ui/core';
 
 import LocationCard from './components/LocationCard';
 import OrderDetails from './components/OrderDetails';
 import CouponList from './components/CouponList';
 import MainActionsBottom from './components/MainActionsBottom';
 import TopNavigationBar from '../../common/TopNavigationBar';
-import { useHistory, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  clearOrderState,
-  confirmOrder,
-  orderSelector,
-  removeItem,
-  setNote,
-  setPaymentType,
-} from '../OrderSlice';
-import { showError } from '../../common/Snackbar/SnackbarSlice';
+import {useHistory, useParams} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {clearOrderState, confirmOrder, orderSelector, removeItem, setNote, setPaymentType,} from '../OrderSlice';
+import {showError} from '../../common/Snackbar/SnackbarSlice';
 import AddressDialog from './components/AddressDialog';
 import NoteDialog from './components/NoteDialog';
 import PaymentDialog from './components/PaymentDialog';
-import { Helmet } from 'react-helmet';
+import {restaurantSelector} from "../../restaurant/RestaurantSlice";
 
 const useStyles = makeStyles((theme) => ({
   topNavigationBar: {
@@ -43,13 +36,14 @@ export default function Checkout() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { id: restaurantId } = useParams();
+  const {id: restaurantId} = useParams();
   const [addressOpen, setAddressOpen] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
-  const { isEmpty, isError, errorMessage, data, orderSuccess } =
-    useSelector(orderSelector);
+  const {isEmpty, isError, errorMessage, data, orderSuccess} = useSelector(orderSelector);
+  const {isSuccess, restaurant: {merchantIdInPayPal}} = useSelector(restaurantSelector);
+
 
   const handlePaymentTypeChange = (paymentType) => {
     dispatch(setPaymentType(paymentType));
@@ -66,7 +60,7 @@ export default function Checkout() {
     }
   }, [isError, dispatch, orderSuccess]);
 
-  if (isEmpty) {
+  if (isEmpty || !isSuccess) {
     history.push(`/store/${restaurantId}`);
     return null;
   }
@@ -74,25 +68,16 @@ export default function Checkout() {
   const {
     id: orderId,
     subTotal,
-    delivery: { customerAddress, shippingFee },
+    delivery: {customerAddress, shippingFee},
     paymentType,
     note,
   } = data;
 
-  const merchantId = 'MERCHANT_ID';
-
-  const scriptAttributes = {
-    src: `https://www.paypal.com/sdk/js?client-id=%REACT_APP_CLIENT_ID%&merchant-id=${merchantId}&disable-funding=credit,card`,
-  };
-
   return (
     <Fragment>
-      <Helmet>
-        <script {...scriptAttributes}></script>
-      </Helmet>
       <Box mt={6} mb={16.25} p={1.5}>
         <Box className={classes.topNavigationBar}>
-          <TopNavigationBar label="Check out" />
+          <TopNavigationBar label="Check out"/>
         </Box>
         <Box>
           <LocationCard
@@ -106,18 +91,18 @@ export default function Checkout() {
             handleUpdateNote={() => setNoteOpen(true)}
             note={note}
             handleRemoveItem={(orderItemId) => {
-              dispatch(removeItem({ orderId, orderItemId }));
+              dispatch(removeItem({orderId, orderItemId}));
             }}
           />
         </Box>
         <Box mx={-1.5}>
-          <CouponList />
+          <CouponList/>
         </Box>
         <Box className={classes.mainActionsBottom}>
           <MainActionsBottom
             totalCost={subTotal + shippingFee}
             handleCheckout={() =>
-              dispatch(confirmOrder({ orderId, note, paymentType }))
+              dispatch(confirmOrder({orderId, note, paymentType}))
             }
             handlePaymentChange={() => setPaymentOpen(true)}
             disablePlaceOrder={!customerAddress}
