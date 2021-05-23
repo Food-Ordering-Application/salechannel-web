@@ -15,6 +15,7 @@ import AddressDialog from './components/AddressDialog';
 import NoteDialog from './components/NoteDialog';
 import PaymentDialog from './components/PaymentDialog';
 import {restaurantSelector} from "../../restaurant/RestaurantSlice";
+import Pusher from "pusher-js";
 
 const useStyles = makeStyles((theme) => ({
   topNavigationBar: {
@@ -44,6 +45,14 @@ export default function Checkout() {
   const {isEmpty, isError, errorMessage, data, orderSuccess} = useSelector(orderSelector);
   const {isSuccess, restaurant: {merchantIdInPayPal}} = useSelector(restaurantSelector);
 
+  const pusher = new Pusher('29ff5ecb5e2501177186', {
+    cluster: 'ap1'
+  });
+
+  const channel = pusher.subscribe('my-channel');
+  channel.bind('my-event', function (data) {
+    alert(JSON.stringify(data));
+  });
 
   const handlePaymentTypeChange = (paymentType) => {
     dispatch(setPaymentType(paymentType));

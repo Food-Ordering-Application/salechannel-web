@@ -159,6 +159,7 @@ export const orderSlice = createSlice({
         state.isRequesting = false;
         state.isError = false;
         state.isSuccess = false;
+        state.orderSuccess = false;
         return state;
       },
       setPaymentType: (state, {payload: paymentType}) => {

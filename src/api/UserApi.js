@@ -157,7 +157,7 @@ const UserApi = {
     } catch (error) {
       const response = error.response;
       if (response) {
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(`Email không tồn tại`);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
