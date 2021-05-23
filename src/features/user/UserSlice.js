@@ -229,7 +229,7 @@ export const userSlice = createSlice({
     [verifyResettingPassword.pending]: handlePendingDefault,
     [verifyResettingPassword.rejected]: handleRejectedDefault,
     [verifyResettingPassword.fulfilled]: (state, {payload}) => {
-      console.log(payload);
+      state.id = payload.customerId;
       state.isFetching = false;
       state.resetPassword.isVerifySuccess = true;
     },

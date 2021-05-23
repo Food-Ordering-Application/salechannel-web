@@ -166,7 +166,7 @@ const UserApi = {
 
   resetPasswordVerify: async function (resetToken) {
     try {
-      return (await axios.get(`${BASEURL}/user/customer/reset-password/${resetToken}`)).data;
+      return (await axios.get(`${BASEURL}/user/customer/reset-password/${resetToken}`)).data.data;
     } catch (error) {
       const response = error.response;
       console.log(response);
@@ -181,6 +181,7 @@ const UserApi = {
   },
 
   submitNewPassword: async function (customerId, password, resetToken) {
+    console.log(password);
     try {
       return (await axios.patch(`${BASEURL}/user/customer/new-password`,
         {customerId, password, resetToken}

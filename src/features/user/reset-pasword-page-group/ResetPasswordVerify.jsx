@@ -17,8 +17,8 @@ export default function ResetPasswordVerify() {
   const {code: resetToken} = useParams();
   const dispatch = useDispatch();
   const [title, setTitle] = useState(titleText.verifying);
-  const [password1, setPassword1] = useState(``);
-  const [password2, setPassword2] = useState(``);
+  const [password1, setPassword1] = useState(`Aa123456`);
+  const [password2, setPassword2] = useState(`Aa123456`);
   const {
     isFetching,
     isError,
@@ -30,10 +30,11 @@ export default function ResetPasswordVerify() {
     }
   } = useSelector(userSelector);
 
+
   const handleSubmit = () => {
     try {
       passwordValidator(password1, password2);
-      dispatch(submitNewPassword({customerId, password1, resetToken}));
+      dispatch(submitNewPassword({customerId: customerId, password: password1, resetToken: resetToken}));
     } catch (error) {
       dispatch(showError(error.message));
     }
