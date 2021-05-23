@@ -107,29 +107,31 @@ export const submitNewPassword = createAsyncThunk(
   }
 );
 
+const defaultState = {
+  isAuthenticated: false,
+  id: '',
+  phoneNumber: '',
+  name: '',
+  gender: '',
+  avatar: '',
+  email: '',
+  isPhoneNumberVerified: false,
+  accessToken: '',
+  isFetching: false,
+  isSuccess: false,
+  isError: false,
+  errorMessage: '',
+  resetPassword: {
+    resetToken: ``,
+    isRequestSuccess: false,
+    isVerifySuccess: false,
+    isResetSuccess: false,
+  }
+};
+
 export const userSlice = createSlice({
   name: `user`,
-  initialState: {
-    isAuthenticated: false,
-    id: '',
-    phoneNumber: '',
-    name: '',
-    gender: '',
-    avatar: '',
-    email: '',
-    isPhoneNumberVerified: false,
-    accessToken: '',
-    isFetching: false,
-    isSuccess: false,
-    isError: false,
-    errorMessage: '',
-    resetPassword: {
-      resetToken: ``,
-      isRequestSuccess: false,
-      isVerifySuccess: false,
-      isResetSuccess: false,
-    }
-  },
+  initialState: defaultState,
   reducers: {
     clearUserState: (state) => {
       state.isError = false;
@@ -149,11 +151,9 @@ export const userSlice = createSlice({
       state.accessToken = access_token;
     },
     removeUser: (state) => {
-      state = {};
-      state.isAuthenticated = false;
       localStorage.removeItem(`token`);
       localStorage.removeItem(`id`);
-      return state;
+      return defaultState;
     },
     verifyOtpSuccess: (state) => {
       state.isPhoneNumberVerified = true;
