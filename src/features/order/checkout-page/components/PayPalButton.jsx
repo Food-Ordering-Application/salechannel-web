@@ -44,7 +44,7 @@ export default function PayPalButtonComponent() {
   CALLBACK
    */
 
-  const createOrder = async (data, actions) => {
+  const createOrder = async function (data, actions) {
     console.log(merchantIdInPayPal);
     try {
       const data = await OrderApi.confirmOrder(
@@ -64,15 +64,12 @@ export default function PayPalButtonComponent() {
     }
   };
 
-  const onApprove = useCallback(
-    (data, actions) => {
-      console.log('PAYPAL ORDER IDDDDDD', paypalOrderId);
-      OrderApi.approvePaypal(orderId, paypalOrderId).then(function (details) {
-        alert('Transaction funds captured from ' + details[`payer_given_name`]);
-      });
-    },
-    [paypalOrderId, orderId]
-  );
+  const onApprove = function (data, actions) {
+    console.log('PAYPAL ORDER IDDDDDD', paypalOrderId);
+    OrderApi.approvePaypal(orderId, paypalOrderId).then(function (details) {
+      alert('Transaction funds captured from ' + details[`payer_given_name`]);
+    });
+  };
 
   return (
     <PayPalButton
