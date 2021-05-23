@@ -56,7 +56,8 @@ export default function Checkout() {
     }
     if (orderSuccess) {
       alert('Đặt hàng thành công!');
-      history.replace(`/checkout/${orderId}`);
+      dispatch(clearOrderState());
+      history.replace(`/order/${orderId}`);
     }
   }, [isError, dispatch, orderSuccess]);
 
@@ -101,9 +102,7 @@ export default function Checkout() {
         <Box className={classes.mainActionsBottom}>
           <MainActionsBottom
             totalCost={subTotal + shippingFee}
-            handleCheckout={() =>
-              dispatch(confirmOrder({orderId, note, paymentType}))
-            }
+            handleCheckout={() => dispatch(confirmOrder({orderId, note, paymentType}))}
             handlePaymentChange={() => setPaymentOpen(true)}
             disablePlaceOrder={!customerAddress}
           />

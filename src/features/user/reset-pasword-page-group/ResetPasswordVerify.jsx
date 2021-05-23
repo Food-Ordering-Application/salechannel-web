@@ -17,8 +17,8 @@ export default function ResetPasswordVerify() {
   const {code: resetToken} = useParams();
   const dispatch = useDispatch();
   const [title, setTitle] = useState(titleText.verifying);
-  const [password1, setPassword1] = useState(`Aa123456`);
-  const [password2, setPassword2] = useState(`Aa123456`);
+  const [password1, setPassword1] = useState(``);
+  const [password2, setPassword2] = useState(``);
   const {
     isFetching,
     isError,
@@ -76,6 +76,7 @@ export default function ResetPasswordVerify() {
                      autoFocus
                      fullWidth
                      onFocus={e => e.target.select()}
+                     type="password"
                      placeholder="Mật khẩu mới"
                      value={password1}
                      onChange={e => setPassword1(`${e.target.value}`)}
@@ -84,6 +85,7 @@ export default function ResetPasswordVerify() {
                      autoFocus
                      fullWidth
                      onFocus={e => e.target.select()}
+                     type="password"
                      placeholder="Nhập lại mật khẩu mới"
                      value={password2}
                      onChange={e => setPassword2(`${e.target.value}`)}
