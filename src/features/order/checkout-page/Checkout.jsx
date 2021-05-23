@@ -82,7 +82,7 @@ export default function Checkout() {
   const merchantId = 'MERCHANT_ID';
 
   const scriptAttributes = {
-    src: `https://www.paypal.com/sdk/js?&client-id=%REACT_APP_CLIENT_ID%&merchant-id=${merchantId}`,
+    src: `https://www.paypal.com/sdk/js?client-id=%REACT_APP_CLIENT_ID%&merchant-id=${merchantId}&disable-funding=credit,card`,
   };
 
   return (
