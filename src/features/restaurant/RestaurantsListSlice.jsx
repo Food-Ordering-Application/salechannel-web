@@ -43,10 +43,9 @@ export const restaurantsListSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       if (payload.append) {
-        // state.data = [...(state.data), ...(payload.restaurants)];
-        state.data = payload.restaurants.filter((restaurant) => restaurant.id === `75d1fd95-9699-4f21-85e6-480def4d8bbb`);
+        state.data = [...(state.data), ...(payload.restaurants)];
       } else {
-        state.data = payload.restaurants.filter((restaurant) => restaurant.id === `75d1fd95-9699-4f21-85e6-480def4d8bbb`);
+        state.data = payload.restaurants;
       }
     }
   },
