@@ -74,6 +74,39 @@ export const updateAvatar = createAsyncThunk(
   }
 );
 
+export const requestResettingPassword = createAsyncThunk(
+  `user/requestResettingPassword`,
+  async ({email}, thunkAPI) => {
+    try {
+      return await UserApi.resetPasswordRequest(email);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const verifyResettingPassword = createAsyncThunk(
+  `user/verifyResettingPassword`,
+  async ({resetToken}, thunkAPI) => {
+    try {
+      return await UserApi.resetPasswordVerify(resetToken);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const submitNewPassword = createAsyncThunk(
+  `user/submitNewPassword`,
+  async ({customerId, password, resetToken}, thunkAPI) => {
+    try {
+      return await UserApi.submitNewPassword(customerId, password, resetToken);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message)
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: `user`,
   initialState: {
@@ -90,12 +123,24 @@ export const userSlice = createSlice({
     isSuccess: false,
     isError: false,
     errorMessage: '',
+    resetPassword: {
+      resetToken: ``,
+      isRequestSuccess: false,
+      isVerifySuccess: false,
+      isResetSuccess: false,
+    }
   },
   reducers: {
     clearUserState: (state) => {
       state.isError = false;
       state.isSuccess = false;
       state.isFetching = false;
+      state.resetPassword = {
+        resetToken: ``,
+        isRequestSuccess: false,
+        isVerifySuccess: false,
+        isResetSuccess: false,
+      }
       return state;
     },
     setUser: (state, action) => {
@@ -174,6 +219,26 @@ export const userSlice = createSlice({
       state.name = data.name || state.name;
       state.email = data.email || state.email;
       state.gender = data.gender || state.gender;
+    },
+    [requestResettingPassword.pending]: handlePendingDefault,
+    [requestResettingPassword.rejected]: handleRejectedDefault,
+    [requestResettingPassword.fulfilled]: (state) => {
+      state.isFetching = false;
+      state.resetPassword.isRequestSuccess = true;
+    },
+    [verifyResettingPassword.pending]: handlePendingDefault,
+    [verifyResettingPassword.rejected]: handleRejectedDefault,
+    [verifyResettingPassword.fulfilled]: (state, {payload}) => {
+      console.log(payload);
+      state.isFetching = false;
+      state.resetPassword.isVerifySuccess = true;
+    },
+    [submitNewPassword.pending]: handlePendingDefault,
+    [submitNewPassword.rejected]: handleRejectedDefault,
+    [submitNewPassword.fulfilled]: (state, {payload}) => {
+      console.log(payload);
+      state.isFetching = false;
+      state.resetPassword.isResetSuccess = true;
     }
   }
 });

@@ -147,6 +147,52 @@ const UserApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+
+  resetPasswordRequest: async function (email) {
+    try {
+      return (await axios.post(`${BASEURL}/user/customer/reset-password`,
+        {email}
+      )).data;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
+  resetPasswordVerify: async function (resetToken) {
+    try {
+      return (await axios.get(`${BASEURL}/user/customer/reset-password/${resetToken}`)).data;
+    } catch (error) {
+      const response = error.response;
+      console.log(response);
+      if (response) {
+        if (response.status === 404)
+          throw new Error(`Yêu cầu đổi mật khẩu hết hạn hoặc không hợp lệ`);
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
+  submitNewPassword: async function (customerId, password, resetToken) {
+    try {
+      return (await axios.patch(`${BASEURL}/user/customer/new-password`,
+        {customerId, password, resetToken}
+      )).data;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 }
 

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {showError, showSuccess} from "../../common/Snackbar/SnackbarSlice";
 import {clearUserState, registerUser, userSelector} from "../UserSlice";
 
-const passwordValidator = (password1, password2) => {
+export const passwordValidator = (password1, password2) => {
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
   if (!strongRegex.test(`${password1}`))
     throw new Error("Mật khẩu tối thiểu 8 ký tự gồm chữ hoa, thường và số");
