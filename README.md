@@ -3,9 +3,9 @@
 ### Academic project
 Vietnam National University Ho Chi Minh City - University of Science
 
-The app was hosted at [this link](https://smartfood.vercel.app/)
+The app was hosted at [this link](https://salechannel.herokuapp.com)
 
-Please open [the link](https://smartfood.vercel.app/) in **_portrait view mode_** or on **__smartphone__** for the best experience
+Please open [the link](https://salechannel.herokuapp.com) in **_portrait view mode_** or on **__smartphone__** for the best experience
 
 ## Screenshots
 ![alt text](https://i.ibb.co/DGyS4V6/Smart-Food-Home-Screen-v1-1.png "Home Screen")
