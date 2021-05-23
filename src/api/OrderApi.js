@@ -1,14 +1,20 @@
-import axios from "axios";
-import {authHeader} from "../helpers/header";
+import axios from 'axios';
+import { authHeader } from '../helpers/header';
 
-const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
-
+const BASEURL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_PRODUCTION_API
+    : process.env.REACT_APP_LOCAL_API;
 
 //TODO: Optimize duplicate code
 export const OrderApi = {
   fetchOrderData: async (orderId) => {
     try {
-      return (await axios.get(`${BASEURL}/order/${orderId}`, {headers: authHeader()})).data.data;
+      return (
+        await axios.get(`${BASEURL}/order/${orderId}`, {
+          headers: authHeader(),
+        })
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -22,25 +28,27 @@ export const OrderApi = {
     console.log(`Menu item`);
     console.log(menuItem);
     const orderItemToppings = topping.flat().map((toppingItem) => ({
-      "toppingItemId": toppingItem.id,
+      toppingItemId: toppingItem.id,
       // "name": toppingItem.name,
-      "quantity": 1,
+      quantity: 1,
       // "price": toppingItem.price,
     }));
     const data = {
-      "orderItem": {
-        "menuItemId": menuItem.id,
+      orderItem: {
+        menuItemId: menuItem.id,
         // "name": menuItem.name,
         // "price": menuItem.price,
-        "quantity": menuItem.quantity,
-        "orderItemToppings": orderItemToppings
+        quantity: menuItem.quantity,
+        orderItemToppings: orderItemToppings,
       },
-      "restaurantId": restaurantId,
-      "customerId": userId,
+      restaurantId: restaurantId,
+      customerId: userId,
     };
 
     try {
-      return (await axios.post(`${BASEURL}/order`, data, {headers: authHeader()})).data.data;
+      return (
+        await axios.post(`${BASEURL}/order`, data, { headers: authHeader() })
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -52,22 +60,26 @@ export const OrderApi = {
 
   addItem: async (orderId, menuItem, topping) => {
     const orderItemToppings = topping.flat().map((toppingItem) => ({
-      "toppingItemId": toppingItem.id,
+      toppingItemId: toppingItem.id,
       // "name": toppingItem.name,
-      "quantity": 1,
+      quantity: 1,
       // "price": toppingItem.price,
     }));
     const data = {
-      "sendItem": {
-        "menuItemId": menuItem.id,
+      sendItem: {
+        menuItemId: menuItem.id,
         // "name": menuItem.name,
         // "price": menuItem.price,
-        "quantity": menuItem.quantity,
-        "orderItemToppings": orderItemToppings
+        quantity: menuItem.quantity,
+        orderItemToppings: orderItemToppings,
       },
     };
     try {
-      return (await axios.patch(`${BASEURL}/order/${orderId}/add-new-item`, data, {headers: authHeader()})).data.data;
+      return (
+        await axios.patch(`${BASEURL}/order/${orderId}/add-new-item`, data, {
+          headers: authHeader(),
+        })
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -79,10 +91,16 @@ export const OrderApi = {
 
   getOrderAssociated: async (restaurantId, customerId) => {
     try {
-      return (await axios.post(`${BASEURL}/order/get-order-associated`, {
-        restaurantId,
-        customerId
-      }, {headers: authHeader()})).data.data;
+      return (
+        await axios.post(
+          `${BASEURL}/order/get-order-associated`,
+          {
+            restaurantId,
+            customerId,
+          },
+          { headers: authHeader() }
+        )
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -94,7 +112,13 @@ export const OrderApi = {
 
   increaseQuantity: async (orderId, orderItemId) => {
     try {
-      return (await axios.patch(`${BASEURL}/order/${orderId}/increase-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (
+        await axios.patch(
+          `${BASEURL}/order/${orderId}/increase-orditem-quantity`,
+          { orderItemId },
+          { headers: authHeader() }
+        )
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -106,7 +130,13 @@ export const OrderApi = {
 
   decreaseQuantity: async (orderId, orderItemId) => {
     try {
-      return (await axios.patch(`${BASEURL}/order/${orderId}/reduce-orditem-quantity`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (
+        await axios.patch(
+          `${BASEURL}/order/${orderId}/reduce-orditem-quantity`,
+          { orderItemId },
+          { headers: authHeader() }
+        )
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -118,7 +148,13 @@ export const OrderApi = {
 
   removeItem: async (orderId, orderItemId) => {
     try {
-      return (await axios.patch(`${BASEURL}/order/${orderId}/remove-orditem`, {orderItemId}, {headers: authHeader()})).data.data;
+      return (
+        await axios.patch(
+          `${BASEURL}/order/${orderId}/remove-orditem`,
+          { orderItemId },
+          { headers: authHeader() }
+        )
+      ).data.data;
     } catch (error) {
       if (error.response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
@@ -130,10 +166,16 @@ export const OrderApi = {
 
   updateAddress: async (customerId, orderId, customerAddressId) => {
     try {
-      return (await axios.patch(`${BASEURL}/order/${orderId}/pick-delivery-address`, {
-        customerId,
-        customerAddressId
-      }, {headers: authHeader()})).data.data;
+      return (
+        await axios.patch(
+          `${BASEURL}/order/${orderId}/pick-delivery-address`,
+          {
+            customerId,
+            customerAddressId,
+          },
+          { headers: authHeader() }
+        )
+      ).data.data;
     } catch (e) {
       const response = e.response;
       if (response) {
@@ -147,13 +189,18 @@ export const OrderApi = {
     }
   },
 
-  confirmOrder: async (orderId, note, paymentMethod) => {
+  confirmOrder: async (orderId, note, paymentMethod, paypalMerchantId) => {
     try {
-      const response = await axios.patch(`${BASEURL}/order/${orderId}/confirm-ord-checkout`, {
-        orderId,
-        note,
-        paymentMethod
-      }, {headers: authHeader()});
+      const response = await axios.patch(
+        `${BASEURL}/order/${orderId}/confirm-ord-checkout`,
+        {
+          orderId,
+          note,
+          paymentMethod,
+          paypalMerchantId,
+        },
+        { headers: authHeader() }
+      );
       return response.data.data;
     } catch (e) {
       const response = e.response;
@@ -169,7 +216,11 @@ export const OrderApi = {
   },
   approvePaypal: async (orderId, paypalOrderId) => {
     try {
-      const response = await axios.patch(`${BASEURL}/order/${orderId}/approve-paypal-order`, {paypalOrderId}, {headers: authHeader()});
+      const response = await axios.patch(
+        `${BASEURL}/order/${orderId}/approve-paypal-order`,
+        { paypalOrderId },
+        { headers: authHeader() }
+      );
       return response.data;
     } catch (e) {
       const response = e.response;
@@ -182,5 +233,5 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
-  }
-}
+  },
+};
