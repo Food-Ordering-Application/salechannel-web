@@ -14,8 +14,7 @@ import {showError} from '../../common/Snackbar/SnackbarSlice';
 import AddressDialog from './components/AddressDialog';
 import NoteDialog from './components/NoteDialog';
 import PaymentDialog from './components/PaymentDialog';
-import {restaurantSelector} from "../../restaurant/RestaurantSlice";
-import Pusher from "pusher-js";
+import SplashScreen from "../../common/SplashScreen";
 
 const useStyles = makeStyles((theme) => ({
   topNavigationBar: {
@@ -42,17 +41,7 @@ export default function Checkout() {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
-  const {isEmpty, isError, errorMessage, data, orderSuccess} = useSelector(orderSelector);
-  const {isSuccess, restaurant: {merchantIdInPayPal}} = useSelector(restaurantSelector);
-
-  const pusher = new Pusher('29ff5ecb5e2501177186', {
-    cluster: 'ap1'
-  });
-
-  const channel = pusher.subscribe('my-channel');
-  channel.bind('my-event', function (data) {
-    alert(JSON.stringify(data));
-  });
+  const {isEmpty, isError, isPlacing, errorMessage, data, orderSuccess} = useSelector(orderSelector);
 
   const handlePaymentTypeChange = (paymentType) => {
     dispatch(setPaymentType(paymentType));
@@ -64,14 +53,13 @@ export default function Checkout() {
       dispatch(clearOrderState());
     }
     if (orderSuccess) {
-      alert('Đặt hàng thành công!');
       dispatch(clearOrderState());
       history.replace(`/order/${orderId}`);
     }
   }, [isError, dispatch, orderSuccess]);
 
-  if (isEmpty || !isSuccess) {
-    history.push(`/store/${restaurantId}`);
+  if (isEmpty) {
+    history.replace(`/store/${restaurantId}`);
     return null;
   }
 
@@ -83,12 +71,12 @@ export default function Checkout() {
     note,
   } = data;
 
+  console.log(isPlacing);
+
   return (
     <Fragment>
       <Box mt={6} mb={16.25} p={1.5}>
-        <Box className={classes.topNavigationBar}>
-          <TopNavigationBar label="Check out"/>
-        </Box>
+        <TopNavigationBar label="Chi tiết đơn hàng"/>
         <Box>
           <LocationCard
             location={customerAddress}
@@ -132,6 +120,7 @@ export default function Checkout() {
           onSubmit={(text) => dispatch(setNote(`${text}`))}
         />
       </Box>
+      <SplashScreen style={2} display={isPlacing}/>
     </Fragment>
   );
 }

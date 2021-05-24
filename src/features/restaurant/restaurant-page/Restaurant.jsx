@@ -83,7 +83,7 @@ export default function Restaurant() {
   const {id: customerId} = useSelector(userSelector);
   const restaurant = useSelector(restaurantSelector);
   const menu = useSelector(menuSelector);
-  const {isEmpty: cartIsEmpty, data: cartData} = useSelector(orderSelector);
+  const {isEmpty: cartIsEmpty, data: cartData, isCreating} = useSelector(orderSelector);
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
   const {id} = useParams();
@@ -136,7 +136,7 @@ export default function Restaurant() {
           <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
         <Box className={classes.cart}>
-          {!cartIsEmpty && <CartSummaryBottom cart={cartData} toCheckout={`/checkout/${id}`}/>}
+          {(!cartIsEmpty || isCreating) && <CartSummaryBottom isLoading={isCreating} cart={cartData} toCheckout={`/checkout/${id}`}/>}
         </Box>
 
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>

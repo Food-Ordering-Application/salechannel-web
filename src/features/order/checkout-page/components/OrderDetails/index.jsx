@@ -49,7 +49,7 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
                       name={item[`name`]}
                       price={price}
                       description=""
-                      onClick={() => handleRemoveItem(id)}/>
+                      handleRemove={() => handleRemoveItem(id)}/>
   });
 
   return (

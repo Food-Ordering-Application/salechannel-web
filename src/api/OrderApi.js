@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { authHeader } from '../helpers/header';
+import {authHeader} from '../helpers/header';
 
 const BASEURL =
   process.env.NODE_ENV === 'production'
@@ -25,19 +25,13 @@ export const OrderApi = {
   },
 
   createOrder: async (restaurantId, userId, menuItem, topping) => {
-    console.log(`Menu item`);
-    console.log(menuItem);
     const orderItemToppings = topping.flat().map((toppingItem) => ({
       toppingItemId: toppingItem.id,
-      // "name": toppingItem.name,
       quantity: 1,
-      // "price": toppingItem.price,
     }));
     const data = {
       orderItem: {
         menuItemId: menuItem.id,
-        // "name": menuItem.name,
-        // "price": menuItem.price,
         quantity: menuItem.quantity,
         orderItemToppings: orderItemToppings,
       },
@@ -47,13 +41,15 @@ export const OrderApi = {
 
     try {
       return (
-        await axios.post(`${BASEURL}/order`, data, { headers: authHeader() })
+        await axios.post(`${BASEURL}/order`,
+          data,
+          {headers: authHeader()})
       ).data.data;
     } catch (error) {
       if (error.response) {
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(`Không thể tạo đơn hàng mới`);
       } else {
-        throw new Error(`Không có kết nối đến máy chủ`);
+        throw new Error(`Không có phản hồi từ máy chủ`);
       }
     }
   },
@@ -61,15 +57,11 @@ export const OrderApi = {
   addItem: async (orderId, menuItem, topping) => {
     const orderItemToppings = topping.flat().map((toppingItem) => ({
       toppingItemId: toppingItem.id,
-      // "name": toppingItem.name,
       quantity: 1,
-      // "price": toppingItem.price,
     }));
     const data = {
       sendItem: {
         menuItemId: menuItem.id,
-        // "name": menuItem.name,
-        // "price": menuItem.price,
         quantity: menuItem.quantity,
         orderItemToppings: orderItemToppings,
       },
@@ -82,9 +74,9 @@ export const OrderApi = {
       ).data.data;
     } catch (error) {
       if (error.response) {
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(`Không thể thêm vào giỏ hàng`);
       } else {
-        throw new Error(`Không có kết nối đến máy chủ`);
+        throw new Error(`Không có phản hồi từ máy chủ`);
       }
     }
   },
@@ -98,7 +90,7 @@ export const OrderApi = {
             restaurantId,
             customerId,
           },
-          { headers: authHeader() }
+          {headers: authHeader()}
         )
       ).data.data;
     } catch (error) {
@@ -115,8 +107,8 @@ export const OrderApi = {
       return (
         await axios.patch(
           `${BASEURL}/order/${orderId}/increase-orditem-quantity`,
-          { orderItemId },
-          { headers: authHeader() }
+          {orderItemId},
+          {headers: authHeader()}
         )
       ).data.data;
     } catch (error) {
@@ -133,8 +125,8 @@ export const OrderApi = {
       return (
         await axios.patch(
           `${BASEURL}/order/${orderId}/reduce-orditem-quantity`,
-          { orderItemId },
-          { headers: authHeader() }
+          {orderItemId},
+          {headers: authHeader()}
         )
       ).data.data;
     } catch (error) {
@@ -151,8 +143,8 @@ export const OrderApi = {
       return (
         await axios.patch(
           `${BASEURL}/order/${orderId}/remove-orditem`,
-          { orderItemId },
-          { headers: authHeader() }
+          {orderItemId},
+          {headers: authHeader()}
         )
       ).data.data;
     } catch (error) {
@@ -173,7 +165,7 @@ export const OrderApi = {
             customerId,
             customerAddressId,
           },
-          { headers: authHeader() }
+          {headers: authHeader()}
         )
       ).data.data;
     } catch (e) {
@@ -199,7 +191,7 @@ export const OrderApi = {
           paymentMethod,
           paypalMerchantId,
         },
-        { headers: authHeader() }
+        {headers: authHeader()}
       );
       return response.data.data;
     } catch (e) {
@@ -218,8 +210,8 @@ export const OrderApi = {
     try {
       const response = await axios.patch(
         `${BASEURL}/order/${orderId}/approve-paypal-order`,
-        { paypalOrderId },
-        { headers: authHeader() }
+        {paypalOrderId},
+        {headers: authHeader()}
       );
       return response.data;
     } catch (e) {

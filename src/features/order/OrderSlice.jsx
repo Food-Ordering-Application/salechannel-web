@@ -138,6 +138,15 @@ export const approvePaypal = createAsyncThunk(
 );
 
 /*
+DEFAULT PROPS
+ */
+
+const defaultProps = {
+  note: '',
+  paymentType: paymentConstant.COD.code
+}
+
+/*
 REDUX SLICE
  */
 
@@ -148,11 +157,12 @@ export const orderSlice = createSlice({
       isError: false,
       isSuccess: false,
       isEmpty: true,
-      data: {
-        note: '',
-        paymentType: paymentConstant.COD.code
-      },
+      isCreating: false,
+      createSuccess: false,
+      isUpdating: false,
+      isPlacing: false,
       orderSuccess: false,
+      data: {...defaultProps},
     },
     reducers: {
       clearOrderState: (state) => {
@@ -170,9 +180,22 @@ export const orderSlice = createSlice({
       }
     },
     extraReducers: {
-      [createOrder.fulfilled]: handleFulfillDefault,
-      [createOrder.pending]: handlePendingDefault,
-      [createOrder.rejected]: handleRejectDefault,
+      [createOrder.pending]: (state) => {
+        state.isCreating = true;
+        state.isError = false;
+        state.createSuccess = false;
+      },
+      [createOrder.rejected]: (state, {payload}) => {
+        state.isCreating = false;
+        state.isError = true;
+        state.errorMessage = payload;
+      },
+      [createOrder.fulfilled]: (state, {payload}) => {
+        state.isCreating = false;
+        state.createSuccess = true;
+        state.isEmpty = !payload.order;
+        state.data = {...defaultProps, ...payload.order};
+      },
       [addItem.pending]: handlePendingDefault,
       [addItem.rejected]: handleRejectDefault,
       [addItem.fulfilled]: handleFulfillDefault,
@@ -195,19 +218,28 @@ export const orderSlice = createSlice({
         state.isSuccess = true;
         state.data = {...state.data, ...order};
       },
-      [confirmOrder.pending]: handlePendingDefault,
-      [confirmOrder.rejected]: handleRejectDefault,
+      [confirmOrder.pending]: (state) => {
+        state.isPlacing = true;
+      },
+      [confirmOrder.rejected]: (state, {payload}) => {
+        state.isPlacing = false;
+        state.isError = true;
+        state.errorMessage = payload;
+      },
       [confirmOrder.fulfilled]: (state) => {
-        state.isRequesting = false;
-        state.isSuccess = true;
+        state.isPlacing = false;
         state.orderSuccess = state.data.paymentType === paymentConstant.COD.code;
       },
-      [approvePaypal.pending]: handlePendingDefault,
-      [approvePaypal.rejected]: handleRejectDefault,
+      [approvePaypal.pending]: (state) => {
+        state.isPlacing = true;
+      },
+      [approvePaypal.rejected]: (state, {payload}) => {
+        state.isPlacing = false;
+        state.isError = true;
+        state.errorMessage = payload;
+      },
       [approvePaypal.fulfilled]: (state, {payload}) => {
-        console.log(`Approve paypal: ` + payload);
-        state.isRequesting = false;
-        state.isSuccess = true;
+        state.isPlacing = false;
         state.orderSuccess = true;
       },
       [fetchOrderData.pending]: handlePendingDefault,

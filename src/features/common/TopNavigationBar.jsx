@@ -33,13 +33,13 @@ export default function TopNavigationBar({
                                            centerComponent,
                                            rightIcon,
                                            rightAction,
-                                           isPending
+                                           isPending,
                                          }) {
   const classes = useStyles();
   const history = useHistory();
 
   const leftActionDefault = () => history.goBack();
-  const rightActionDefault = () => history.push('/');
+  const rightActionDefault = () => history.replace('/');
 
   return (
     <Box className={classes.root}>

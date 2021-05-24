@@ -113,7 +113,7 @@ export default function MainActionsBottom({
             </Button>
           </Grid>
           <Grid item xs hidden={paymentType !== paymentConstant.PAYPAL.code}>
-            <PayPalButtonComponent orderId={orderId} note={"note"}/>
+            <PayPalButtonComponent orderId={orderId} note={"note"} disabled={disablePlaceOrder}/>
           </Grid>
         </Grid>
       </Box>

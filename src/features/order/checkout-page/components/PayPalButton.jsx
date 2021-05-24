@@ -1,24 +1,23 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {orderSelector} from '../../OrderSlice';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {approvePaypal, orderSelector} from '../../OrderSlice';
 import {paymentConstant} from '../../../../constants/paymentConstant';
 import {OrderApi} from '../../../../api/OrderApi';
 import {restaurantSelector} from '../../../restaurant/RestaurantSlice';
 import {PayPalButton} from 'react-paypal-button-v2';
+import Ribbon from "../../../common/Ribbon";
 
-export default function PayPalButtonComponent() {
+export default function PayPalButtonComponent({disabled}) {
   const {
     data: {
       id: orderId,
       note,
-      subTotal,
-      delivery: {shippingFee},
     },
   } = useSelector(orderSelector);
   const {
     restaurant: {merchantIdInPayPal},
   } = useSelector(restaurantSelector);
-  const [paypalOrdId, setPaypalOrderId] = useState(null);
+  const dispatch = useDispatch();
 
   /*
   STYLES & OPTIONS
@@ -26,7 +25,7 @@ export default function PayPalButtonComponent() {
 
   const buttonStyle = {
     layout: 'vertical',
-    color: 'gold',
+    color: disabled ? 'silver' : 'gold',
     shape: 'rect',
     label: 'paypal',
     tagline: false,
@@ -45,7 +44,6 @@ export default function PayPalButtonComponent() {
    */
 
   const createOrder = async function (data, actions) {
-    console.log(merchantIdInPayPal);
     try {
       const data = await OrderApi.confirmOrder(
         orderId,
@@ -56,8 +54,6 @@ export default function PayPalButtonComponent() {
 
       const {paypalOrderId} = data;
 
-      console.log('PAYPAL ORDER ID', paypalOrderId);
-      setPaypalOrderId(paypalOrderId);
       return paypalOrderId;
     } catch (err) {
       console.log(err);
@@ -65,27 +61,19 @@ export default function PayPalButtonComponent() {
   };
 
   const onApprove = async function (data, actions) {
-
     const {id} = await actions.order.get();
-    console.log('PAYPAL ORDER IDDDDDD', id);
-
-    try {
-      OrderApi.approvePaypal(orderId, id).then(function (details) {
-        alert('Transaction funds captured from ' + details[`payer_given_name`]);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-
+    dispatch(approvePaypal({orderId, paypalOrderId: id}));
   };
 
   return (
-    <PayPalButton
-      style={buttonStyle}
-      options={buttonOptions}
-      createOrder={createOrder}
-      onApprove={onApprove}
-      onError={(error) => console.log(error)}
-    />
+    <Ribbon disabled={disabled}>
+      <PayPalButton
+        style={buttonStyle}
+        options={buttonOptions}
+        createOrder={createOrder}
+        onApprove={onApprove}
+        onError={(error) => console.log(error)}
+      />
+    </Ribbon>
   );
 }

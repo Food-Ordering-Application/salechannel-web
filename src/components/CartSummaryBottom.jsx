@@ -2,6 +2,7 @@ import React from "react";
 import {Box, makeStyles, Typography} from "@material-ui/core";
 import {currencyFormatter} from "../untils/formatter";
 import {Link} from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function CartSummaryBottom({cart, toCheckout}) {
+export default function CartSummaryBottom({cart, toCheckout, isLoading}) {
   const {orderItems = [], subTotal = 0} = cart;
   let quantity = 0;
   for (const item of orderItems) {
@@ -35,8 +36,11 @@ export default function CartSummaryBottom({cart, toCheckout}) {
     <Box className={classes.container} component={Link} to={toCheckout}>
       <Box id="CartInfo">
         <Typography variant="h3">
-          <Box className={classes.text}>
+          <Box className={classes.text} hidden={isLoading}>
             {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(subTotal)}`}
+          </Box>
+          <Box hidden={!isLoading}>
+            <Skeleton height={`16px`} width={`25vw`}/>
           </Box>
         </Typography>
       </Box>
