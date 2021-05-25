@@ -120,6 +120,7 @@ const defaultState = {
   isFetching: false,
   isSuccess: false,
   isError: false,
+  isVerified: false,
   errorMessage: '',
   resetPassword: {
     resetToken: ``,

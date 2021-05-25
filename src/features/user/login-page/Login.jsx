@@ -9,6 +9,8 @@ import OTPVerificationDialog from "./components/otpVerification-dialog/OTPVerifi
 import {clearUserState, loginUser, userSelector} from "../UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {otpSelector, requestOTP} from "./components/otpVerification-dialog/otpSlice";
+import {ReCAPTCHA} from "react-google-recaptcha";
+import firebase from "../../../helpers/firebase";
 
 
 const useStyles = makeStyles(theme => ({
@@ -47,6 +49,7 @@ export default function Login() {
   const [password, setPassword] = useState(``);
   const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified, accessToken} = useSelector(userSelector);
   const {isRequesting} = useSelector(otpSelector);
+  const recaptchaRef = React.useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,10 +69,17 @@ export default function Login() {
     }
     if (isSuccess) {
       dispatch(clearUserState());
-      if (!isPhoneNumberVerified)
-        dispatch(requestOTP(accessToken));
-      else
+      if (!isPhoneNumberVerified) {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+          'size': 'invisible',
+          'callback': (recaptchaToken) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            dispatch(requestOTP({phoneNumber, recaptchaToken}));
+          }
+        });
+      } else {
         history.push('/');
+      }
     }
   }, [isError, isSuccess])
 
@@ -151,6 +161,11 @@ export default function Login() {
             </Typography>
           </Grid>
         </Grid>
+        <ReCAPTCHA
+          sitekey={`AIzaSyDEWsxFzkM8IrbN8GuNo2QC0VHReErVw20`}
+          size="invisible"
+          ref={recaptchaRef}
+        />
       </form>
       <OTPVerificationDialog/>
     </Box>

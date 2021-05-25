@@ -37,9 +37,12 @@ const UserApi = {
     }
   },
 
-  requestOTP: async function (token) {
+  requestOTP: async function (phoneNumber, recaptchaToken) {
     try {
-      await axios.post(`${BASEURL}/user/customer/send-otp`, {}, {headers: {"Authorization": `Bearer ${token}`}});
+      await axios.post(`${BASEURL}/user/customer/send-otp`, {
+        phoneNumber,
+        recaptchaToken,
+      }, {headers: authHeader()});
       return true;
     } catch (error) {
       const response = error.response;
@@ -91,8 +94,10 @@ const UserApi = {
     } catch (error) {
       const response = error.response;
       if (response) {
-        if (response.status === 401 || response.status === 403)
+        if (response.status === 403)
           throw new Error(`Token không hợp lệ`);
+        if (response.status === 409)
+          throw new Error(`Trùng email với tài khoản khác`);
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
@@ -181,7 +186,6 @@ const UserApi = {
   },
 
   submitNewPassword: async function (customerId, password, resetToken) {
-    console.log(password);
     try {
       return (await axios.patch(`${BASEURL}/user/customer/new-password`,
         {customerId, password, resetToken}
@@ -190,6 +194,20 @@ const UserApi = {
       const response = error.response;
       if (response) {
         throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+
+  verifyEmail: async function (verifyEmailToken) {
+    try {
+      await axios.get(`/user/customer/verify-email/${verifyEmailToken}`, {headers: authHeader()});
+      return true;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        throw new Error(`Yêu cầu xác thực hết hạn hoặc không hợp lệ`);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }

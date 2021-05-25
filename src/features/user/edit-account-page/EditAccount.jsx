@@ -3,7 +3,7 @@ import TopNavigationBar from "../../common/TopNavigationBar";
 import {Avatar, Box, Divider} from "@material-ui/core";
 import InfoItem from "./components/InfoItem";
 import {useDispatch, useSelector} from "react-redux";
-import {updateAvatar, userSelector} from "../UserSlice";
+import {clearUserState, updateAvatar, userSelector} from "../UserSlice";
 import {genderConstant} from "../../../constants/genderConstant";
 import TipsItem from "./components/TipsItem";
 import {EmailOutlined, PersonOutlineOutlined} from "@material-ui/icons";
@@ -34,6 +34,7 @@ export default function EditAccount() {
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
+      dispatch(clearUserState());
     }
   }, [isError]);
 
@@ -59,11 +60,6 @@ export default function EditAccount() {
               <InfoItem leftNode={(<Avatar src={avatar}/>)}
                         actionLabel={`${avatar ? `Đổi` : `Thêm`} ảnh đại diện`}
                         isLoading={isFetching}
-                        onClick={() => {
-                          // setType(InputDialogType.email);
-                          // setInitValue(email);
-                          // setOpen(true);
-                        }}
               />
             </label>
           </form>

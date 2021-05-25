@@ -3,9 +3,9 @@ import UserApi from "../../../../../api/UserApi";
 
 export const requestOTP = createAsyncThunk(
   `otp/request`,
-  async (token, thunkAPI) => {
+  async ({phoneNumber, recaptchaToken}, thunkAPI) => {
     try {
-      await UserApi.requestOTP(token);
+      await UserApi.requestOTP(phoneNumber, recaptchaToken);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -43,7 +43,7 @@ export const otpSlice = createSlice({
       state.isVerifyError = false;
       return state;
     },
-    closeOtpDialog: (state)=>{
+    closeOtpDialog: (state) => {
       state.isDialogOpen = false;
     }
   },
