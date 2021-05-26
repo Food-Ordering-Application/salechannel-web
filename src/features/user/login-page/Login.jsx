@@ -7,9 +7,8 @@ import {ChevronLeft} from "@material-ui/icons";
 import StyledLink from "../../../components/StyledLink";
 import OTPVerificationDialog from "./components/otpVerification-dialog/OTPVerificationDialog";
 import {clearUserState, loginUser, userSelector} from "../UserSlice";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import {otpSelector, requestOTP} from "./components/otpVerification-dialog/otpSlice";
-import {ReCAPTCHA} from "react-google-recaptcha";
 import firebase from "../../../helpers/firebase";
 
 
@@ -47,9 +46,9 @@ export default function Login() {
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState(``);
   const [password, setPassword] = useState(``);
-  const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified, accessToken} = useSelector(userSelector);
+  const {isFetching, isSuccess, isError, errorMessage, isPhoneNumberVerified} = useSelector(userSelector);
   const {isRequesting} = useSelector(otpSelector);
-  const recaptchaRef = React.useRef();
+  const {isRequesting: otpRequesting, isVerifySuccess} = useSelector(otpSelector);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,18 +69,19 @@ export default function Login() {
     if (isSuccess) {
       dispatch(clearUserState());
       if (!isPhoneNumberVerified) {
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
           'size': 'invisible',
           'callback': (recaptchaToken) => {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            dispatch(requestOTP({phoneNumber, recaptchaToken}));
+            dispatch(requestOTP({phoneNumber: `+84${phoneNumber.substring(1)}`, recaptchaToken}));
           }
-        });
-      } else {
-        history.push('/');
+        }).verify();
       }
     }
-  }, [isError, isSuccess])
+    if (isVerifySuccess) {
+      dispatch(showInfo(`Đăng nhập thành công`));
+      history.replace('/');
+    }
+  }, [isError, isSuccess, isVerifySuccess])
 
   return (
     <Box className={classes.root}>
@@ -141,9 +141,9 @@ export default function Login() {
           color="primary"
           className={classes.submit}
           onClick={handleSubmit}
-          disabled={isFetching || isRequesting}
+          disabled={isFetching || isRequesting || otpRequesting}
         >
-          {isFetching || isRequesting ? <CircularProgress size={26}/> : `Đăng nhập`}
+          {isFetching || isRequesting || otpRequesting ? <CircularProgress size={26}/> : `Đăng nhập`}
         </Button>
         <Grid container justify="flex-end">
           <Grid item>
@@ -161,11 +161,7 @@ export default function Login() {
             </Typography>
           </Grid>
         </Grid>
-        <ReCAPTCHA
-          sitekey={`AIzaSyDEWsxFzkM8IrbN8GuNo2QC0VHReErVw20`}
-          size="invisible"
-          ref={recaptchaRef}
-        />
+        <div id="recaptcha"/>
       </form>
       <OTPVerificationDialog/>
     </Box>

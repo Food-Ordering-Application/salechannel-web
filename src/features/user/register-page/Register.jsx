@@ -8,7 +8,7 @@ import {showError, showSuccess} from "../../common/Snackbar/SnackbarSlice";
 import {clearUserState, registerUser, userSelector} from "../UserSlice";
 import OTPVerificationDialog from "../login-page/components/otpVerification-dialog/OTPVerificationDialog";
 import firebase from "../../../helpers/firebase";
-import {otpSelector, requestOTP} from "../login-page/components/otpVerification-dialog/otpSlice";
+import {requestOTP} from "../login-page/components/otpVerification-dialog/otpSlice";
 
 export const passwordValidator = (password1, password2) => {
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
@@ -55,7 +55,6 @@ export default function Register() {
   const [password1, setPassword1] = useState(``);
   const [password2, setPassword2] = useState(``);
   const {isFetching, isError, isSuccess, errorMessage} = useSelector(userSelector);
-  const {isRequesting: otpRequesting, isVerifySuccess} = useSelector(otpSelector);
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(`${e.target.value}`);
@@ -82,19 +81,10 @@ export default function Register() {
       dispatch(clearUserState());
     }
     if (isSuccess) {
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptchar', {
-        'size': 'invisible',
-        'callback': (recaptchaToken) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          dispatch(requestOTP({phoneNumber, recaptchaToken}));
-        }
-      });
-    }
-    if(isVerifySuccess){
       dispatch(showSuccess("Đăng ký thành công"));
       history.replace("/login");
     }
-  }, [isError, isSuccess, isVerifySuccess]);
+  }, [isError, isSuccess]);
 
   return (
     <Box className={classes.root}>
@@ -161,9 +151,9 @@ export default function Register() {
           color="primary"
           className={classes.submit}
           onClick={handleSubmit}
-          disabled={isFetching||otpRequesting}
+          disabled={isFetching}
         >
-          {(isFetching||otpRequesting) ? <CircularProgress size={26}/> : `Đăng ký ngay`}
+          {(isFetching) ? <CircularProgress size={26}/> : `Đăng ký ngay`}
         </Button>
         <Grid container justify="center">
           <Grid item>
@@ -172,8 +162,8 @@ export default function Register() {
             </Typography>
           </Grid>
         </Grid>
-        <div id={`recaptchar`}/>
       </form>
+      <div id={`recaptchar`}></div>
       <OTPVerificationDialog/>
     </Box>
   );
