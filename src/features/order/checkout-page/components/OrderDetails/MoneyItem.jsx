@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MoneyItem({label, value}) {
+export default function MoneyItem({label, value, rightNode}) {
   const classes = useStyles();
 
   return (
@@ -25,6 +25,9 @@ export default function MoneyItem({label, value}) {
         </Typography>
       </Grid>
       <Grid item>
+        {rightNode}
+      </Grid>
+      <Grid item hidden={rightNode}>
         <Typography variant="h6">
           <Box className={classes.price}>{currencyFormatter(value)}</Box>
         </Typography>

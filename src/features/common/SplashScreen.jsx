@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: `center`,
     padding: theme.spacing(0),
     margin: theme.spacing(0),
-    zIndex: 5,
+    zIndex: 0.5,
   }),
   image: {
     maxWidth: `100%`,

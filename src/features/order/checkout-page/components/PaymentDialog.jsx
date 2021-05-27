@@ -8,9 +8,11 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core';
-import { paymentConstant } from '../../../../constants/paymentConstant';
-import { CreditCard, LocalAtm } from '@material-ui/icons';
+import {paymentConstant} from '../../../../constants/paymentConstant';
+import {CreditCard, LocalAtm} from '@material-ui/icons';
 import PayPalIcon from '../../../../asserts/icons/PayPalIcon';
+import {useDispatch} from "react-redux";
+import {setPaymentType} from "../../OrderSlice";
 
 export const mapPaymentIcon = (paymentTypes) => {
   switch (paymentTypes) {
@@ -25,14 +27,15 @@ export const mapPaymentIcon = (paymentTypes) => {
   }
 };
 
-export default function PaymentDialog({ open, onClose, onChange }) {
+export default function PaymentDialog({open, onClose}) {
+  const dispatch = useDispatch();
   const paymentTypes = Object.entries(paymentConstant).map(([k, v]) => ({
     value: v.code,
     text: v.name,
   }));
 
-  const handleItemClick = (value) => {
-    onChange(value);
+  const onPaymentChange = (paymentType) => {
+    dispatch(setPaymentType(paymentType));
     onClose();
   };
 
@@ -45,12 +48,12 @@ export default function PaymentDialog({ open, onClose, onChange }) {
           </Box>
         </Typography>
       </DialogTitle>
-      {paymentTypes.map(({ text, value }) => (
-        <ListItem key={value} button onClick={() => handleItemClick(value)}>
+      {paymentTypes.map(({text, value}) => (
+        <ListItem key={value} button onClick={() => onPaymentChange(value)}>
           <ListItemIcon>
-            <Box component={mapPaymentIcon(value)} />
+            <Box component={mapPaymentIcon(value)}/>
           </ListItemIcon>
-          <ListItemText primary={text} />
+          <ListItemText primary={text}/>
         </ListItem>
       ))}
     </Dialog>

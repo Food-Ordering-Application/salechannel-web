@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function StatusCard({statusText, actionText}) {
+export default function StatusCard({statusText, actionText, step}) {
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
@@ -31,7 +31,7 @@ export default function StatusCard({statusText, actionText}) {
           <Box className={classes.action}>{actionText}</Box>
         </Typography>
         <Box py={4}>
-          <ProcessingBar/>
+          <ProcessingBar step={step}/>
         </Box>
       </Box>
     </Paper>

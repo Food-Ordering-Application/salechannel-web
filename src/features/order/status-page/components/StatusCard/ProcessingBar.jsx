@@ -5,62 +5,53 @@ import {RadioButtonChecked, RadioButtonUnchecked} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  text:{
+  text: {
     fontSize: theme.spacing(1.25),
     color: theme.palette.onSurface.highEmphasis,
   },
-  disabledText:{
+  disabledText: {
     fontSize: theme.spacing(1.25),
     color: theme.palette.onSurface.disabled,
   },
 }));
 
-export default function ProcessingBar() {
+const mockedData = [
+  {
+    text: "Đã nhận",
+    time: ""
+  },
+  {
+    text: "Đang chuẩn bị",
+    time: "",
+  },
+  {
+    text: "Đang giao",
+    time: "",
+  },
+  {
+    text: "Đã giao",
+    time: ""
+  }
+];
+
+export default function ProcessingBar({step}) {
   const classes = useStyles();
 
   return (
     <Grid container justify="space-around" alignItems="flex-end">
-      <Grid item>
-        <Box>
-          <Typography variant="h6">
-            <Box className={classes.text}>12:20</Box>
-          </Typography>
-          <RadioButtonChecked color="secondary"/>
-          <Typography variant="h6">
-            <Box className={classes.text}>Ready</Box>
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item>
-        <Box>
-          <Typography variant="h6">
-            <Box className={classes.text}>12:30</Box>
-          </Typography>
-          <RadioButtonChecked color="secondary"/>
-          <Typography variant="h6">
-            <Box className={classes.text}>Preparing</Box>
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item>
-        <Box>
-          <Typography variant="h6">
-            <Box className={classes.text}>12:40</Box>
-          </Typography>
-          <RadioButtonChecked color="secondary"/>
-          <Typography variant="h6">
-            <Box className={classes.text}>Delivering</Box>
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item>
-        <Box>
-          <RadioButtonUnchecked color="secondary"/>
-          <Typography variant="h6">
-            <Box className={classes.disabledText}>Arrived</Box>
-          </Typography>
-        </Box>
-      </Grid>
+      {mockedData.map((data, index) => (
+        <Grid item key={index}>
+          <Box>
+            <Typography variant="h6">
+              <Box className={classes.text}>{data.time}</Box>
+            </Typography>
+            <Box color="secondary" component={index < step ? RadioButtonChecked : RadioButtonUnchecked}/>
+            <Typography variant="h6">
+              <Box className={classes.text}>{data.text}</Box>
+            </Typography>
+          </Box>
+        </Grid>
+      ))}
     </Grid>
   );
 }
