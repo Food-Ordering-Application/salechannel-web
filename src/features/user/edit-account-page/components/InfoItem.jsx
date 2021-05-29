@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 24,
     color: disabled ? `transparent` : theme.palette.onSurface.mediumEmphasis,
     display: `flex`,
-    paddingLeft: theme.spacing(1),
   }),
   label: {
     fontSize: `14px`,
@@ -26,15 +25,15 @@ const useStyles = makeStyles((theme) => ({
   action: {
     fontSize: `14px`,
     color: theme.palette.primary.main,
-  }
+  },
 }))
 
-export default function InfoItem({label, value, leftNode, rightNode, actionLabel, isLoading, disabled, onClick}) {
+export default function InfoItem({label, value, leftNode, appendInner, actionLabel, isLoading, disabled, onClick}) {
   const classes = useStyles({disabled});
 
   return (
     <Ribbon onClick={onClick} disabled={disabled} component="span">
-      <Grid container alignItems="center" className={classes.root}>
+      <Grid container spacing={1} alignItems="center" className={classes.root}>
         <Grid item xs>
           <Box hidden={leftNode}>
             <Typography variant="h4">
@@ -45,14 +44,13 @@ export default function InfoItem({label, value, leftNode, rightNode, actionLabel
         </Grid>
         <Grid item hidden={isLoading}>
           <Box>
-            {rightNode}
-            <Box hidden={rightNode}>
+            <Box>
               <Typography variant="h4">
                 <Box className={classes.value}>{value}</Box>
               </Typography>
             </Box>
           </Box>
-          <Box hidden={value || rightNode}>
+          <Box hidden={value}>
             <Typography variant="h4">
               <Box className={classes.action}>{actionLabel || `Nhập ngay`}</Box>
             </Typography>
@@ -60,6 +58,9 @@ export default function InfoItem({label, value, leftNode, rightNode, actionLabel
         </Grid>
         <Grid item hidden={!isLoading}>
           <Skeleton height={16} width={"40vw"}/>
+        </Grid>
+        <Grid item hidden={!appendInner}>
+          {appendInner}
         </Grid>
         <Grid item>
           <Box className={classes.icon} component={ChevronRight}/>

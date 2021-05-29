@@ -20,6 +20,7 @@ import RestaurantInfo from "../features/restaurant/restaurant-info-page/Restaura
 import EditAccount from "../features/user/edit-account-page/EditAccount";
 import ResetPasswordRequest from "../features/user/reset-pasword-page-group/ResetPasswordRequest";
 import ResetPasswordVerify from "../features/user/reset-pasword-page-group/ResetPasswordVerify";
+import VerifyEmail from "../features/user/verify-email-page/VerifyEmail";
 
 
 export default function IndexComponent() {
@@ -45,6 +46,7 @@ export default function IndexComponent() {
       <Route exact path='/coupons'><Coupon/></Route>
       <Route exact path='/orders'><OrderHistory/></Route>
       <Route exact path='/orders/history/:id'><OrderHistoryDetails/></Route>
+      <Route exact path='/add-email/verify/:token'><VerifyEmail/></Route>
     </Switch>
   );
 }

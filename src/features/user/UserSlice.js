@@ -107,6 +107,17 @@ export const submitNewPassword = createAsyncThunk(
   }
 );
 
+export const verifyEmail = createAsyncThunk(
+  `user/verifyEmail`,
+  async ({token}, thunkAPI) => {
+    try {
+      return await UserApi.verifyEmail(token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 const defaultState = {
   isAuthenticated: false,
   id: '',
@@ -116,6 +127,7 @@ const defaultState = {
   avatar: '',
   email: '',
   isPhoneNumberVerified: false,
+  isEmailVerified: false,
   accessToken: '',
   isFetching: false,
   isSuccess: false,
@@ -171,6 +183,7 @@ export const userSlice = createSlice({
       state.avatar = user.avatar;
       state.email = user.email;
       state.isPhoneNumberVerified = user.isPhoneNumberVerified;
+      state.isEmailVerified = user.isEmailVerified;
       state.accessToken = payload.access_token;
       state.isFetching = false;
       state.isSuccess = true;
@@ -237,9 +250,14 @@ export const userSlice = createSlice({
     [submitNewPassword.pending]: handlePendingDefault,
     [submitNewPassword.rejected]: handleRejectedDefault,
     [submitNewPassword.fulfilled]: (state, {payload}) => {
-      console.log(payload);
       state.isFetching = false;
       state.resetPassword.isResetSuccess = true;
+    },
+    [verifyEmail.pending]: handlePendingDefault,
+    [verifyEmail.rejected]: handleRejectedDefault,
+    [verifyEmail.fulfilled]: (state) => {
+      state.isFetching = false;
+      state.isEmailVerified = true;
     }
   }
 });

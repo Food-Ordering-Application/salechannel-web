@@ -3,16 +3,23 @@ import TopNavigationBar from "../../common/TopNavigationBar";
 import {Avatar, Box, Divider} from "@material-ui/core";
 import InfoItem from "./components/InfoItem";
 import {useDispatch, useSelector} from "react-redux";
-import {clearUserState, updateAvatar, userSelector} from "../UserSlice";
+import {clearUserState, fetchUser, updateAvatar, userSelector} from "../UserSlice";
 import {genderConstant} from "../../../constants/genderConstant";
 import TipsItem from "./components/TipsItem";
-import {EmailOutlined, PersonOutlineOutlined} from "@material-ui/icons";
+import {
+  EmailOutlined,
+  PersonOutlineOutlined,
+  VerifiedUserTwoTone,
+  WarningOutlined,
+  WarningTwoTone
+} from "@material-ui/icons";
 import InputDialog, {InputDialogType} from "./components/InputDialog";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 
 export default function EditAccount() {
   const dispatch = useDispatch();
   const {
+    id: userId,
     isFetching,
     isError,
     errorMessage,
@@ -21,6 +28,7 @@ export default function EditAccount() {
     gender,
     avatar,
     email,
+    isEmailVerified,
   } = useSelector(userSelector);
   const [open, setOpen] = useState();
   const [inputType, setType] = useState(InputDialogType.username);
@@ -30,6 +38,10 @@ export default function EditAccount() {
     e.preventDefault();
     dispatch(updateAvatar({file: e.target.files[0]}));
   }
+
+  useEffect(() => {
+    dispatch(fetchUser({userId}));
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -51,12 +63,15 @@ export default function EditAccount() {
                     text={`Nhập họ tên để giúp bác tài tiện liên hệ với bạn nha!`}
                     hidden={name}
           />
+          <TipsItem icon={WarningOutlined}
+                    text={`Vui lòng xác nhận email`}
+                    hidden={!email || isEmailVerified}
+          />
         </Box>
         <Box p={2}>
           <form>
             <input id="file-input" type="file" accept="image/jpeg,image/png" hidden onChange={handleUpdateAvatar}/>
             <label htmlFor="file-input">
-              {/*<Button component={"span"} type="submit">Upload</Button>*/}
               <InfoItem leftNode={(<Avatar src={avatar}/>)}
                         actionLabel={`${avatar ? `Đổi` : `Thêm`} ảnh đại diện`}
                         isLoading={isFetching}
@@ -82,6 +97,13 @@ export default function EditAccount() {
           <InfoItem label={`Email`}
                     value={email}
                     isLoading={isFetching}
+                    appendInner={
+                      email
+                        ? isEmailVerified
+                        ? <Box color="success.main" component={VerifiedUserTwoTone}/>
+                        : <Box color="warning.main" component={WarningTwoTone}/>
+                        : null
+                    }
                     onClick={() => {
                       setType(InputDialogType.email);
                       setInitValue(email);

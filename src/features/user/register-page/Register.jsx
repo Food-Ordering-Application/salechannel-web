@@ -7,8 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {showError, showSuccess} from "../../common/Snackbar/SnackbarSlice";
 import {clearUserState, registerUser, userSelector} from "../UserSlice";
 import OTPVerificationDialog from "../login-page/components/otpVerification-dialog/OTPVerificationDialog";
-import firebase from "../../../helpers/firebase";
-import {requestOTP} from "../login-page/components/otpVerification-dialog/otpSlice";
 
 export const passwordValidator = (password1, password2) => {
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
@@ -81,6 +79,7 @@ export default function Register() {
       dispatch(clearUserState());
     }
     if (isSuccess) {
+      dispatch(clearUserState());
       dispatch(showSuccess("Đăng ký thành công"));
       history.replace("/login");
     }
@@ -163,7 +162,7 @@ export default function Register() {
           </Grid>
         </Grid>
       </form>
-      <div id={`recaptchar`}></div>
+      <div id={`recaptchar`}/>
       <OTPVerificationDialog/>
     </Box>
   );

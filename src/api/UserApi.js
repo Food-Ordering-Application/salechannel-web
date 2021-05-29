@@ -202,7 +202,7 @@ const UserApi = {
 
   verifyEmail: async function (verifyEmailToken) {
     try {
-      await axios.get(`/user/customer/verify-email/${verifyEmailToken}`, {headers: authHeader()});
+      await axios.get(`${BASEURL}/user/customer/verify-email/${verifyEmailToken}`, {headers: authHeader()});
       return true;
     } catch (error) {
       const response = error.response;
