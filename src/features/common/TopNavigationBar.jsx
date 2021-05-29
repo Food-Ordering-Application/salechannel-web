@@ -12,8 +12,6 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     zIndex: 5,
-  },
-  container: {
     backgroundColor: theme.palette.surface.light,
     boxShadow: theme.effect.dp08.boxShadow,
   },
@@ -31,6 +29,7 @@ export default function TopNavigationBar({
                                            leftIcon,
                                            leftAction,
                                            centerComponent,
+                                           bottomComponent,
                                            rightIcon,
                                            rightAction,
                                            isPending,
@@ -43,7 +42,7 @@ export default function TopNavigationBar({
 
   return (
     <Box className={classes.root}>
-      <Grid container justify="space-between" alignItems="center" className={classes.container}>
+      <Grid container justify="space-between" alignItems="center">
         <Grid item>
           <IconButton color="primary" onClick={leftAction || leftActionDefault}>
             <Box color="inherit" component={leftIcon || ChevronLeft}/>
@@ -62,6 +61,9 @@ export default function TopNavigationBar({
           </IconButton>
         </Grid>
       </Grid>
+      <>
+        {bottomComponent}
+      </>
       <Box hidden={!isPending}>
         <PendingBar color="secondary"/>
       </Box>

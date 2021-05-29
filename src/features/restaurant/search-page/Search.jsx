@@ -4,13 +4,16 @@ import {throttle} from "lodash";
 
 import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {Box, FormControl, Grid, InputBase, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {Box, Collapse, Divider, FormControl, Grid, InputBase, MenuItem, Select, Typography} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
 import Skeleton from "react-loading-skeleton";
+import {areaConstant} from "../../../constants/areaConstant";
+import FilterTitle from "./components/FilterTitle";
+import Ribbon from "../../common/Ribbon";
 
 const useStyles = makeStyles((theme) => ({
   topNavigator: {
@@ -21,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     fontSize: theme.spacing(1.5),
+  },
+  filterContainer: {
+    position: "sticky",
+    top: theme.spacing(6),
+    backgroundColor: theme.palette.surface.light,
   }
 }));
 
@@ -33,13 +41,16 @@ export default function Search() {
 
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
+  const [open, setOpen] = useState(false);
 
   const onAreaChange = (event) => {
-    setArea(event.target.value);
-    search();
+    const text = `${event.target.value}`;
+    setOpen(false);
+    setArea(text);
+    search(name, text);
   };
 
-  const search = function () {
+  const search = function (name, area) {
     dispatch(clearRestaurantsListState());
     dispatch(filterRestaurant({pageIndex: 1, area: area, name: name}));
   };
@@ -49,7 +60,9 @@ export default function Search() {
   const handleTextChange = (event) => setName(`${event.target.value}`);
   const throttleSearch = useCallback(
     throttle(
-      (name) => search(name),
+      (name, area) => {
+        search(name, area);
+      },
       2000,
       {"leading": false}
     ),
@@ -58,14 +71,14 @@ export default function Search() {
 
   useEffect(() => {
     if (data.length === 0) {
-      search();
+      search(``, area);
       //Cache history result when back from details
     }
   }, []);
 
-  useEffect(() => {
-    if (name && name.length !== 0)
-      throttleSearch(name);
+  useEffect(function () {
+    if (name && area)
+      throttleSearch(name, area);
   }, [name]);
 
   useEffect(() => {
@@ -105,6 +118,50 @@ export default function Search() {
     }
     , [isError, isSuccess, isFetching]);
 
+  const bottomComponent = (
+    <>
+      <Ribbon onClick={() => setOpen(!open)}>
+        <Box mx={2} pb={1}>
+          <Grid container alignItems="center" justify="flex-end">
+            <Grid item xs>
+              <FilterTitle>{areaConstant[area].name}</FilterTitle>
+            </Grid>
+            <Grid item>
+              <Typography variant="h4">
+                <Box fontSize={14} color="primary.main">Nâng cao</Box>
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Ribbon>
+      <Collapse in={open}>
+        <Divider variant="fullWidth" light/>
+        <Box mt={2} mb={2} mx={2}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Typography variant="h4">
+                <Box fontSize={14}>Khu vực</Box>
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <FormControl fullWidth>
+                <Select value={area}
+                        onChange={onAreaChange}
+                >
+                  {Object.keys(areaConstant).map((code) => (
+                    <MenuItem key={code}
+                              value={code}
+                              children={areaConstant[code].name}/>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Box>
+      </Collapse>
+    </>
+  );
+
   return (
     <Box>
       <TopNavigationBar rightIcon={SearchIcon}
@@ -114,47 +171,10 @@ export default function Search() {
                                      placeholder="Tìm kiếm cửa hàng, món ăn"
                                      onChange={handleTextChange} fullWidth/>
                         )}
+                        bottomComponent={bottomComponent}
       />
-      <Box mt={8} mx={2}>
-        <Box pb={2}>
-          <Grid container justify="space-between">
-            <Grid item xs>
-              <FormControl variant="filled">
-                <InputLabel id="demo-simple-select-label">Khu vực</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={area}
-                  onChange={onAreaChange}
-                >
-                  <MenuItem value={`TPHCM`}>TP. Hồ Chí Minh</MenuItem>
-                  <MenuItem value={`HANOI`}>Hà Hội</MenuItem>
-                  <MenuItem value={`BACNINH`}>Bắc Ninh</MenuItem>
-                  <MenuItem value={`LAMDONG`}>Lâm Đồng</MenuItem>
-                  <MenuItem value={`BINHDUONG`}>Bình Dương</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs hidden>
-              <FormControl variant="filled">
-                <InputLabel id="demo-simple-select-label">Khu vực</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={area}
-                  onChange={onAreaChange}
-                >
-                  <MenuItem value={`TPHCM`}>TP. Hồ Chí Minh</MenuItem>
-                  <MenuItem value={`HANOI`}>Hà Hội</MenuItem>
-                  <MenuItem value={`BACNINH`}>Bắc Ninh</MenuItem>
-                  <MenuItem value={`LAMDONG`}>Lâm Đồng</MenuItem>
-                  <MenuItem value={`BINHDUONG`}>Bình Dương</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-        <>{result}</>
+      <Box mt={12.75} mx={2}>
+        {result}
       </Box>
     </Box>
   );
