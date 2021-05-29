@@ -56,8 +56,6 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
 
-  console.log(toppingGroups);
-
   useEffect(() => {
     setPricePerUnit(basePrice);
   }, [basePrice]);

@@ -34,20 +34,20 @@ export default function OrderStatus() {
 
   //=========================================
 
-  // useEffect(function () {
-  //   // Enable pusher logging - don't include this in production
-  //   Pusher.logToConsole = true;
-  //
-  //   const pusher = new Pusher('29ff5ecb5e2501177186', {
-  //     cluster: 'ap1'
-  //   });
-  //
-  //   const channel = pusher.subscribe(`order_${orderId}`);
-  //   channel.bind('order-status', function (data) {
-  //     console.log(data);
-  //     alert(JSON.stringify(data));
-  //   });
-  // }, []);
+  useEffect(function () {
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher('29ff5ecb5e2501177186', {
+      cluster: 'ap1'
+    });
+
+    const channel = pusher.subscribe(`order_${orderId}`);
+    channel.bind('order-status', function (data) {
+      console.log(data);
+      alert(JSON.stringify(data));
+    });
+  }, []);
 
 
   //=========================================

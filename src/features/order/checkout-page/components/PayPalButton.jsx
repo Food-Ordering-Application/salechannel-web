@@ -31,8 +31,6 @@ export default function PayPalButtonComponent({disabled}) {
     tagline: false,
   };
 
-  console.log('PAYPAL_CLIENT_ID', process.env.REACT_APP_CLIENT_ID);
-
   const buttonOptions = {
     clientId: process.env.REACT_APP_CLIENT_ID,
     merchantId: merchantIdInPayPal,

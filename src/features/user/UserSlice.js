@@ -223,6 +223,9 @@ export const userSlice = createSlice({
       state.name = data.name || state.name;
       state.email = data.email || state.email;
       state.gender = data.gender || state.gender;
+      if (data.email) {
+        state.isEmailVerified = false;
+      }
     },
     [updateAvatar.pending]: handlePendingDefault,
     [updateAvatar.rejected]: handleRejectedDefault,
