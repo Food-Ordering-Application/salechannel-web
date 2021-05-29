@@ -14,6 +14,7 @@ import {useParams} from "react-router-dom";
 import {paymentConstant} from "../../../constants/paymentConstant";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import orderConstant from "../../../constants/orderConstant";
+import Pusher from "pusher-js";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -30,13 +31,15 @@ export default function OrderStatus() {
   const {id: orderId} = useParams();
   const dispatch = useDispatch();
 
-  const {isFetching, isSuccess, isError, errorMessage, isEmpty, data} = useSelector(orderSelector);
+  const {isRequesting, isSuccess, isError, errorMessage, isEmpty, data} = useSelector(orderSelector);
 
   //=========================================
 
   useEffect(function () {
     // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
+    Pusher.log = (msg) => {
+      console.log("[Pusher]", msg);
+    };
 
     const pusher = new Pusher('29ff5ecb5e2501177186', {
       cluster: 'ap1'
@@ -56,7 +59,7 @@ export default function OrderStatus() {
     if (!isSuccess) {
       dispatch(fetchOrderData({orderId}));
     }
-  }, [orderId]);
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -68,8 +71,8 @@ export default function OrderStatus() {
 
   return (
     <>
-      <TopNavigationBar label="Trạng thái đơn hàng" isPending={isFetching}/>
-      <Box my={6} p={2} hidden={isFetching || isEmpty}>
+      <TopNavigationBar label="Trạng thái đơn hàng" isPending={isRequesting}/>
+      {isSuccess && <Box my={6} p={2}>
         <Box py={2}>
           <StatusCard statusText={orderConstant[status].name}
                       actionText={orderConstant[status].name}
@@ -107,6 +110,7 @@ export default function OrderStatus() {
           </BottomButton>
         </Box>
       </Box>
+      }
     </>
   );
 }
