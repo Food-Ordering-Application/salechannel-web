@@ -75,6 +75,9 @@ export default function Login() {
             dispatch(requestOTP({phoneNumber: `+84${phoneNumber.substring(1)}`, recaptchaToken}));
           }
         }).verify();
+      } else {
+        dispatch(showInfo(`Đăng nhập thành công`));
+        history.replace('/');
       }
     }
     if (isVerifySuccess) {
