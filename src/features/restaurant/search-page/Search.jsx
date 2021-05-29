@@ -56,7 +56,7 @@ export default function Search() {
   };
 
   const handleItemClick = (id) => history.push(`/store/${id}`);
-  const handleSearchButtonClick = () => search(name);
+  const handleSearchButtonClick = () => search(name, area);
   const handleTextChange = (event) => setName(`${event.target.value}`);
   const throttleSearch = useCallback(
     throttle(
@@ -173,7 +173,7 @@ export default function Search() {
                         )}
                         bottomComponent={bottomComponent}
       />
-      <Box mt={12.75} mx={2}>
+      <Box mt={12} mx={2}>
         {result}
       </Box>
     </Box>
