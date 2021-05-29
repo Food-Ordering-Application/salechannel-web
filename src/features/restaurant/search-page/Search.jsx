@@ -4,7 +4,7 @@ import {throttle} from "lodash";
 
 import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {Box, InputBase} from "@material-ui/core";
+import {Box, FormControl, Grid, InputBase, InputLabel, MenuItem, Select} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
@@ -29,14 +29,19 @@ export default function Search() {
   const {data, isError, isSuccess, isFetching, errorMessage} = useSelector(restaurantsListSelector);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [area, setArea] = useState("TPHCM");
 
   const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
 
+  const onAreaChange = (event) => {
+    setArea(event.target.value);
+    search();
+  };
 
-  const search = (name) => {
+  const search = function () {
     dispatch(clearRestaurantsListState());
-    dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name}));
+    dispatch(filterRestaurant({pageIndex: 1, area: area, name: name}));
   };
 
   const handleItemClick = (id) => history.push(`/store/${id}`);
@@ -110,7 +115,47 @@ export default function Search() {
                                      onChange={handleTextChange} fullWidth/>
                         )}
       />
-      <Box mt={8} mx={2}>{result}</Box>
+      <Box mt={8} mx={2}>
+        <Box pb={2}>
+          <Grid container justify="space-between">
+            <Grid item xs>
+              <FormControl variant="filled">
+                <InputLabel id="demo-simple-select-label">Khu vực</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={area}
+                  onChange={onAreaChange}
+                >
+                  <MenuItem value={`TPHCM`}>TP. Hồ Chí Minh</MenuItem>
+                  <MenuItem value={`HANOI`}>Hà Hội</MenuItem>
+                  <MenuItem value={`BACNINH`}>Bắc Ninh</MenuItem>
+                  <MenuItem value={`LAMDONG`}>Lâm Đồng</MenuItem>
+                  <MenuItem value={`BINHDUONG`}>Bình Dương</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs hidden>
+              <FormControl variant="filled">
+                <InputLabel id="demo-simple-select-label">Khu vực</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={area}
+                  onChange={onAreaChange}
+                >
+                  <MenuItem value={`TPHCM`}>TP. Hồ Chí Minh</MenuItem>
+                  <MenuItem value={`HANOI`}>Hà Hội</MenuItem>
+                  <MenuItem value={`BACNINH`}>Bắc Ninh</MenuItem>
+                  <MenuItem value={`LAMDONG`}>Lâm Đồng</MenuItem>
+                  <MenuItem value={`BINHDUONG`}>Bình Dương</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Box>
+        <>{result}</>
+      </Box>
     </Box>
   );
 }
