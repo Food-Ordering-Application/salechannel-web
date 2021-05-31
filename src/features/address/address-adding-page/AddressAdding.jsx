@@ -43,7 +43,7 @@ export default function AddressAdding() {
   const [isFetching, setFetching] = useState(false);
   const handleSearch = () => {
   };
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState(``);
   const handleTextChange = (address) => setAddress(address);
   const handleSelect = (address) => {
     geocodeByAddress(address)

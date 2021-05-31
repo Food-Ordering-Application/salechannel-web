@@ -60,10 +60,16 @@ export default function LocationAdding() {
     dispatch(addAddress({userId, address, longitude, latitude}));
   }
 
+  const onLocationChange = () => {
+    getAddress(location.lng, location.lat)
+      .then((text) => setAddress(text))
+      .catch((error) => dispatch(showError(error.message)));
+  }
+
   const handleMapClick = ({lat, lng}) => {
-    setAddress(``);
+    setAddress(`...`);
     setLocation({lat, lng});
-    getAddress(lng, lat).then(({results}) => setAddress(results[0].formatted_address));
+    onLocationChange();
   }
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export default function LocationAdding() {
   }, [])
 
   useEffect(() => {
-    getAddress(location.lng, location.lat).then(({results}) => setAddress(results[0].formatted_address));
+    onLocationChange();
   }, [location])
 
   useEffect(() => {

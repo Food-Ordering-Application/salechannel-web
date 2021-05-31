@@ -1,7 +1,7 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {LocationOn} from "@material-ui/icons";
-import {Box, Paper, Typography} from "@material-ui/core";
+import {Box, Paper, Typography, withMobileDialog} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {

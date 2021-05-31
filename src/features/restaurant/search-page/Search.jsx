@@ -69,7 +69,7 @@ export default function Search() {
     []
   );
 
-  useEffect(() => {
+  useEffect(function () {
     if (data.length === 0) {
       search(``, area);
       //Cache history result when back from details
@@ -87,9 +87,8 @@ export default function Search() {
       }
       if (isSuccess) {
         const temp = data.map(({id, name, address, coverImageUrl, rating}, index) => (
-          <Box mb={2}>
-            <RestaurantItemLarge key={index}
-                                 name={`${name} - ${address}`}
+          <Box key={id} mb={2}>
+            <RestaurantItemLarge name={`${name} - ${address}`}
                                  image={coverImageUrl}
                                  onClick={() => handleItemClick(id)}
                                  rating={rating}
@@ -107,11 +106,11 @@ export default function Search() {
       if (isFetching) {
         setResult(
           <Box mb={2}>
-            {Array(10).fill(
-              <Box mb={2}>
+            {Array(10).map((value, index) => (
+              <Box key={index} mb={2}>
                 <Skeleton height={82}/>
               </Box>
-            )}
+            ))}
           </Box>
         );
       }

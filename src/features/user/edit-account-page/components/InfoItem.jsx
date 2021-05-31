@@ -59,11 +59,8 @@ export default function InfoItem({label, value, leftNode, appendInner, actionLab
         <Grid item hidden={!isLoading}>
           <Skeleton height={16} width={"40vw"}/>
         </Grid>
-        <Grid item hidden={!appendInner}>
-          {appendInner}
-        </Grid>
         <Grid item>
-          <Box className={classes.icon} component={ChevronRight}/>
+          {appendInner || <Box className={classes.icon} component={ChevronRight}/>}
         </Grid>
       </Grid>
     </Ribbon>

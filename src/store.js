@@ -1,4 +1,4 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"
 import {persistReducer} from "redux-persist";
 
@@ -10,6 +10,7 @@ import {restaurantsListSlice} from "./features/restaurant/RestaurantsListSlice";
 import {restaurantSlice} from "./features/restaurant/RestaurantSlice";
 import {menuSlice} from "./features/restaurant/MenuSlice";
 import {addressSlice} from "./features/address/AddressSlice";
+import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 
 const reducer = combineReducers({
   snackbar: snackbarSlice.reducer,
@@ -30,4 +31,9 @@ const persistedReducer = persistReducer({
 
 export default configureStore({
   reducer: persistedReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 });

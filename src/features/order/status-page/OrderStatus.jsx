@@ -36,7 +36,6 @@ export default function OrderStatus() {
   //=========================================
 
   useEffect(function () {
-    // Enable pusher logging - don't include this in production
     Pusher.log = (msg) => {
       console.log("[Pusher]", msg);
     };
@@ -48,8 +47,14 @@ export default function OrderStatus() {
     const channel = pusher.subscribe(`order_${orderId}`);
     channel.bind('order-status', function (data) {
       console.log(data);
-      alert(JSON.stringify(data));
+      alert(`Order status change`);
     });
+
+    // const channel_pos = pusher.subscribe(`orders_6587f789-8c76-4a2e-9924-c14fc30629ef`);
+    // channel_pos.bind('order-status', function (data) {
+    //   console.log(data);
+    //   alert(JSON.stringify(data));
+    // });
   }, []);
 
 

@@ -6,12 +6,14 @@ import {useHistory} from "react-router-dom";
 import PendingBar from "./PendingBar";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  container:{
     position: `fixed`,
     top: 0,
     left: 0,
     right: 0,
     zIndex: 5,
+  },
+  root: {
     backgroundColor: theme.palette.surface.light,
     boxShadow: theme.effect.dp08.boxShadow,
   },
@@ -41,29 +43,29 @@ export default function TopNavigationBar({
   const rightActionDefault = () => history.replace('/');
 
   return (
-    <Box className={classes.root}>
-      <Grid container justify="space-between" alignItems="center">
-        <Grid item>
-          <IconButton color="primary" onClick={leftAction || leftActionDefault}>
-            <Box color="inherit" component={leftIcon || ChevronLeft}/>
-          </IconButton>
+    <Box className={classes.container}>
+      <Box className={classes.root}>
+        <Grid container justify="space-between" alignItems="center" >
+          <Grid item>
+            <IconButton color="primary" onClick={leftAction || leftActionDefault}>
+              <Box color="inherit" component={leftIcon || ChevronLeft}/>
+            </IconButton>
+          </Grid>
+          <Grid item xs>
+            {centerComponent || (
+              <Typography variant="h3">
+                <Box className={classes.label}>{label}</Box>
+              </Typography>
+            )}
+          </Grid>
+          <Grid item>
+            <IconButton color="primary" onClick={rightAction || rightActionDefault}>
+              <Box color="inherit" component={rightIcon || Home}/>
+            </IconButton>
+          </Grid>
         </Grid>
-        <Grid item xs>
-          {centerComponent || (
-            <Typography variant="h3">
-              <Box className={classes.label}>{label}</Box>
-            </Typography>
-          )}
-        </Grid>
-        <Grid item>
-          <IconButton color="primary" onClick={rightAction || rightActionDefault}>
-            <Box color="inherit" component={rightIcon || Home}/>
-          </IconButton>
-        </Grid>
-      </Grid>
-      <>
-        {bottomComponent}
-      </>
+        <>{bottomComponent}</>
+      </Box>
       <Box hidden={!isPending}>
         <PendingBar color="secondary"/>
       </Box>
