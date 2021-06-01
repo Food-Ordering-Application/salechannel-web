@@ -1,6 +1,12 @@
 import React, {useState} from "react";
 import {Collapse, List, Typography} from "@material-ui/core";
-import {AccountBalanceWalletOutlined, EditOutlined, LocationOnOutlined, ReceiptOutlined} from "@material-ui/icons";
+import {
+  AccountBalanceWalletOutlined,
+  EditOutlined,
+  FavoriteBorder,
+  LocationOnOutlined,
+  ReceiptOutlined
+} from "@material-ui/icons";
 
 import CategoryLabel from "../../../../../components/CategoryLabel";
 import StyledListItem from "./StyledListItem";
@@ -23,6 +29,10 @@ export default function AccountActionList({initOpen}) {
           <StyledListItem label="Địa chỉ giao hàng"
                           icon={LocationOnOutlined}
                           to="/address"
+          />
+          <StyledListItem label="Nhà hàng yêu thích"
+                          icon={FavoriteBorder}
+                          to="/store/favorite"
           />
           <StyledListItem label="Lịch sử đơn hàng"
                           icon={ReceiptOutlined}

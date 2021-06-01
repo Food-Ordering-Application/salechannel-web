@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import PendingBar from "./PendingBar";
 
 const useStyles = makeStyles((theme) => ({
-  container:{
+  container: {
     position: `fixed`,
     top: 0,
     left: 0,
@@ -35,6 +35,7 @@ export default function TopNavigationBar({
                                            rightIcon,
                                            rightAction,
                                            isPending,
+                                           homeButton = true
                                          }) {
   const classes = useStyles();
   const history = useHistory();
@@ -45,7 +46,7 @@ export default function TopNavigationBar({
   return (
     <Box className={classes.container}>
       <Box className={classes.root}>
-        <Grid container justify="space-between" alignItems="center" >
+        <Grid container justify="space-between" alignItems="center">
           <Grid item>
             <IconButton color="primary" onClick={leftAction || leftActionDefault}>
               <Box color="inherit" component={leftIcon || ChevronLeft}/>
@@ -59,9 +60,15 @@ export default function TopNavigationBar({
             )}
           </Grid>
           <Grid item>
-            <IconButton color="primary" onClick={rightAction || rightActionDefault}>
-              <Box color="inherit" component={rightIcon || Home}/>
-            </IconButton>
+            {
+              homeButton
+                ?
+                <IconButton color="primary" onClick={rightAction || rightActionDefault}>
+                  <Box color="inherit" component={rightIcon || Home}/>
+                </IconButton>
+                :
+                <Box p={3}/>
+            }
           </Grid>
         </Grid>
         <>{bottomComponent}</>

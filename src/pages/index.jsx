@@ -21,12 +21,14 @@ import EditAccount from "../features/user/edit-account-page/EditAccount";
 import ResetPasswordRequest from "../features/user/reset-pasword-page-group/ResetPasswordRequest";
 import ResetPasswordVerify from "../features/user/reset-pasword-page-group/ResetPasswordVerify";
 import VerifyEmail from "../features/user/verify-email-page/VerifyEmail";
+import FavoriteRestaurant from "../features/restaurant/favorite-page/FavoriteRestaurant";
 
 
 export default function IndexComponent() {
   return (
     <Switch>
       <Route exact path='/'><Home/></Route>
+      <Route exact path='/store/favorite'><FavoriteRestaurant/></Route>
       <Route exact path='/store/:id/info'><RestaurantInfo/></Route>
       <Route exact path='/store/:id'><Restaurant/></Route>
       <Route exact path='/login'><Login/></Route>
