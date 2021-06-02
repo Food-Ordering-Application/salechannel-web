@@ -47,7 +47,8 @@ export const OrderApi = {
       ).data.data;
     } catch (error) {
       if (error.response) {
-        throw new Error(`Không thể tạo đơn hàng mới`);
+        // throw new Error(`Không thể tạo đơn hàng mới`);
+        throw new Error(error.response.data.message);
       } else {
         throw new Error(`Không có phản hồi từ máy chủ`);
       }
@@ -174,7 +175,8 @@ export const OrderApi = {
         if (response.status === 403) {
           throw new Error(`Máy chủ từ chối thao tác`);
         }
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        // throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(response.data.message);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
@@ -200,7 +202,8 @@ export const OrderApi = {
         if (response.status === 403) {
           throw new Error(`Máy chủ từ chối thao tác`);
         }
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        // throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(response.data.message);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }

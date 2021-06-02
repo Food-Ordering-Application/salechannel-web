@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     fontSize: theme.spacing(1.5),
+    borderRadius: theme.spacing(2),
+    padding: theme.spacing(0, 2),
+    backgroundColor: theme.palette.stateBlackOverlay.hover,
   },
   filterContainer: {
     position: "sticky",
@@ -95,18 +98,12 @@ export default function Search() {
             />
           </Box>
         ));
-        // temp.push(
-        //   <Button key={"14225362"} onClick={() => {
-        //     dispatch(clearRestaurantsListState());
-        //     dispatch(filterRestaurant({pageIndex: 1, area: "TPHCM", name: name, append: true}));
-        //   }}>Load more</Button>
-        // );
         setResult(temp);
       }
       if (isFetching) {
         setResult(
           <Box mb={2}>
-            {Array(10).map((value, index) => (
+            {Array(10).fill(0).map((value, index) => (
               <Box key={index} mb={2}>
                 <Skeleton height={82}/>
               </Box>
@@ -116,6 +113,14 @@ export default function Search() {
       }
     }
     , [isError, isSuccess, isFetching]);
+
+  const centerComponent = (
+    <InputBase className={classes.textField}
+               placeholder="Tìm kiếm cửa hàng, món ăn"
+               onChange={handleTextChange}
+               fullWidth
+    />
+  );
 
   const bottomComponent = (
     <>
@@ -165,11 +170,7 @@ export default function Search() {
     <Box>
       <TopNavigationBar rightIcon={SearchIcon}
                         rightAction={handleSearchButtonClick}
-                        centerComponent={(
-                          <InputBase className={classes.textField}
-                                     placeholder="Tìm kiếm cửa hàng, món ăn"
-                                     onChange={handleTextChange} fullWidth/>
-                        )}
+                        centerComponent={centerComponent}
                         bottomComponent={bottomComponent}
       />
       <Box mt={12} mx={2}>
