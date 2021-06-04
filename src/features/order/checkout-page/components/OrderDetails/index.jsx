@@ -31,7 +31,14 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-export default function OrderDetails({additionComponent, orderData, handleRemoveItem, handleUpdateNote, note}) {
+export default function OrderDetails({
+                                       additionComponent,
+                                       orderData,
+                                       handleRemoveItem,
+                                       handleUpdateNote,
+                                       note,
+                                       isEditable = true,
+                                     }) {
   const classes = useStyles();
 
   const {orderItems, subTotal, delivery: {distance, shippingFee}} = orderData;
@@ -49,7 +56,7 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
                       name={item[`name`]}
                       price={price}
                       description=""
-                      handleRemove={() => handleRemoveItem(id)}/>
+                      handleRemove={isEditable ? () => handleRemoveItem(id) : null}/>
   });
 
   return (
@@ -70,16 +77,16 @@ export default function OrderDetails({additionComponent, orderData, handleRemove
               <Box p={1} component={DescriptionOutlined} fontSize={20} color="onSurface.mediumEmphasis"/>
             </Grid>
             <Grid item xs>
-              <Ribbon p={1} onClick={handleUpdateNote}>
+              <Ribbon p={1} onClick={handleUpdateNote} disabled={!isEditable}>
                 <Typography variant="h5">
-                  <Box className={classes.note}>{note || `Thêm ghi chú đơn hàng`}</Box>
+                  <Box className={classes.note}>{note || `${isEditable ? `Thêm` : `Không có`} ghi chú`}</Box>
                 </Typography>
               </Ribbon>
             </Grid>
           </Grid>
           <Divider variant="fullWidth"/>
           <Box py={1.5}>
-            <OrderCost subtotal={subTotal} distance={distance} deliveryFees={shippingFee}/>
+            <OrderCost subtotal={subTotal} distance={distance / 1000} deliveryFees={shippingFee}/>
           </Box>
         </Box>
         <Box>

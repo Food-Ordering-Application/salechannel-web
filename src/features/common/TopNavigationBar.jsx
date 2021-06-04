@@ -35,6 +35,7 @@ export default function TopNavigationBar({
                                            rightIcon,
                                            rightAction,
                                            isPending,
+                                           backButton = true,
                                            homeButton = true
                                          }) {
   const classes = useStyles();
@@ -48,9 +49,15 @@ export default function TopNavigationBar({
       <Box className={classes.root}>
         <Grid container justify="space-between" alignItems="center">
           <Grid item>
-            <IconButton color="primary" onClick={leftAction || leftActionDefault}>
-              <Box color="inherit" component={leftIcon || ChevronLeft}/>
-            </IconButton>
+            {
+              backButton
+                ?
+                <IconButton color="primary" onClick={leftAction || leftActionDefault}>
+                  <Box color="inherit" component={leftIcon || ChevronLeft}/>
+                </IconButton>
+                :
+                <Box p={3}/>
+            }
           </Grid>
           <Grid item xs>
             {centerComponent || (

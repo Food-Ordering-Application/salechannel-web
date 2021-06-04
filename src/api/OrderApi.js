@@ -17,7 +17,7 @@ export const OrderApi = {
       ).data.data;
     } catch (error) {
       if (error.response) {
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+        throw new Error(`Đơn hàng không tồn tại`);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
@@ -229,4 +229,21 @@ export const OrderApi = {
       }
     }
   },
+  fetchDraft: async (offset, limit) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/order/get-drafts`,
+        {offset, limit},
+        {headers: authHeader()}
+      );
+      return response.data.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        throw new Error(response.message);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  }
 };

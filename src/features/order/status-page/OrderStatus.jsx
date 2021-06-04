@@ -9,8 +9,8 @@ import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import BottomButton from "../../common/BottomButton";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchOrderData, orderSelector} from "../OrderSlice";
-import {useParams} from "react-router-dom";
+import {clearOrderState, fetchOrderData, orderSelector} from "../OrderSlice";
+import {useHistory, useParams} from "react-router-dom";
 import {paymentConstant} from "../../../constants/paymentConstant";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import orderConstant from "../../../constants/orderConstant";
@@ -30,8 +30,9 @@ export default function OrderStatus() {
   const classes = useStyles();
   const {id: orderId} = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const {isRequesting, isSuccess, isError, errorMessage, isEmpty, data} = useSelector(orderSelector);
+  const {isRequesting, isSuccess, isError, errorMessage, data} = useSelector(orderSelector);
 
   //=========================================
 
@@ -69,10 +70,12 @@ export default function OrderStatus() {
   useEffect(() => {
     if (isError) {
       dispatch(showError(errorMessage));
+      dispatch(clearOrderState());
+      history.replace('/search');
     }
   }, [isError]);
 
-  const {paymentType, grandTotal, status} = data;
+  const {paymentType, subTotal, status, delivery: {shippingFee}} = data;
 
   return (
     <>
@@ -90,11 +93,12 @@ export default function OrderStatus() {
         <Box pb={2}>
           <OrderDetails
             orderData={data}
+            isEditable={false}
             additionComponent={
               <>
                 <Divider variant="fullWidth"/>
                 <Box py={1.5}>
-                  <MoneyItem label="Tổng cộng" value={grandTotal}/>
+                  <MoneyItem label="Tổng cộng" value={subTotal + shippingFee}/>
                 </Box>
                 <Box pb={1.5} fontWeight="bold">
                   <MoneyItem label="Thanh toán bằng" rightNode={

@@ -9,7 +9,7 @@ export default function OrderCost({subtotal, distance, deliveryFees}) {
         <MoneyItem label="Tổng đơn" value={subtotal}/>
       </Box>
       <Box>
-        <MoneyItem label={`Phí vận chuyển (${distance}km)`} value={deliveryFees}/>
+        <MoneyItem label={`Phí vận chuyển (${distance} km)`} value={deliveryFees}/>
       </Box>
     </Box>
   );

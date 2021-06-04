@@ -13,7 +13,12 @@ export const datetimeFormatter = (value) => {
 };
 
 export const dateFormatter = (value) => {
-  return `${dateFormatObject.format(value)}`;
+  try {
+    return `${dateFormatObject.format(value)}`;
+  } catch (e) {
+    console.log(e);
+    return ``;
+  }
 };
 
 export const weekDayOfToday = () => {
