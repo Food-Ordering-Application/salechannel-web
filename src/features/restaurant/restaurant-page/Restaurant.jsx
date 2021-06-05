@@ -125,9 +125,12 @@ export default function Restaurant() {
   useEffect(() => {
     if (restaurant.isSuccess) {
       getLocation(function ({coords}) {
-        const canDelivery = isAbleToDelivery(restaurant.restaurant.geo, coords);
-        dispatch(setAbleToDelivery(canDelivery));
-      });
+          const canDelivery = isAbleToDelivery(restaurant.restaurant.geo, coords);
+          dispatch(setAbleToDelivery(canDelivery));
+        },
+        function () {
+          dispatch(showError(`Vui lòng cấp quyền truy cập vị trí`));
+        });
     }
   }, [restaurant.isSuccess]);
 

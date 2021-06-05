@@ -2,11 +2,18 @@ import axios from "axios";
 
 const MAX_DISTANCE = 10000; //meter
 
-export function getLocation(onSuccess) {
-  return navigator.geolocation.getCurrentPosition(
-    onSuccess,
-    (error) => alert(JSON.stringify(error))
-  );
+export function getLocation(onSuccess, onError = () => {
+  alert(`Vui lòng cấp quyền truy cập vị trí`)
+}) {
+  navigator.permissions.query({name: 'geolocation'}).then(function (result) {
+    if (result.state === 'granted') {
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    } else if (result.state === 'prompt') {
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    } else if (result.state === 'denied') {
+      onError();
+    }
+  });
 }
 
 export async function getAddress(lng, lat) {

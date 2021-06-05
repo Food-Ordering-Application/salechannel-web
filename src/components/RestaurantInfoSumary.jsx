@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
       margin: `auto`,
       padding: theme.spacing(2),
       boxShadow: `0px 4px 4px rgba(255, 107, 53, 0.1)`,
+      backgroundColor: `white`,
     },
     address: {
       marginTop: theme.spacing(1),
@@ -29,7 +30,7 @@ export default function RestaurantInfoSumary({id, name, address, distance}) {
   const classes = useStyles();
 
   return (
-    <Ribbon paper className={classes.root} component={Link} to={`/store/${id}/info`}>
+    <Ribbon className={classes.root} component={Link} to={`/store/${id}/info`}>
       <Typography variant="h4">
         <Box textAlign="center">{name}</Box>
       </Typography>
