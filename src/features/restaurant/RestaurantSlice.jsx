@@ -23,6 +23,7 @@ export const restaurantSlice = createSlice({
     isError: false,
     isSuccess: false,
     isOpen: true,
+    isAbleToDelivery: true,
     errorMessage: ``,
   },
   reducers: {
@@ -32,6 +33,9 @@ export const restaurantSlice = createSlice({
       state.isSuccess = false;
       return state;
     },
+    setAbleToDelivery: (state, {payload}) => {
+      state.isAbleToDelivery = payload;
+    }
   },
   extraReducers: {
     [fetchRestaurant.pending]: (state) => {
@@ -51,5 +55,5 @@ export const restaurantSlice = createSlice({
   },
 });
 
-export const {clearRestaurantState} = restaurantSlice.actions;
+export const {clearRestaurantState, setAbleToDelivery} = restaurantSlice.actions;
 export const restaurantSelector = (state) => state.restaurant;

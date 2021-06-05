@@ -12,16 +12,16 @@ import CategoryMenu from "../../../components/CategoryMenu";
 import {Box, LinearProgress} from "@material-ui/core";
 import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
-import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
+import {clearRestaurantState, fetchRestaurant, restaurantSelector, setAbleToDelivery} from "../RestaurantSlice";
 import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
-import {fetchOrder, orderSelector} from "../../order/OrderSlice";
+import {clearOrder, fetchOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
 import RestaurantClosedAlert from "./components/RestaurantCloseAlert";
+import {getLocation, isAbleToDelivery} from "../../../helpers/location";
+import OutForDeliveryAlert from "./components/OutForDeliveryAlert";
 
 const useStyles = makeStyles(theme => ({
-    container: {},
-    root: {},
     topNavigationBar: {
       position: `fixed`,
       top: 0,
@@ -101,9 +101,14 @@ export default function Restaurant() {
     setToCart(newCart);
   };
 
+  /*
+  HANDLE CONSTANT
+   */
+
   useEffect(() => {
     dispatch(clearRestaurantState());
     dispatch(clearMenuState());
+    dispatch(clearOrder());
     dispatch(fetchRestaurant({id: id}));
     dispatch(fetchMenu({id: id}));
     if (isAuthenticated) {
@@ -118,16 +123,30 @@ export default function Restaurant() {
   }, [id]);
 
   useEffect(() => {
-    if (restaurant.isError) {
-      dispatch(showError(restaurant.errorMessage));
+    if (restaurant.isSuccess) {
+      getLocation(function ({coords}) {
+        const canDelivery = isAbleToDelivery(restaurant.restaurant.geo, coords);
+        dispatch(setAbleToDelivery(canDelivery));
+      });
     }
-  }, [restaurant.isError]);
+  }, [restaurant.isSuccess]);
+
+  /*
+  HANDLE ERROR
+   */
 
   useEffect(() => {
+    if (restaurant.isError) {
+      dispatch(showError(restaurant.errorMessage));
+      dispatch(clearRestaurantState());
+      history.replace(`/search`);
+    }
     if (menu.isError) {
       dispatch(showError(menu.errorMessage));
+      dispatch(clearMenuState());
+      history.replace(`/search`);
     }
-  }, [menu.isError]);
+  }, [restaurant.isError, menu.isError]);
 
   if (restaurant.isSuccess && menu.isSuccess) {
     const categoryMenu = menu.menu.map(category => ({name: category.name, count: category.menuItems.length}));
@@ -171,10 +190,13 @@ export default function Restaurant() {
                           orderItems={(orderState.data && orderState.data.orderItems) || []}/>
           </div>
           <RestaurantClosedAlert open={!restaurant.isOpen}/>
+          <OutForDeliveryAlert open={!restaurant?.isAbleToDelivery}/>
         </div>
       </>
     );
   }
 
-  return <LinearProgress color="primary"/>
+  return (
+    <LinearProgress color="primary"/>
+  )
 }

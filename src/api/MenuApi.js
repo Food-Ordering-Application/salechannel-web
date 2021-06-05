@@ -8,8 +8,9 @@ export const MenuApi = {
     try {
       return (await axios.get(`${BASEURL}/restaurant/${restaurantId}/get-menu-information`)).data.data;
     } catch (error) {
-      if (error.response) {
-        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      const response = error.response;
+      if (response) {
+        throw new Error(response.data.message);
       } else {
         throw new Error(`Không có kết nối đến máy chủ`);
       }

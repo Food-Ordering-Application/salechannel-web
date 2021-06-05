@@ -10,7 +10,7 @@ export default function ScrollToShowBackground({children, window}) {
 
   return React.cloneElement(children, {
     style: {
-      backgroundColor: trigger ? `white` : `transparent`,
+      background: trigger ? `white` : `linear-gradient(0, transparent, #00000099)`,
       color: trigger ? `black` : `white`,
       transitionDuration: `0.357s`,
       transitionTimingFunction: `ease-in-out`,

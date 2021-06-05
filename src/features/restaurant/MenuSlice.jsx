@@ -5,9 +5,9 @@ export const fetchMenu = createAsyncThunk(
   `restaurant/fetchMenu`,
   async ({id}, thunkAPI) => {
     try {
-      return MenuApi.fetchMenu(id);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return await MenuApi.fetchMenu(id);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
@@ -36,6 +36,7 @@ export const menuSlice = createSlice({
     [fetchMenu.rejected]: (state, {payload}) => {
       state.isFetching = false;
       state.isError = true;
+      console.log(payload);
       state.errorMessage = payload;
     },
     [fetchMenu.fulfilled]: (state, {payload}) => {

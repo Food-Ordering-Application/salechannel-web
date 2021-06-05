@@ -27,13 +27,13 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-export default function TopNavigationBar({isFavorite, onFavoriteClick}) {
+export default function TopNavigationBar({isFavorite, onFavoriteClick, onBack}) {
   const classes = useStyles({isFavorite});
   const history = useHistory()
 
   return (
     <div className={classes.root}>
-      <IconButton className={classes.button} onClick={() => history.goBack()}>
+      <IconButton className={classes.button} onClick={onBack || (() => history.goBack())}>
         <ChevronLeft/>
       </IconButton>
       <div className={classes.favoriteContainer}>
