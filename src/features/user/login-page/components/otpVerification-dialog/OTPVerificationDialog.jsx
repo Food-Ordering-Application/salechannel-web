@@ -55,13 +55,13 @@ export default function OTPVerificationDialog() {
       <DialogTitle>Nhập mã OTP</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Vui lòng nhập mã OTP được gửi đến số điện thoại của bạn
+          Vui lòng nhập mã xác nhận được gửi đến số điện thoại của bạn
         </DialogContentText>
         <TextField
           variant="outlined"
           autoFocus
           id="otp"
-          label="OTP"
+          label="Mã xác nhận"
           type="text"
           onChange={(event) => setOtp(`${event.target.value}`)}
           required

@@ -146,24 +146,26 @@ const defaultProps = {
   paymentType: paymentConstant.COD.code
 }
 
+const initProps = {
+  isRequesting: false,
+  isError: false,
+  isSuccess: false,
+  isEmpty: true,
+  isCreating: false,
+  createSuccess: false,
+  isUpdating: false,
+  isPlacing: false,
+  orderSuccess: false,
+  data: {...defaultProps},
+}
+
 /*
 REDUX SLICE
  */
 
 export const orderSlice = createSlice({
     name: 'order',
-    initialState: {
-      isRequesting: false,
-      isError: false,
-      isSuccess: false,
-      isEmpty: true,
-      isCreating: false,
-      createSuccess: false,
-      isUpdating: false,
-      isPlacing: false,
-      orderSuccess: false,
-      data: {...defaultProps},
-    },
+    initialState: initProps,
     reducers: {
       clearOrderState: (state) => {
         state.isRequesting = false;
@@ -177,6 +179,9 @@ export const orderSlice = createSlice({
       },
       setNote: (state, {payload: note}) => {
         state.data.note = note;
+      },
+      clearOrder: (state) => {
+        return initProps;
       }
     },
     extraReducers: {
@@ -249,5 +254,5 @@ export const orderSlice = createSlice({
   })
 ;
 
-export const {clearOrderState, setPaymentType, setNote} = orderSlice.actions;
+export const {clearOrderState, setPaymentType, setNote, clearOrder} = orderSlice.actions;
 export const orderSelector = (state) => state.order;

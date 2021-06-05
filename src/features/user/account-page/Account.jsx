@@ -9,11 +9,17 @@ import LogoutButton from "./components/LogoutButton";
 import {removeUser, userSelector} from "../UserSlice";
 import UserAuthButtonGroup from "../login-page/components/UserAuthButtonGroup";
 import TopNavigationBar from "../../common/TopNavigationBar";
+import {clearOrder} from "../../order/OrderSlice";
 
 
 export default function Account() {
   const dispatch = useDispatch();
   const {isAuthenticated, phoneNumber, name, email, avatar} = useSelector(userSelector);
+
+  const onLogout = () => {
+    dispatch(removeUser());
+    dispatch(clearOrder());
+  }
 
   return (
     <Box mt={8} mx={2}>
@@ -33,7 +39,7 @@ export default function Account() {
         <FAQsActionList initOpen={!isAuthenticated}/>
       </Box>
       <Box pt={5}>
-        {isAuthenticated && <LogoutButton handleLogout={() => dispatch(removeUser())}/>}
+        {isAuthenticated && <LogoutButton handleLogout={onLogout}/>}
       </Box>
     </Box>
   )
