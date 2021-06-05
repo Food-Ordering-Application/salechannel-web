@@ -90,7 +90,7 @@ export default function MainActionsBottom({
               <Box className={classes.cost}>{currencyFormatter(totalCost)}</Box>
             </Typography>
           </Grid>
-          <Grid item xs hidden={paymentType !== paymentConstant.COD.code}>
+          {paymentType === paymentConstant.COD.code && <Grid item xs>
             <Button
               variant="contained"
               color="primary"
@@ -100,21 +100,21 @@ export default function MainActionsBottom({
             >
               <Box className={classes.orderBtn}>Đặt hàng</Box>
             </Button>
-          </Grid>
-          <Grid item xs hidden={paymentType !== paymentConstant.VISA_MASTERCARD.code}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={handleCheckout}
-              disabled={disablePlaceOrder}
-            >
-              <Box className={classes.orderBtn}>Thanh toán</Box>
-            </Button>
-          </Grid>
-          <Grid item xs hidden={paymentType !== paymentConstant.PAYPAL.code}>
+          </Grid>}
+          {/*<Grid item xs hidden={paymentType !== paymentConstant.VISA_MASTERCARD.code}>*/}
+          {/*  <Button*/}
+          {/*    variant="contained"*/}
+          {/*    color="primary"*/}
+          {/*    fullWidth*/}
+          {/*    onClick={handleCheckout}*/}
+          {/*    disabled={disablePlaceOrder}*/}
+          {/*  >*/}
+          {/*    <Box className={classes.orderBtn}>Thanh toán</Box>*/}
+          {/*  </Button>*/}
+          {/*</Grid>*/}
+          {paymentType === paymentConstant.PAYPAL.code && <Grid item xs>
             <PayPalButtonComponent orderId={orderId} note={"note"} disabled={disablePlaceOrder}/>
-          </Grid>
+          </Grid>}
         </Grid>
       </Box>
     </Box>

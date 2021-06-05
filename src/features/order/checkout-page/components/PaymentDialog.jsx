@@ -11,8 +11,9 @@ import {
 import {paymentConstant} from '../../../../constants/paymentConstant';
 import {CreditCard, LocalAtm} from '@material-ui/icons';
 import PayPalIcon from '../../../../asserts/icons/PayPalIcon';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setPaymentType} from "../../OrderSlice";
+import {restaurantSelector} from "../../../restaurant/RestaurantSlice";
 
 export const mapPaymentIcon = (paymentTypes) => {
   switch (paymentTypes) {
@@ -29,7 +30,16 @@ export const mapPaymentIcon = (paymentTypes) => {
 
 export default function PaymentDialog({open, onClose}) {
   const dispatch = useDispatch();
-  const paymentTypes = Object.entries(paymentConstant).map(([k, v]) => ({
+  const {restaurant: {merchantIdInPayPal}} = useSelector(restaurantSelector);
+
+  const allPayment = Object.entries(paymentConstant).filter((data) => {
+    if (data[0] === paymentConstant.VISA_MASTERCARD.code)
+      return false;
+    if (data[0] === paymentConstant.PAYPAL.code)
+      return merchantIdInPayPal !== null;
+    return true
+  });
+  const paymentTypes = allPayment.map(([k, v]) => ({
     value: v.code,
     text: v.name,
   }));

@@ -78,12 +78,12 @@ export default function Login() {
         }).verify();
       } else {
         dispatch(showInfo(`Đăng nhập thành công`));
-        history.replace(location.state.ref || '/');
+        history.replace(location.state?.ref || '/');
       }
     }
     if (isVerifySuccess) {
       dispatch(showInfo(`Đăng nhập thành công`));
-      history.replace(location.state.ref || '/');
+      history.replace(location.state?.ref || '/');
     }
   }, [isError, isSuccess, isVerifySuccess])
 
