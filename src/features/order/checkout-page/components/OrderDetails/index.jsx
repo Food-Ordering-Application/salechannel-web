@@ -36,12 +36,11 @@ export default function OrderDetails({
                                        orderData,
                                        handleRemoveItem,
                                        handleUpdateNote,
-                                       note,
                                        isEditable = true,
                                      }) {
   const classes = useStyles();
 
-  const {orderItems, subTotal, delivery: {distance, shippingFee}} = orderData;
+  const {orderItems, subTotal, note, delivery: {distance, shippingFee}} = orderData;
 
   const orderItemsList = orderItems.map((item) => {
     let {id, price, orderItemToppings} = item;

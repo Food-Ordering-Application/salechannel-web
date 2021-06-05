@@ -245,5 +245,39 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+  fetchHistory: async (filter = `COMPLETED`, from = `2021-01-01T17:15:33.558Z`, to = new Date().toISOString()) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/order/get-history`,
+        {filter, from, to},
+        {headers: authHeader()}
+      );
+      return response.data.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        throw new Error(response.message);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+  fetchOnOnGoing: async (offset, limit) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/order/get-ongoing`,
+        {offset, limit},
+        {headers: authHeader()}
+      );
+      return response.data.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        throw new Error(response.message);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 };
