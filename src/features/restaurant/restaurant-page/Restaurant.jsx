@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import {useHistory, useParams, useLocation} from "react-router-dom";
 import TopNavigationBar from "../../../components/TopNavigationBar";
 import RestaurantInfoSumary from "../../../components/RestaurantInfoSumary";
 import Label from "../../../components/Label";
@@ -13,7 +13,7 @@ import {Box, LinearProgress} from "@material-ui/core";
 import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
 import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
 import {fetchOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
@@ -80,11 +80,13 @@ const mockedData = {
 export default function Restaurant() {
   const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
-  const {id: customerId} = useSelector(userSelector);
+  const {id: customerId, isAuthenticated} = useSelector(userSelector);
   const restaurant = useSelector(restaurantSelector);
   const menu = useSelector(menuSelector);
   const {isEmpty: cartIsEmpty, data: cartData, isCreating} = useSelector(orderSelector);
   const orderState = useSelector(orderSelector);
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
   const {id} = useParams();
   const classes = useStyles({cartIsAppear: !cartIsEmpty});
@@ -104,7 +106,15 @@ export default function Restaurant() {
     dispatch(clearMenuState());
     dispatch(fetchRestaurant({id: id}));
     dispatch(fetchMenu({id: id}));
-    dispatch(fetchOrder({restaurantId: id, customerId: customerId}));
+    if (isAuthenticated) {
+      dispatch(fetchOrder({restaurantId: id, customerId: customerId}));
+    } else {
+      dispatch(showInfo(`Bạn cần đăng nhập để tiếp tục!`))
+      history.replace({
+        pathname: `/login`,
+        state: {ref: location.pathname}
+      });
+    }
   }, [id]);
 
   useEffect(() => {
@@ -136,7 +146,8 @@ export default function Restaurant() {
           <CategoryMenu categoryList={categoryMenu} onclick={(index) => alert(index)}/>
         </Box>
         <Box className={classes.cart}>
-          {(!cartIsEmpty || isCreating) && <CartSummaryBottom isLoading={isCreating} cart={cartData} toCheckout={`/checkout/${id}`}/>}
+          {(!cartIsEmpty || isCreating) &&
+          <CartSummaryBottom isLoading={isCreating} cart={cartData} toCheckout={`/checkout/${id}`}/>}
         </Box>
 
         <img className={classes.cover} src={restaurantData.coverImageUrl} alt={restaurantData.name}/>

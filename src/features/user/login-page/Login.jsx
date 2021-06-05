@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, CircularProgress, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {ChevronLeft} from "@material-ui/icons";
 
@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
   const classes = useStyles();
+  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState(``);
@@ -77,12 +78,12 @@ export default function Login() {
         }).verify();
       } else {
         dispatch(showInfo(`Đăng nhập thành công`));
-        history.replace('/');
+        history.replace(location.state.ref || '/');
       }
     }
     if (isVerifySuccess) {
       dispatch(showInfo(`Đăng nhập thành công`));
-      history.replace('/');
+      history.replace(location.state.ref || '/');
     }
   }, [isError, isSuccess, isVerifySuccess])
 
