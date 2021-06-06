@@ -3,7 +3,7 @@ import TopNavigationBar from "../../common/TopNavigationBar";
 import {Avatar, Box, Divider} from "@material-ui/core";
 import InfoItem from "./components/InfoItem";
 import {useDispatch, useSelector} from "react-redux";
-import {clearUserState, fetchUser, updateAvatar, userSelector} from "../UserSlice";
+import {clearUserState, fetchUser, setAvatar, updateAvatar, userSelector} from "../UserSlice";
 import {genderConstant} from "../../../constants/genderConstant";
 import TipsItem from "./components/TipsItem";
 import {
@@ -15,6 +15,9 @@ import {
 } from "@material-ui/icons";
 import InputDialog, {InputDialogType} from "./components/InputDialog";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {convertBase64} from "../../../helpers/file";
+
+const AVATAR_TEMP_KEY = `_avatar`;
 
 export default function EditAccount() {
   const dispatch = useDispatch();
@@ -30,12 +33,15 @@ export default function EditAccount() {
     email,
     isEmailVerified,
   } = useSelector(userSelector);
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
   const [inputType, setType] = useState(InputDialogType.username);
   const [initValue, setInitValue] = useState(name);
 
   const handleUpdateAvatar = async (e) => {
     e.preventDefault();
+    const tempImage = await convertBase64(e.target.files[0]);
+    localStorage.setItem(AVATAR_TEMP_KEY, tempImage);
+    dispatch(setAvatar(tempImage));
     dispatch(updateAvatar({file: e.target.files[0]}));
   }
 

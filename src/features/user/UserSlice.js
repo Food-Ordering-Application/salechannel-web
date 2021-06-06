@@ -171,6 +171,9 @@ export const userSlice = createSlice({
     verifyOtpSuccess: (state) => {
       state.isPhoneNumberVerified = true;
     },
+    setAvatar: (state, {payload}) => {
+      state.avatar = payload;
+    }
   },
   extraReducers: {
     [loginUser.fulfilled]: (state, {payload}) => {
@@ -265,5 +268,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const {clearUserState, setUser, removeUser, verifyOtpSuccess} = userSlice.actions;
+export const {clearUserState, setUser, removeUser, verifyOtpSuccess, setAvatar} = userSlice.actions;
 export const userSelector = (state) => state.user;

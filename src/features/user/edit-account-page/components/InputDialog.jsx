@@ -123,6 +123,7 @@ function InputDialog({open, onClose, initValue, type}) {
               {Object.keys(genderConstant).map((key) => (
                 <FormControlLabel control={<Radio/>}
                                   value={genderConstant[key].code}
+                                  key={genderConstant[key].code}
                                   label={genderConstant[key].name}/>
               ))}
             </RadioGroup>
