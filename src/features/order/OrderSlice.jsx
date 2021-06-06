@@ -31,6 +31,7 @@ export const createOrder = createAsyncThunk(
   `order/create`,
   async ({restaurantId, userId, menuItem, topping}, thunkAPI) => {
     try {
+      // thunkAPI.dispatch(cacheOrderPending())
       return await OrderApi.createOrder(restaurantId, userId, menuItem, topping);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -142,6 +143,8 @@ DEFAULT PROPS
  */
 
 const defaultProps = {
+  subTotal: 0,
+  orderItems: [],
   note: '',
   paymentType: paymentConstant.COD.code
 }
@@ -182,18 +185,41 @@ export const orderSlice = createSlice({
       },
       clearOrder: (state) => {
         return initProps;
+      },
+      cacheOrderPending: (state, {payload}) => {
+
       }
     },
     extraReducers: {
-      [createOrder.pending]: (state) => {
+      [createOrder.pending]: (state, {meta: {arg: {restaurantId, menuItem, topping}}}) => {
         state.isCreating = true;
         state.isError = false;
         state.createSuccess = false;
+
+        state.data[`restaurantId`] = restaurantId;
+
+        const fTopping = topping.flat();
+        let price = menuItem.price;
+        for (let i = 0; i < topping.length; i++) {
+          price += fTopping[i].price;
+        }
+        state.data[`subTotal`] = price * menuItem.quantity;
+
+        state.data[`orderItems`] = [{
+          menuItemId: menuItem?.id,
+          quantity: menuItem?.quantity,
+        }];
+
+        state.isEmpty = false;
+        return state;
       },
       [createOrder.rejected]: (state, {payload}) => {
         state.isCreating = false;
+        state.isEmpty = true;
         state.isError = true;
         state.errorMessage = payload;
+        state.data[`subTotal`] = 0;
+        state.data[`orderItems`] = [];
       },
       [createOrder.fulfilled]: (state, {payload}) => {
         state.isCreating = false;
@@ -201,7 +227,27 @@ export const orderSlice = createSlice({
         state.isEmpty = !payload.order;
         state.data = {...defaultProps, ...payload.order};
       },
-      [addItem.pending]: handlePendingDefault,
+      [addItem.pending]: (state, {meta: {arg: {menuItem, topping}}}) => {
+        handlePendingDefault(state);
+
+        const fTopping = topping.flat();
+        let price = menuItem.price;
+        for (let i = 0; i < fTopping.length; i++) {
+          price += fTopping[i].price;
+        }
+        state.data[`subTotal`] += price * menuItem.quantity;
+
+        state.data[`orderItems`].push({
+          menuItemId: menuItem.id,
+          quantity: menuItem.quantity,
+          orderItemToppings: topping.map(({id}) => ({
+            menuItemToppingId: id,
+            quantity: 1,
+          })),
+        });
+
+      },
+      //TODO: handle add item rejected
       [addItem.rejected]: handleRejectDefault,
       [addItem.fulfilled]: handleFulfillDefault,
       [fetchOrder.pending]: handlePendingDefault,
@@ -254,5 +300,5 @@ export const orderSlice = createSlice({
   })
 ;
 
-export const {clearOrderState, setPaymentType, setNote, clearOrder} = orderSlice.actions;
+export const {clearOrderState, setPaymentType, setNote, clearOrder, cacheOrderPending} = orderSlice.actions;
 export const orderSelector = (state) => state.order;

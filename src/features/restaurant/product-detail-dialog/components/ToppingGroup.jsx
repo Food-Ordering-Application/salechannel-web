@@ -11,7 +11,12 @@ export default function ToppingGroup({toppingGroup, onChange}) {
   }, [toppings]);
 
   const handleClick = (index) => {
-    const newArr = [...selected];
+
+    //Multiple Selection
+    // const newArr = [...selected];
+
+    //One Selection
+    const newArr = Array(toppings.length).fill(false);
     newArr[index] = !selected[index];
     setSelected(newArr);
 
@@ -34,7 +39,7 @@ export default function ToppingGroup({toppingGroup, onChange}) {
           </Grid>
           <Grid item>
             <Typography variant="h6">
-              <Box fontSize={9} lineHeight="normal" color="error.main">Tùy chọn</Box>
+              <Box fontSize={9} lineHeight="normal" color="error.main">Chọn 1</Box>
             </Typography>
           </Grid>
         </Grid>
