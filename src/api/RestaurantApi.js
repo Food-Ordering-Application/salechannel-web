@@ -11,6 +11,7 @@ const RestaurantApi = {
         area: area,
         category: category,
         search: name,
+        cityId: 5,
       })).data.data;
     } catch (error) {
       if (error.response) {
