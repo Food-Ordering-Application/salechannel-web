@@ -188,6 +188,9 @@ export const orderSlice = createSlice({
       },
       cacheOrderPending: (state, {payload}) => {
 
+      },
+      updateOrderStatus: (state, {payload}) => {
+        state.data = Object.assign(state.data, payload);
       }
     },
     extraReducers: {
@@ -300,5 +303,12 @@ export const orderSlice = createSlice({
   })
 ;
 
-export const {clearOrderState, setPaymentType, setNote, clearOrder, cacheOrderPending} = orderSlice.actions;
+export const {
+  clearOrderState,
+  setPaymentType,
+  setNote,
+  clearOrder,
+  cacheOrderPending,
+  updateOrderStatus
+} = orderSlice.actions;
 export const orderSelector = (state) => state.order;

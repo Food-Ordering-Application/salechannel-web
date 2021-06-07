@@ -38,14 +38,14 @@ export default function OrderHistory() {
           <Draft
             isActive={tabIndex === 0}
             fetchOrders={OrderApi.fetchOnOnGoing}
-            orderStatus={orderConstant.DELIVERING.code}
+            orderStatus={orderConstant.CONFIRMED.code}
           />
         </Box>
         <Box p={2}>
           <Draft
             isActive={tabIndex === 1}
             fetchOrders={OrderApi.fetchHistory}
-            orderStatus={orderConstant.DELIVERIED.code}
+            orderStatus={orderConstant.COMPLETED.code}
           />
         </Box>
         <Box p={2}>

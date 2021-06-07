@@ -9,7 +9,7 @@ import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import BottomButton from "../../common/BottomButton";
 import {useDispatch, useSelector} from "react-redux";
-import {clearOrderState, fetchOrderData, orderSelector} from "../OrderSlice";
+import {clearOrderState, fetchOrderData, orderSelector, updateOrderStatus} from "../OrderSlice";
 import {useHistory, useParams} from "react-router-dom";
 import {paymentConstant} from "../../../constants/paymentConstant";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
@@ -47,19 +47,9 @@ export default function OrderStatus() {
 
     const channel = pusher.subscribe(`order_${orderId}`);
     channel.bind('order-status', function (data) {
-      console.log(data);
-      alert(`Order status change`);
+      dispatch(updateOrderStatus(data));
     });
-
-    // const channel_pos = pusher.subscribe(`orders_6587f789-8c76-4a2e-9924-c14fc30629ef`);
-    // channel_pos.bind('order-status', function (data) {
-    //   console.log(data);
-    //   alert(JSON.stringify(data));
-    // });
   }, []);
-
-
-  //=========================================
 
   useEffect(() => {
     if (!isSuccess) {
@@ -74,6 +64,14 @@ export default function OrderStatus() {
       history.replace('/search');
     }
   }, [isError]);
+
+  if (!isSuccess) {
+    return (
+      <>
+        <TopNavigationBar label="Trạng thái đơn hàng" isPending={isRequesting}/>
+      </>
+    )
+  }
 
   const {paymentType, subTotal, status, delivery: {shippingFee}} = data;
 

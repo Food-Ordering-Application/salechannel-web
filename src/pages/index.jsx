@@ -22,6 +22,7 @@ import ResetPasswordRequest from "../features/user/reset-pasword-page-group/Rese
 import ResetPasswordVerify from "../features/user/reset-pasword-page-group/ResetPasswordVerify";
 import VerifyEmail from "../features/user/verify-email-page/VerifyEmail";
 import FavoriteRestaurant from "../features/restaurant/favorite-page/FavoriteRestaurant";
+import OrderReview from "../features/order/review-page/OrderReview";
 
 
 export default function IndexComponent() {
@@ -40,6 +41,7 @@ export default function IndexComponent() {
       <Route exact path='/notifications'><Notifications/></Route>
       <Route exact path='/checkout/:id'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
+      <Route exact path='/order/:id/review'><OrderReview/></Route>
       <Route exact path='/order/:id'><OrderStatus/></Route>
       <Route exact path='/address'><AddressManagement/></Route>
       <Route exact path='/address/add'><AddressAdding/></Route>

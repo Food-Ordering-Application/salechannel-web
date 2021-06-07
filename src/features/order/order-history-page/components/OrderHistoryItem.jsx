@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => {
 
 const mapStatusIcon = (status) => {
   switch (status) {
-    case orderConstant.DELIVERIED.code:
+    case orderConstant.COMPLETED.code:
       return CheckCircle;
     case orderConstant.CANCELED.code:
       return Cancel;
