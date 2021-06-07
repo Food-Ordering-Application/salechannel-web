@@ -200,9 +200,13 @@ const theme = createMuiTheme({
     },
     white: 'rgba(255, 255, 255)',
     status: {
-      DELIVERING: `#ff9800`,
-      DELIVERIED: `#4caf50`,
-      CANCELED: `#f44336`,
+      DRAFT: `#FF6B35`,
+      ASSIGNING_DRIVER: `#ff9800`,
+      ON_GOING: `#ff9800`,
+      PICKED_UP: `#ff9800`,
+      COMPLETED: `#4caf50`,
+      CANCELLED: `#f44336`,
+      EXPIRED: `#f44336`,
     }
   },
 

@@ -1,6 +1,14 @@
 import React from "react";
 import {Box, Grid, Paper, Typography} from "@material-ui/core";
-import {Autorenew, Cancel, CheckCircle, ChevronRight} from "@material-ui/icons";
+import {
+  AssignmentIndTwoTone,
+  Autorenew,
+  CancelTwoTone,
+  CheckCircleTwoTone,
+  ChevronRight,
+  DescriptionTwoTone,
+  MotorcycleTwoTone
+} from "@material-ui/icons";
 import {currencyFormatter, dateFormatter} from "../../../../untils/formatter";
 import Ribbon from "../../../common/Ribbon";
 import {makeStyles} from "@material-ui/core/styles";
@@ -20,23 +28,31 @@ const useStyles = makeStyles((theme) => {
     }),
     statusText: ({status}) => ({
       fontSize: theme.spacing(2),
-      color: theme.palette.status[status],
+      color: theme.palette.status[status.trim()],
     }),
   });
 });
 
 const mapStatusIcon = (status) => {
   switch (status) {
+    case orderConstant.DRAFT.code:
+      return DescriptionTwoTone;
     case orderConstant.COMPLETED.code:
-      return CheckCircle;
-    case orderConstant.CANCELED.code:
-      return Cancel;
+      return CheckCircleTwoTone;
+    case orderConstant.ASSIGNING_DRIVER.code:
+      return AssignmentIndTwoTone;
+    case orderConstant.ON_GOING.code:
+      return MotorcycleTwoTone;
+    case orderConstant.PICKED_UP.code:
+      return MotorcycleTwoTone;
+    case orderConstant.CANCELLED.code:
+      return CancelTwoTone;
   }
   return Autorenew;
 };
 
 export default function OrderHistoryItem({status, name, itemCount, date, cost, paymentMethod: paymentType, onClick}) {
-  const classes = useStyles({status});
+  const classes = useStyles({status: status.trim()});
 
   return (
     <Paper variant="outlined" className={classes.root}>
@@ -46,7 +62,7 @@ export default function OrderHistoryItem({status, name, itemCount, date, cost, p
             <Box>
               <Grid container alignItems="center" spacing={1}>
                 <Grid item>
-                  <Box className={classes.statusIcon} component={mapStatusIcon(status)}/>
+                  <Box className={classes.statusIcon} component={mapStatusIcon(status.trim())}/>
                 </Grid>
                 <Grid item>
                   <Typography variant="h4">
@@ -57,7 +73,7 @@ export default function OrderHistoryItem({status, name, itemCount, date, cost, p
                 <Grid item xs/>
                 <Grid item>
                   <Typography variant="h5">
-                    <Box fontSize={12} color="onSurface.mediumEmphasis">{dateFormatter(date)}</Box>
+                    <Box fontSize={12} color="onSurface.mediumEmphasis">{dateFormatter(new Date(date))}</Box>
                   </Typography>
                 </Grid>
               </Grid>

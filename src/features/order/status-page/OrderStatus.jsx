@@ -73,16 +73,16 @@ export default function OrderStatus() {
     )
   }
 
-  const {paymentType, subTotal, status, delivery: {shippingFee}} = data;
+  const {paymentType, subTotal, delivery: {shippingFee, status}} = data;
 
   return (
     <>
       <TopNavigationBar label="Trạng thái đơn hàng" isPending={isRequesting}/>
       {isSuccess && <Box my={6} p={2}>
         <Box py={2}>
-          <StatusCard statusText={orderConstant[status].name}
-                      actionText={orderConstant[status].name}
-                      step={orderConstant[status].step}
+          <StatusCard statusText={''}
+                      actionText={orderConstant[status.trim()].description}
+                      step={orderConstant[status.trim()].step}
           />
         </Box>
         <Box pb={2}>

@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
 
 const mockedData = [
   {
-    text: "Đã nhận",
+    text: "Sẵn sàng",
     time: ""
   },
   {
-    text: "Đang chuẩn bị",
+    text: "Đang lấy",
     time: "",
   },
   {
