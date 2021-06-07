@@ -1,18 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Tab, Tabs} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SwipeableViews from "react-swipeable-views";
 import Draft from "./components/Draft";
 import {OrderApi} from "../../../api/OrderApi";
-import orderConstant from "../../../constants/orderConstant";
+import {RefreshOutlined} from "@material-ui/icons";
 
 export default function OrderHistory() {
   const [tabIndex, setTabIndex] = useState(0);
+  const [forceRefresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    if (forceRefresh) {
+      setRefresh(false);
+    }
+  }, [forceRefresh]);
 
   return (
     <Box mt={12}>
       <TopNavigationBar label="Quản lí đơn hàng"
-                        homeButton={false}
                         bottomComponent={
                           <>
                             <Tabs
@@ -29,6 +35,8 @@ export default function OrderHistory() {
                             </Tabs>
                           </>
                         }
+                        rightIcon={RefreshOutlined}
+                        rightAction={() => setRefresh(true)}
       />
       <SwipeableViews
         index={tabIndex}
@@ -38,21 +46,24 @@ export default function OrderHistory() {
           <Draft
             isActive={tabIndex === 0}
             fetchOrders={OrderApi.fetchOnOnGoing}
-            orderStatus={orderConstant.CONFIRMED.code}
+            forceRefresh={forceRefresh}
+            linkPattern={`/order/{orderId}`}
           />
         </Box>
         <Box p={2}>
           <Draft
             isActive={tabIndex === 1}
             fetchOrders={OrderApi.fetchHistory}
-            orderStatus={orderConstant.COMPLETED.code}
+            forceRefresh={forceRefresh}
+            linkPattern={`/order/{orderId}/review`}
           />
         </Box>
         <Box p={2}>
           <Draft
             isActive={tabIndex === 2}
             fetchOrders={OrderApi.fetchDraft}
-            orderStatus={orderConstant.DRAFT.code}
+            forceRefresh={forceRefresh}
+            linkPattern={`/store/{restaurantId}`}
           />
         </Box>
       </SwipeableViews>

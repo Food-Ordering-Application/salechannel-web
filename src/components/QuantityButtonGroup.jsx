@@ -9,16 +9,16 @@ export default function QuantityButtonGroup({value = 1, onChange}) {
 
   return (
     <Box display="flex" flexDirection="row">
-      <Box bgcolor="secondary.l0" color="onSurface.default" borderRadius="50%">
-        <IconButton onClick={handleDecrement} size="medium" color="inherit" disabled={value <= 1}>
+      <Box bgcolor="stateBlackOverlay.selected" color="primary.main" borderRadius="25%">
+        <IconButton onClick={handleDecrement} size="small" color="inherit" disabled={value <= 1}>
           <Remove/>
         </IconButton>
       </Box>
-      <Box mx={3} display="flex" alignItems="center" color={"onSurface.highEmphasis"}>
+      <Box mx={2} display="flex" alignItems="center" color="onSurface.highEmphasis">
         <Typography variant="h4" color="inherit">{value}</Typography>
       </Box>
-      <Box bgcolor="primary.main" color="onPrimary.highEmphasis" borderRadius="50%">
-        <IconButton onClick={handleIncrement} color="inherit">
+      <Box bgcolor="stateBlackOverlay.selected" color="primary.main" borderRadius="25%">
+        <IconButton onClick={handleIncrement} size="small" color="inherit">
           <Add/>
         </IconButton>
       </Box>

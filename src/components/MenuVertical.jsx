@@ -13,6 +13,7 @@ export default function MenuVertical({productList, onAddToCart, orderItems}) {
   const [expand, setExpand] = useState(initArr);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [isFetchingTopping, setFetchingTopping] = useState(false);
   const {data: orderData} = useSelector(orderSelector);
   const dispatch = useDispatch();
 
@@ -23,13 +24,18 @@ export default function MenuVertical({productList, onAddToCart, orderItems}) {
   };
   const handleItemClick = (index1, index2) => {
     const item = productList[index1].menuItems[index2];
+    setFetchingTopping(true);
+    setSelected(item);
+    setOpen(true);
     MenuApi.fetchTopping(item.id)
       .then((data) => {
         setSelected({...item, ...data});
-        setOpen(true);
       })
       .catch((error) => {
         dispatch(showError(error.message));
+      })
+      .finally(() => {
+        setFetchingTopping(false);
       })
   };
   const handleIncreaseQuantity = (orderItemId) => {
@@ -72,8 +78,11 @@ export default function MenuVertical({productList, onAddToCart, orderItems}) {
           </div>
         )
       }
-      {selected && <ProductDetail open={open} handleClose={() => setOpen(false)} product={selected}
+      {selected && <ProductDetail open={open}
+                                  handleClose={() => setOpen(false)}
+                                  product={selected}
                                   onSubmit={(data) => onAddToCart(data)}
+                                  isPending={isFetchingTopping}
       />}
     </>
   );

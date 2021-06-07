@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, Button, Dialog, DialogContent, IconButton, Slide, Typography} from "@material-ui/core";
+import {Box, Button, Dialog, DialogContent, Grid, IconButton, Slide, Typography} from "@material-ui/core";
 import {HighlightOff} from "@material-ui/icons";
 import theme from "../../../asserts/Theme";
 import QuantityButtonGroup from "../../../components/QuantityButtonGroup";
@@ -11,11 +11,13 @@ import {addItem, clearOrderState, createOrder, orderSelector} from "../../order/
 import {userSelector} from "../../user/UserSlice";
 import {restaurantSelector} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import Skeleton from "react-loading-skeleton";
 
 const useStyles = makeStyles(theme => ({
     root: {},
     contentRoot: {
       padding: 0,
+      marginBottom: theme.spacing(7),
       "&:first-child": {
         padding: 0,
       }
@@ -37,14 +39,21 @@ const useStyles = makeStyles(theme => ({
       left: 0,
       color: theme.palette.surface.light,
     },
+    actionBottom: {
+      position: `absolute`,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      background: `white`,
+    }
   })
 );
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} timeout={{enter: 450, exit: 650}}/>;
+const Transition = React.forwardRef((props, thisRef) => {
+  return <Slide direction="up" {...props} ref={thisRef} timeout={{enter: 450, exit: 650}}/>;
 });
 
-export default function ProductDetail({open, handleClose, product, onSubmit}) {
+export default function ProductDetail({open, handleClose, product, onSubmit, isPending}) {
   const {price: basePrice, toppingGroups} = product;
   const classes = useStyles();
   const [value, setValue] = useState(null);
@@ -55,6 +64,14 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
   const {restaurant} = useSelector(restaurantSelector);
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (open) {
+      document
+        .getElementById(`top`)
+        ?.scrollIntoView();
+    }
+  }, [open]);
 
   useEffect(() => {
     setPricePerUnit(basePrice);
@@ -135,6 +152,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
         <IconButton className={classes.exit} onClick={handleClose}>
           <HighlightOff/>
         </IconButton>
+        <div id={`top`}/>
         <img className={classes.image}
              alt={product.name}
              src={product.imageUrl}/>
@@ -152,12 +170,19 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
             </Box>
           </Box>
 
-          <Box mx={-2}>
-            {toppingGroups.map((data, index) => <ToppingGroup key={data.id}
-                                                              toppingGroup={data}
-                                                              onChange={(selectedToppings) => handleToppingChange(index, selectedToppings)}/>
-            )}
-          </Box>
+          {
+            isPending
+              ? (<Box mx={-2}>
+                <Skeleton count={9} height={40}/>
+              </Box>)
+              : (<Box mx={-2}>
+                  {toppingGroups.map((data, index) => <ToppingGroup key={data.id}
+                                                                    toppingGroup={data}
+                                                                    onChange={(selectedToppings) => handleToppingChange(index, selectedToppings)}/>
+                  )}
+                </Box>
+              )
+          }
 
           {/*<Box id="Options" hidden>*/}
           {/*  <RadioGroup value={value} onChange={handleChange}>{*/}
@@ -174,39 +199,29 @@ export default function ProductDetail({open, handleClose, product, onSubmit}) {
           {/*    ))*/}
           {/*  }</RadioGroup>*/}
           {/*</Box>*/}
-          <Box id="QuantityController">
-            <Box width={1} my={5} display="flex" justifyContent="center">
-              <QuantityButtonGroup value={quantity} onChange={(value) => setQuantity(value)}/>
+          <div className={classes.actionBottom}>
+            <Box p={2}>
+              <Grid container spacing={2} alignItems={`center`}>
+                <Grid item>
+                  <QuantityButtonGroup value={quantity} onChange={(value) => setQuantity(value)}/>
+                </Grid>
+                <Grid item xs>
+                  <Button color="primary"
+                          variant="contained"
+                          fullWidth
+                          style={{borderRadius: theme.spacing(1)}}
+                          onClick={handleAddToCart}
+                  >
+                    <Typography variant="h3">
+                      <Box fontSize={theme.spacing(2)} color={`onPrimary.highEmphasis`}>
+                        {`ADD ● ${currencyFormatter(quantity * pricePerUnit)}`}
+                      </Box>
+                    </Typography>
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
-          </Box>
-          <Box id="Button">
-            <Button color="primary" variant="contained" fullWidth style={{borderRadius: theme.spacing(1)}}
-                    onClick={handleAddToCart}>
-              <Box display="flex" alignItems="center" width={1} py={1}>
-                <Box>
-                  <Typography variant="h4">
-                    <Box fontSize={theme.spacing(1.5)} color={theme.palette.surface.light}>
-                      {quantity}{quantity > 1 ? ` Items` : ` Item`}
-                    </Box>
-                  </Typography>
-                </Box>
-                <Box flexGrow={1} textAlign="center">
-                  <Typography variant="h3">
-                    <Box fontSize={theme.spacing(2)} color={theme.palette.surface.light}>
-                      ADD
-                    </Box>
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h3">
-                    <Box fontSize={theme.spacing(1.5)} color={theme.palette.surface.light}>
-                      {currencyFormatter(quantity * pricePerUnit)}
-                    </Box>
-                  </Typography>
-                </Box>
-              </Box>
-            </Button>
-          </Box>
+          </div>
         </Box>
       </DialogContent>
     </Dialog>

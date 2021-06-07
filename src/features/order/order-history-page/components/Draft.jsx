@@ -8,6 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import {makeStyles} from "@material-ui/core/styles";
 import PlaceHolder from "../../../common/PlaceHolder";
 import {ReceiptTwoTone} from "@material-ui/icons";
+import {clearOrderState} from "../../OrderSlice";
 
 const useStyles = makeStyles((theme) => ({
   skeleton: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Draft({isActive, fetchOrders}) {
+export default function Draft({isActive, fetchOrders, forceRefresh, linkPattern = `/orders`}) {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -24,8 +25,15 @@ export default function Draft({isActive, fetchOrders}) {
   const [isSuccess, setSuccess] = useState(false);
   const [draft, setDraft] = useState([]);
 
+  const onItemClick = (orderId, restaurantId) => {
+    let strLink = linkPattern.replace(`{orderId}`, `${orderId}`);
+    strLink = strLink.replace(`{restaurantId}`, `${restaurantId}`);
+    dispatch(clearOrderState());
+    history.push(strLink);
+  };
+
   useEffect(() => {
-    if (isActive && !isSuccess) {
+    if (!isSuccess || forceRefresh) {
       setLoading(true);
       fetchOrders()
         .then(({orders}) => {
@@ -39,10 +47,19 @@ export default function Draft({isActive, fetchOrders}) {
           setLoading(false);
         })
     }
-  }, [isActive]);
+  }, [forceRefresh]);
+
+  useEffect(() => {
+    if (isActive) {
+      document
+        .getElementById(`top`)
+        .scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    }
+  }, [isActive])
 
   return (
     <>
+      <div id={`top`}/>
       <Box hidden={!isLoading}>
         <Skeleton count={10} className={classes.skeleton}/>
       </Box>
@@ -58,7 +75,7 @@ export default function Draft({isActive, fetchOrders}) {
             itemCount={1}
             date={updatedAt}
             cost={subTotal}
-            onClick={() => history.push(`/store/${restaurantId}`)}
+            onClick={() => onItemClick(id, restaurantId)}
           />
         ))}
       </Box>

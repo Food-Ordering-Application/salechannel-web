@@ -59,7 +59,7 @@ export default function ProductItemLarge({image, name, description, price, onCli
     <div className={classes.container}>
       <Card elevation={0} className={classes.root}>
         <Grid container wrap="nowrap">
-          <Grid item>
+          <Grid item onClick={onClick}>
             <CardMedia
               className={classes.cover}
               image={image}
@@ -69,15 +69,17 @@ export default function ProductItemLarge({image, name, description, price, onCli
           <Grid item xs>
             <div className={classes.details}>
               <div className={classes.content}>
-                <Typography variant="h5">
-                  <Box className={classes.name}>{name}</Box>
-                </Typography>
-                <Typography variant="h6">
-                  <Box className={classes.info}>{description}</Box>
-                </Typography>
+                <div onClick={onClick}>
+                  <Typography variant="h5">
+                    <Box className={classes.name}>{name}</Box>
+                  </Typography>
+                  <Typography variant="h6">
+                    <Box className={classes.info}>{description}</Box>
+                  </Typography>
+                </div>
                 <Divider variant='fullWidth' className={classes.divider}/>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item xs onClick={onClick}>
                     <Typography variant="h6">
                       <Box className={classes.name}>{currencyFormatter(price)}</Box>
                     </Typography>
