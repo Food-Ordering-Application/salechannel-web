@@ -32,8 +32,8 @@ export default function SplashScreen({style = 1, display = 1}) {
              alt="Splash Screen"
              src={
                style === 1 ?
-                 "https://i.pinimg.com/originals/e6/13/21/e613212546d6c27600379a26cd601365.gif" :
-                 "https://ckbox.net/static/media/loading.50cd3412.gif"
+                 `${process.env.PUBLIC_URL}/splash1.gif` :
+                 `${process.env.PUBLIC_URL}/splash2.gif`
              }
         />
       </div>

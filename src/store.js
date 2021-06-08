@@ -27,6 +27,7 @@ const persistedReducer = persistReducer({
   key: `root`,
   storage,
   whitelist: [`user`],
+  timeout: 500,
 }, reducer);
 
 export default configureStore({

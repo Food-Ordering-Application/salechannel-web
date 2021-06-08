@@ -7,9 +7,9 @@ const theme = createMuiTheme({
   // Text Styles
   typography: {
     h1: {
-      fontFamily: `Poppins`,
+      fontFamily: `Lexend`,
       fontStyle: `normal`,
-      fontWeight: 300,
+      fontWeight: 800,
       fontSize: `96px`,
       lineHeight: `normal`,
       letterSpacing: `-1.5px`,
