@@ -83,6 +83,9 @@ export default function OrderStatus() {
           <StatusCard statusText={''}
                       actionText={orderConstant[status.trim()].description}
                       step={orderConstant[status.trim()].step}
+                      onCancel={() => {
+                        console.log(`Cancel order`)
+                      }}
           />
         </Box>
         <Box pb={2}>

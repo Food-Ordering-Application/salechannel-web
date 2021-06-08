@@ -2,7 +2,7 @@ const orderConstant = {
   DRAFT: {
     code: "DRAFT",
     name: "Đơn nháp",
-    description: "Đơn nháp",
+    description: "Đang xử lí đơn hàng của bạn",
     step: 0,
   },
   ASSIGNING_DRIVER: {
