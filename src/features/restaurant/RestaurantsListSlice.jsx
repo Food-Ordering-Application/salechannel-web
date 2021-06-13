@@ -39,10 +39,10 @@ export const restaurantsListSlice = createSlice({
       state.isError = true;
       state.errorMessage = payload;
     },
-    [filterRestaurant.fulfilled]: (state, {payload}) => {
+    [filterRestaurant.fulfilled]: (state, {meta: {arg}, payload}) => {
       state.isFetching = false;
       state.isSuccess = true;
-      if (payload.append) {
+      if (arg?.append) {
         state.data = [...(state.data), ...(payload.restaurants)];
       } else {
         state.data = payload.restaurants;

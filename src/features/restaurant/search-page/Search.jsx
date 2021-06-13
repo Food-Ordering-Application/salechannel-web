@@ -14,13 +14,15 @@ import Skeleton from "react-loading-skeleton";
 import {areaConstant} from "../../../constants/areaConstant";
 import FilterTitle from "./components/FilterTitle";
 import Ribbon from "../../common/Ribbon";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from "../../common/Spinner";
 
 const useStyles = makeStyles((theme) => ({
-  topNavigator: {
-    position: `fixed`,
-    top: 0,
-    left: 0,
-    right: 0,
+  container: {
+    margin: theme.spacing(12, 2, 2, 2),
+  },
+  skeleton: {
+    marginBottom: theme.spacing(2),
   },
   textField: {
     fontSize: theme.spacing(1.5),
@@ -37,12 +39,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Search() {
   const classes = useStyles();
-  const {data, isError, isSuccess, isFetching, errorMessage} = useSelector(restaurantsListSelector);
+  const {data: restaurants, isFetching, isError, errorMessage} = useSelector(restaurantsListSelector);
   const dispatch = useDispatch();
   const history = useHistory();
   const [area, setArea] = useState("TPHCM");
 
-  const [result, setResult] = useState(``);
   const [name, setName] = useState(``);
   const [open, setOpen] = useState(false);
 
@@ -73,7 +74,7 @@ export default function Search() {
   );
 
   useEffect(function () {
-    if (data.length === 0) {
+    if (restaurants.length === 0) {
       search(``, area);
       //Cache history result when back from details
     }
@@ -87,32 +88,10 @@ export default function Search() {
   useEffect(() => {
       if (isError) {
         dispatch(showError(errorMessage));
-      }
-      if (isSuccess) {
-        const temp = data.map(({id, name, address, coverImageUrl, rating}, index) => (
-          <Box key={id} mb={2}>
-            <RestaurantItemLarge name={`${name} - ${address}`}
-                                 image={coverImageUrl}
-                                 onClick={() => handleItemClick(id)}
-                                 rating={rating}
-            />
-          </Box>
-        ));
-        setResult(temp);
-      }
-      if (isFetching) {
-        setResult(
-          <Box mb={2}>
-            {Array(10).fill(0).map((value, index) => (
-              <Box key={index} mb={2}>
-                <Skeleton height={82}/>
-              </Box>
-            ))}
-          </Box>
-        );
+        dispatch(clearRestaurantsListState());
       }
     }
-    , [isError, isSuccess, isFetching]);
+    , [isError]);
 
   const centerComponent = (
     <InputBase className={classes.textField}
@@ -161,6 +140,26 @@ export default function Search() {
               </FormControl>
             </Grid>
           </Grid>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Typography variant="h4">
+                <Box fontSize={14}>Khu vực</Box>
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <FormControl fullWidth>
+                <Select value={area}
+                        onChange={onAreaChange}
+                >
+                  {Object.keys(areaConstant).map((code) => (
+                    <MenuItem key={code}
+                              value={code}
+                              children={areaConstant[code].name}/>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
         </Box>
       </Collapse>
     </>
@@ -168,14 +167,28 @@ export default function Search() {
 
   return (
     <Box>
-      <TopNavigationBar rightIcon={SearchIcon}
+      <TopNavigationBar rightIcon={isFetching ? Spinner : SearchIcon}
                         rightAction={handleSearchButtonClick}
                         centerComponent={centerComponent}
                         bottomComponent={bottomComponent}
       />
-      <Box mt={12} mx={2}>
-        {result}
-      </Box>
+      <InfiniteScroll
+        next={() => dispatch(filterRestaurant({append: true, pageIndex: 1, area: area, name: ""}))}
+        hasMore={false}
+        loader={<Skeleton height={82} count={10} className={classes.skeleton}/>}
+        dataLength={restaurants.length}
+        className={classes.container}
+      >
+        {restaurants.map(({id, name, address, coverImageUrl, rating}, index) => (
+          <Box key={index} mb={2}>
+            <RestaurantItemLarge name={`${name} - ${address}`}
+                                 image={coverImageUrl}
+                                 onClick={() => handleItemClick(id)}
+                                 rating={rating}
+            />
+          </Box>
+        ))}
+      </InfiniteScroll>
     </Box>
   );
 }

@@ -71,7 +71,7 @@ export default function TopNavigationBar({
               homeButton
                 ?
                 <IconButton color="primary" onClick={rightAction || rightActionDefault}>
-                  <Box color="inherit" component={rightIcon || Home}/>
+                  <Box width={24} height={24} color="inherit" component={rightIcon || Home}/>
                 </IconButton>
                 :
                 <Box p={3}/>
