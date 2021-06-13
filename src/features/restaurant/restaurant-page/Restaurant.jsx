@@ -12,7 +12,13 @@ import CategoryMenu from "../../../components/CategoryMenu";
 import {Box, LinearProgress} from "@material-ui/core";
 import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
-import {clearRestaurantState, fetchRestaurant, restaurantSelector, setAbleToDelivery} from "../RestaurantSlice";
+import {
+  clearRestaurantState,
+  fetchRestaurant,
+  restaurantSelector,
+  setAbleToDelivery,
+  setFavoriteRestaurant
+} from "../RestaurantSlice";
 import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
 import {clearOrder, fetchOrder, orderSelector} from "../../order/OrderSlice";
@@ -69,16 +75,7 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-const mockedData = {
-  name: `Nhà hàng hải sản cá Trend - Nguyễn Văn Cừ`,
-  distance: 1.2,
-  address: `224 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh`,
-  cover: `https://images.foody.vn/res/g21/208155/prof/s576x330/foody-mobile-img_0954-jpg-344-635947742274439596.jpg`,
-  isFavorite: false,
-}
-
 export default function Restaurant() {
-  const [info, setInfo] = useState(mockedData);
   const [cart, setToCart] = useState([]);
   const {id: customerId, isAuthenticated} = useSelector(userSelector);
   const restaurant = useSelector(restaurantSelector);
@@ -92,9 +89,9 @@ export default function Restaurant() {
   const classes = useStyles({cartIsAppear: !cartIsEmpty});
 
   const handleFavoriteChange = () => {
-    const newInfo = {...info};
-    newInfo.isFavorite = !info.isFavorite;
-    setInfo(newInfo);
+    const isFavorite = restaurant.restaurant?.isFavorite;
+    const restaurantId = restaurant.restaurant?.id;
+    dispatch(setFavoriteRestaurant({restaurantId, isFavorite: !isFavorite}));
   };
   const handleAddToCart = (product) => {
     const newCart = [...cart, product];
@@ -160,7 +157,7 @@ export default function Restaurant() {
           <div className={classes.topNavigationBar}>
             <TopNavigationBar
               onFavoriteClick={handleFavoriteChange}
-              {...info}
+              isFavorite={restaurant.restaurant?.isFavorite}
             />
           </div>
         </ScrollToShowBackground>

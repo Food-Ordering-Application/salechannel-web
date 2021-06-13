@@ -6,6 +6,7 @@ import {snackbarSlice} from "./features/common/Snackbar/SnackbarSlice";
 import {userSlice} from "./features/user/UserSlice";
 import {otpSlice} from "./features/user/login-page/components/otpVerification-dialog/otpSlice";
 import {orderSlice} from "./features/order/OrderSlice";
+import {restaurantFavoriteSlice} from "./features/restaurant/RestaurantFavoriteSlice";
 import {restaurantsListSlice} from "./features/restaurant/RestaurantsListSlice";
 import {restaurantSlice} from "./features/restaurant/RestaurantSlice";
 import {menuSlice} from "./features/restaurant/MenuSlice";
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   otp: otpSlice.reducer,
   restaurant: restaurantSlice.reducer,
   restaurants: restaurantsListSlice.reducer,
+  favoriteRestaurants: restaurantFavoriteSlice.reducer,
   menu: menuSlice.reducer,
   address: addressSlice.reducer,
 });

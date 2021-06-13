@@ -7,7 +7,18 @@ export const fetchRestaurant = createAsyncThunk(
   `restaurant/fetch`,
   async ({id}, thunkAPI) => {
     try {
-      return RestaurantApi.fetch(id);
+      return await RestaurantApi.fetch(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const setFavoriteRestaurant = createAsyncThunk(
+  `restaurant/setFavorite`,
+  async ({restaurantId, isFavorite}, thunkAPI) => {
+    try {
+      return await RestaurantApi.setFavorite(restaurantId, isFavorite);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -22,6 +33,8 @@ export const restaurantSlice = createSlice({
     isFetching: false,
     isError: false,
     isSuccess: false,
+    isUpdating: false,
+    updateSuccess: false,
     isOpen: true,
     isAbleToDelivery: true,
     errorMessage: ``,
@@ -50,7 +63,21 @@ export const restaurantSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       state.restaurant = payload.restaurant;
-      state.isOpen = checkRestaurantOpen(payload.restaurant.openHours);
+      state.isOpen = checkRestaurantOpen(payload.restaurant?.openHours);
+    },
+    [setFavoriteRestaurant.pending]: (state) => {
+      state.isUpdating = true;
+      state.restaurant.isFavorite = !state.restaurant?.isFavorite;
+    },
+    [setFavoriteRestaurant.rejected]: (state, {payload}) => {
+      state.isUpdating = false;
+      state.isError = true;
+      state.errorMessage = payload;
+      state.restaurant.isFavorite = !state.restaurant?.isFavorite;
+    },
+    [setFavoriteRestaurant.fulfilled]: (state) => {
+      state.isUpdating = false;
+      state.updateSuccess = true;
     }
   },
 });
