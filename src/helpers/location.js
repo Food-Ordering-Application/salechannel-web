@@ -15,6 +15,14 @@ export function getLocation(onSuccess, onError = () => {
     }
   });
 }
+export function getCurrentLocation(options) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      resolve, ({code, message}) =>
+        reject(Object.assign(new Error(message), {name: "PositionError", code})),
+      options);
+  });
+};
 
 export async function getAddress(lng, lat) {
   try {

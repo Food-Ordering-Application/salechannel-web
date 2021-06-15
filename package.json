@@ -17,6 +17,7 @@
         "google-map-react": "^2.1.9",
         "google-maps-react": "^2.0.6",
         "lodash": "^4.17.21",
+        "mapbox-gl": "^2.3.0",
         "moment-timezone": "^0.5.33",
         "prop-types": "^15.7.2",
         "pusher-js": "^7.0.3",

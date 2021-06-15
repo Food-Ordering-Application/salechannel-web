@@ -11,6 +11,7 @@ import {restaurantsListSlice} from "./features/restaurant/RestaurantsListSlice";
 import {restaurantSlice} from "./features/restaurant/RestaurantSlice";
 import {menuSlice} from "./features/restaurant/MenuSlice";
 import {addressSlice} from "./features/address/AddressSlice";
+import {locationSlice} from "./features/home/LocationSlice";
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 
 const reducer = combineReducers({
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   favoriteRestaurants: restaurantFavoriteSlice.reducer,
   menu: menuSlice.reducer,
   address: addressSlice.reducer,
+  location: locationSlice.reducer,
 });
 
 const persistedReducer = persistReducer({

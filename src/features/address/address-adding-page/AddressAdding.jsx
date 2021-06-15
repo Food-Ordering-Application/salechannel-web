@@ -14,6 +14,7 @@ import {userSelector} from "../../user/UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {EditLocationOutlined, GpsFixed} from "@material-ui/icons";
 import PlaceHolder from "../../common/PlaceHolder";
+import {MapboxAPI} from "../../../helpers/mapbox";
 
 const useStyles = makeStyles((theme) => ({
   input: {

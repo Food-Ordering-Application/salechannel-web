@@ -65,6 +65,14 @@ export default function OrderStatus() {
     }
   }, [isError]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      const {delivery: {status: deliveryStatus}} = data;
+      if (deliveryStatus === orderConstant.COMPLETED.code)
+        history.replace(`/order/${orderId}/review`)
+    }
+  }, [data])
+
   if (!isSuccess) {
     return (
       <>

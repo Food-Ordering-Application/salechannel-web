@@ -18,8 +18,29 @@ const useStyles = makeStyles(theme => ({
   text: {
     fontSize: theme.spacing(2),
     color: theme.palette.surface.light,
+  },
+  dotCarousel: {
+    position: `relative`,
+    left: `-9999px`,
+    width: `10px`,
+    height: `10px`,
+    borderRadius: `50%`,
+    backgroundColor: `white`,
+    color: `white`,
+    boxShadow: `9984px 0 0 0 white, 9999px 0 0 0 white, 10014px 0 0 0 white`,
+    animation: `$dotCarousel 1.5s infinite linear`,
+  },
+  "@keyframes dotCarousel": {
+    "0%": {
+      boxShadow: `9984px 0 0 -1px white, 9999px 0 0 1px white, 10014px 0 0 -1px white`,
+    },
+    "50%": {
+      boxShadow: `10014px 0 0 -1px white, 9984px 0 0 -1px white, 9999px 0 0 1px white`,
+    },
+    "100%": {
+      boxShadow: `9999px 0 0 1px white, 10014px 0 0 -1px white, 9984px 0 0 -1px white`,
+    }
   }
-
 }));
 
 export default function CartSummaryBottom({cart, toCheckout, isLoading}) {
@@ -42,9 +63,19 @@ export default function CartSummaryBottom({cart, toCheckout, isLoading}) {
       </Box>
       <Box flexGrow={1}/>
       <Box id="ViewCart">
-        <Typography variant="h3">
-          <Box className={classes.text}>View Cart</Box>
-        </Typography>
+        {
+          isLoading
+            ? (
+              <Box pr={2}>
+                <div className={classes.dotCarousel}/>
+              </Box>
+            )
+            : (
+              <Typography variant="h3">
+                <Box className={classes.text}>View Cart</Box>
+              </Typography>
+            )
+        }
       </Box>
     </Box>
   );
