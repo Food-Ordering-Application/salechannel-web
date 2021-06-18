@@ -1,5 +1,4 @@
 import axios from "axios";
-import {getCurrentLocation} from "./location";
 
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
@@ -13,12 +12,14 @@ const getMapInstance = (elementID) => {
 }
 
 const autoComplete = async (longitude, latitude) => {
-  const {coords:{latitude: lat, longitude: lon}} = await getCurrentLocation();
-  console.log(lat, lon);
-  // const {data: {features}} = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${process.env.REACT_APP_MAP_BOX_KEY}&country=VN&language=vi`);
-  const {data: {features}} = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${process.env.REACT_APP_MAP_BOX_KEY}&country=VN&language=vi&types=country,region,district,place`);
+  // const {coords:{latitude: lat, longitude: lon}} = await getCurrentLocation();
+  // console.log(lat, lon);
+  const {data: {features}} = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${process.env.REACT_APP_MAP_BOX_KEY}&country=VN&language=vi`);
+  // const {data: {features}} = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${process.env.REACT_APP_MAP_BOX_KEY}&country=VN&language=vi&types=country,region,district,place`);
   console.log(features);
-  return true
+  if (features?.length !== 0)
+    return features[0].place_name_vi;
+  throw new Error("Không tìm thấy địa chỉ của bạn");
 }
 
 export const MapboxAPI = {

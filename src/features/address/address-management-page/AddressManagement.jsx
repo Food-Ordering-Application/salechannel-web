@@ -48,7 +48,7 @@ export default function AddressManagement() {
       <Box hidden={address.length > 0}>
         <PlaceHolder icon={LocationIcon} text="Bạn chưa lưu địa chỉ nào"/>
       </Box>
-      <BottomButton variant="contained" component={Link} to="/address/add">
+      <BottomButton variant="contained" component={Link} to="/address/add/current-location">
         Thêm địa chỉ mới
       </BottomButton>
     </Box>

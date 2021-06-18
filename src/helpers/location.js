@@ -35,6 +35,35 @@ export async function getAddress(lng, lat) {
   }
 }
 
+export async function getAddressV2(lng, lat) {
+  try {
+    const {data: {items}} = await axios.get(`https://discover.search.hereapi.com/v1/revgeocode?limit=1&apiKey=${process.env.REACT_APP_HERE_MAP_KEY}&resultType=houseNumber&at=${lat},${lng}&lang=vi`);
+    if (items[0]) {
+      const {address} = items[0];
+      const result = [];
+      if(address.houseNumber){
+        result.push(address.houseNumber);
+      }
+      if(address.street){
+        result.push(address.street);
+      }
+      if(address.district){
+        result.push(address.district);
+      }
+      if(address.city){
+        result.push(address.city);
+      }
+      if(address.county){
+        result.push(address.county);
+      }
+      return result.join(', ');
+    }
+    return "Không tìm thấy địa chỉ của bạn";
+  } catch (error) {
+    throw new Error("Không tìm thấy địa chỉ của bạn");
+  }
+}
+
 function degreeToRadian(deg) {
   return deg * (Math.PI / 180);
 }

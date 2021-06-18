@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {getAddress, getLocation} from "../../../helpers/location";
+import {getAddressV2, getLocation} from "../../../helpers/location";
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {Done} from "@material-ui/icons";
@@ -12,7 +12,8 @@ import GoogleMapReact from "google-map-react";
 import MarkerComponent from "./components/MarkerComponent";
 
 const GoogleMapConfig = {
-  key: process.env.REACT_APP_GOOGLE_API_KEY,
+  // key: process.env.REACT_APP_GOOGLE_API_KEY,
+  key: null,
   language: `vi`,
   region: `VN`,
 };
@@ -52,7 +53,7 @@ export default function LocationAdding() {
   const {id: userId} = useSelector(userSelector);
   const {isPending, isError, isSuccess, errorMessage} = useSelector(addressSelector);
 
-  const [location, setLocation] = useState({lat: 49.2827291, lng: -123.1207375,});
+  const [location, setLocation] = useState({lat: 49.2827291, lng: -123.1207375});
   const [address, setAddress] = useState(``);
 
   const handleSubmitLocation = () => {
@@ -61,7 +62,7 @@ export default function LocationAdding() {
   }
 
   const onLocationChange = () => {
-    getAddress(location.lng, location.lat)
+    getAddressV2(location.lng, location.lat)
       .then((text) => setAddress(text))
       .catch((error) => dispatch(showError(error.message)));
   }
@@ -87,7 +88,7 @@ export default function LocationAdding() {
     }
     if (isSuccess) {
       dispatch(clearAddressState())
-      history.go(-2)
+      history.go(-1)
     }
   }, [isError, isSuccess, dispatch])
 
