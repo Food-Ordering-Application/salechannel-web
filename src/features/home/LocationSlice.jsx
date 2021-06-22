@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {getCurrentLocation} from "../../helpers/location";
+import {getAddressV2, getCurrentLocation} from "../../helpers/location";
 
 export const analyseCurrentLocation = createAsyncThunk(
   `location/analyse`,
@@ -8,7 +8,7 @@ export const analyseCurrentLocation = createAsyncThunk(
       const {coords: {latitude, longitude}} = await getCurrentLocation()
       return ({
         location: {longitude, latitude},
-        address: `25 Đường số 3, ấp Đá Hàng, xã Hiệp Thạnh, huyện Gò Dầu, tỉnh Tây Ninh`
+        address: await getAddressV2(longitude, latitude)
       })
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message)
@@ -50,7 +50,6 @@ export const locationSlice = createSlice({
       state.isPending = false;
       state.isSuccess = true;
       state.location = payload.location;
-      state.address = payload.address;
       state.address = payload.address;
     }
   }
