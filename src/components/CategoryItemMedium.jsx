@@ -4,8 +4,8 @@ import {GridListTile, Paper, Typography, makeStyles} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: '75px',
-      margin: theme.spacing(0, 1),
+      width: '82px',
+      margin: theme.spacing(0, 0.75),
       '&:first-child': {
         marginLeft: theme.spacing(2),
       },
@@ -30,15 +30,16 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
       fontSize: '11px',
       lineHeight: '18px',
+      whiteSpace: 'nowrap',
     }
   })
 );
 
-export default function CategoryItemMedium({key, image, name, onClick}) {
+export default function CategoryItemMedium({image, name, onClick}) {
   const classes = useStyles();
 
   return (
-    <GridListTile key={key} classes={{root: classes.root}} onClick={onClick}>
+    <GridListTile classes={{root: classes.root}} onClick={onClick}>
       <img className={classes.image} src={image} alt={name}/>
       <Paper className={classes.titlePaper} elevation={0}>
         <Typography className={classes.titleText}>

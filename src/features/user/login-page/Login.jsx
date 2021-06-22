@@ -101,8 +101,8 @@ export default function Login() {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="subtitle2" color="inherit">
-            <Box>Vui lòng điền tên tài khoản và mật khẩu</Box>
+          <Typography variant="h5" color="inherit">
+            <Box fontSize={12} mt={1}>Vui lòng điền tên tài khoản và mật khẩu</Box>
           </Typography>
         </Grid>
       </Grid>
@@ -152,7 +152,7 @@ export default function Login() {
         <Grid container justify="flex-end">
           <Grid item>
             <Typography variant="subtitle1" color="inherit">
-              <Box fontSize={18}>
+              <Box fontSize={14}>
                 <StyledLink to="/reset-password">Quên mật khẩu</StyledLink>
               </Box>
             </Typography>
@@ -161,7 +161,7 @@ export default function Login() {
         <Grid container justify="center">
           <Grid item>
             <Typography variant="subtitle1" color="inherit">
-              <Box fontSize={14} pt={5}>Chưa có tài khoản? <StyledLink to="/register">Đăng ký</StyledLink></Box>
+              <Box fontSize={14} pt={8}>Chưa có tài khoản? <StyledLink to="/register">Đăng ký</StyledLink></Box>
             </Typography>
           </Grid>
         </Grid>

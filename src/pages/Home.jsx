@@ -2,13 +2,12 @@ import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core";
 
 import AddressSelector from "../components/AddressSelector";
-import FavoriteListHorizontal from "../components/FavoriteListHorizontal";
 import SearchBar from "../components/SearchBar";
 import Label from "../components/Label";
 import CategoryListHorizontal from "../components/CategoryListHorizontal";
 import BottomNavigationBar from "../components/BottomNavigationBar";
 import RestaurantListVertical from "../components/RestaurantListVertical";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {locationSelector} from "../features/home/LocationSlice";
 import {Link, useHistory, useLocation} from "react-router-dom";
 import Ribbon from "../features/common/Ribbon";
@@ -40,7 +39,6 @@ export default function Home() {
   const classes = useStyle();
 
   //Hook
-  const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
 
@@ -61,16 +59,16 @@ export default function Home() {
     <>
       <AddressSelector address={address}/>
       <div className={classes.content}>
-        <div className={classes.favoriteRestaurants}>
-          <FavoriteListHorizontal/>
-        </div>
+        {/*<div className={classes.favoriteRestaurants}>*/}
+        {/*  <FavoriteListHorizontal/>*/}
+        {/*</div>*/}
         <div className={classes.searchBar}>
           <Ribbon component={Link} to={'/search'}>
             <SearchBar/>
           </Ribbon>
         </div>
         <div className={classes.label}>
-          <Label uppercase>20 nhà hàng gần bạn</Label>
+          <Label uppercase>Quanh đây có gì ngon?</Label>
         </div>
         <div className={classes.categoryList}>
           <CategoryListHorizontal/>

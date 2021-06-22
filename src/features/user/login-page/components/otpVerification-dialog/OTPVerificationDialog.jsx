@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -7,7 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   LinearProgress,
-  TextField
+  TextField, Typography
 } from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -52,7 +53,11 @@ export default function OTPVerificationDialog() {
 
   return (
     <Dialog open={isDialogOpen} onClose={handleClose}>
-      <DialogTitle>Nhập mã OTP</DialogTitle>
+      <DialogTitle>
+        <Typography variant="h4">
+          <Box fontSize={16}>Nhập mã xác thực</Box>
+        </Typography>
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>
           Vui lòng nhập mã xác nhận được gửi đến số điện thoại của bạn

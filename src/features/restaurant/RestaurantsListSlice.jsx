@@ -3,12 +3,12 @@ import RestaurantApi from "../../api/RestaurantApi";
 
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
-  async ({pageIndex, rowsPerPage = 25, area, category, name, append = false}, thunkAPI) => {
+  async ({pageIndex, rowsPerPage = 25, area, category, name, append = false, categoryIds}, thunkAPI) => {
     try {
-      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name);
-      return {...data, append};
+      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name, categoryIds)
+      return {...data, append}
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message)
     }
   }
 );
@@ -16,11 +16,19 @@ export const filterRestaurant = createAsyncThunk(
 export const restaurantsListSlice = createSlice({
   name: `restaurants`,
   initialState: {
-    data: [],
     isFetching: false,
     isSuccess: false,
     isError: false,
     errorMessage: '',
+    position: {
+      latitude: null,
+      longitude: null,
+    },
+    data: [],
+    sortId: [],
+    filterIds: [],
+    areaIds: [],
+    categoryIds: [],
   },
   reducers: {
     clearRestaurantsListState: (state) => {
@@ -28,6 +36,9 @@ export const restaurantsListSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       return state;
+    },
+    setCategoryIds: (state, {payload}) => {
+      state.categoryIds = payload
     }
   },
   extraReducers: {
@@ -51,5 +62,5 @@ export const restaurantsListSlice = createSlice({
   },
 });
 
-export const {clearRestaurantsListState} = restaurantsListSlice.actions;
+export const {clearRestaurantsListState, setCategoryIds} = restaurantsListSlice.actions;
 export const restaurantsListSelector = (state) => state.restaurants;

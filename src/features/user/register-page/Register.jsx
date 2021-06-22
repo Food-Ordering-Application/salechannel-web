@@ -99,8 +99,8 @@ export default function Register() {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="subtitle2" color="inherit">
-            <Box>Vui lòng nhập số điện thoại và mật khẩu</Box>
+          <Typography variant="h5" color="inherit">
+            <Box fontSize={12} mt={1}>Vui lòng nhập số điện thoại và mật khẩu</Box>
           </Typography>
         </Grid>
       </Grid>
@@ -157,7 +157,7 @@ export default function Register() {
         <Grid container justify="center">
           <Grid item>
             <Typography variant="subtitle1" color="inherit">
-              <Box fontSize={14} pt={3}>Đã có tài khoản? <StyledLink to="/login">Đăng nhập</StyledLink></Box>
+              <Box fontSize={13} pt={5}>Đã có tài khoản? <StyledLink to="/login">Đăng nhập</StyledLink></Box>
             </Typography>
           </Grid>
         </Grid>

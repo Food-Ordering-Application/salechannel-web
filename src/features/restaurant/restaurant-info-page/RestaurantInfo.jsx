@@ -57,12 +57,12 @@ export default function RestaurantInfo() {
         </Box>
         <Box mt={2}>
           <GoogleMap centerLocation={{
-            lat: restaurant["geo"].latitude,
-            lng: restaurant["geo"].longitude,
+            lat: restaurant["position"]?.latitude,
+            lng: restaurant["position"]?.longitude,
           }}>
             <Marker position={{
-              lat: restaurant["geo"].latitude,
-              lng: restaurant["geo"].longitude,
+              lat: restaurant["position"]?.latitude,
+              lng: restaurant["position"]?.longitude,
             }}/>
           </GoogleMap>
         </Box>

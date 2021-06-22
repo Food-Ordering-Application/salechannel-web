@@ -4,7 +4,6 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import StyledBadge from "./StyledBadge";
 import StyledBottomNavigationAction from "./StyledBottomNavigationAction";
 import LocationIcon from "../asserts/icons/Location";
-import NotificationIcon from "../asserts/icons/Notification";
 import SearchIcon from "../asserts/icons/Search";
 import ShoppingBagIcon from "../asserts/icons/ShoppingBag";
 import UserIcon from "../asserts/icons/User";
@@ -52,14 +51,14 @@ export default function BottomNavigationBar({initSate}) {
                                       component={Link}
                                       to="/"
         />
-        <StyledBottomNavigationAction label="Thông báo"
-                                      component={Link}
-                                      to="/notifications"
-                                      icon={
-                                        <StyledBadge badgeContent={1} color='primary'>
-                                          <NotificationIcon/>
-                                        </StyledBadge>
-                                      }/>
+        {/*<StyledBottomNavigationAction label="Thông báo"*/}
+        {/*                              component={Link}*/}
+        {/*                              to="/notifications"*/}
+        {/*                              icon={*/}
+        {/*                                <StyledBadge badgeContent={1} color='primary'>*/}
+        {/*                                  <NotificationIcon/>*/}
+        {/*                                </StyledBadge>*/}
+        {/*                              }/>*/}
         <StyledBottomNavigationAction label="Khám phá"
                                       icon={<SearchIcon/>}
                                       component={Link}

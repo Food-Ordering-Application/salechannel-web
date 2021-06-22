@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {analyseCurrentLocation, locationSelector} from "../home/LocationSlice";
 import {useHistory, useLocation} from "react-router-dom";
 import {Box} from "@material-ui/core";
+import {fetchMetadata, metadataSelector} from "../home/MetadataSlice";
 
 export default function AnalyseLocation() {
   //Hook
@@ -11,18 +12,20 @@ export default function AnalyseLocation() {
   const dispatch = useDispatch()
 
   //Global state
-  const {isSuccess} = useSelector(locationSelector)
+  const {isSuccess: lSuccess} = useSelector(locationSelector)
+  const {isSuccess: mSuccess} = useSelector(metadataSelector)
 
   //Side effect
   useEffect(async () => {
     dispatch(analyseCurrentLocation({}))
+    dispatch(fetchMetadata({latitude: 10.759092606200658, longitude: 106.6829820685133}))
   }, [])
 
   useEffect(() => {
-    if (isSuccess) {
+    if (lSuccess && mSuccess) {
       history.replace(location.state?.ref || '/')
     }
-  }, [isSuccess])
+  }, [lSuccess, mSuccess])
 
   return (
     <>

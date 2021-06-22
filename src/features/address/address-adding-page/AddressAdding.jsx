@@ -14,7 +14,6 @@ import {userSelector} from "../../user/UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {EditLocationOutlined, GpsFixed} from "@material-ui/icons";
 import PlaceHolder from "../../common/PlaceHolder";
-import {MapboxAPI} from "../../../helpers/mapbox";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -40,7 +39,40 @@ export default function AddressAdding() {
   const {id: userId} = useSelector(userSelector);
   const {isPending, isSuccess, isError, errorMessage} = useSelector(addressSelector);
 
-  const [suggestions, setSuggestion] = useState([]);
+  const [suggestions, setSuggestion] = useState([
+    {
+      placeId: 1,
+      description: ``,
+      formattedSuggestion: {
+        mainText: `227 Đường Nguyễn Văn Cừ`,
+        secondaryText: `phường 4, Quận 5, Thành phố Hồ Chí Minh`,
+      }
+    },
+    {
+      placeId: 2,
+      description: ``,
+      formattedSuggestion: {
+        mainText: `227 Đường Nguyễn Văn Cừ`,
+        secondaryText: `An Hòa, Ninh Kiều, Cần Thơ`,
+      }
+    },
+    {
+      placeId: 3,
+      description: ``,
+      formattedSuggestion: {
+        mainText: `227 Đường Nguyễn Văn Cừ`,
+        secondaryText: `Ngọc Lâm, Long Biên, Hà Nội`,
+      }
+    },
+    {
+      placeId: 4,
+      description: ``,
+      formattedSuggestion: {
+        mainText: `227 Nguyễn Văn Cừ nối dài`,
+        secondaryText: `An Khánh, Ninh Kiều, Cần Thơ`,
+      }
+    },
+  ]);
   const [isFetching, setFetching] = useState(false);
   const handleSearch = () => {
   };

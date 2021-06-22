@@ -2,7 +2,12 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {throttle} from "lodash";
 
-import {clearRestaurantsListState, filterRestaurant, restaurantsListSelector} from "../RestaurantsListSlice";
+import {
+  clearRestaurantsListState,
+  filterRestaurant,
+  restaurantsListSelector,
+  setCategoryIds
+} from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {Box, Collapse, Divider, FormControl, Grid, InputBase, MenuItem, Select, Typography} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
@@ -16,6 +21,7 @@ import FilterTitle from "./components/FilterTitle";
 import Ribbon from "../../common/Ribbon";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../../common/Spinner";
+import {metadataSelector} from "../../home/MetadataSlice";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -39,13 +45,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Search() {
   const classes = useStyles();
-  const {data: restaurants, isFetching, isError, errorMessage} = useSelector(restaurantsListSelector);
+  const {data: restaurants, isFetching, isError, errorMessage, categoryIds} = useSelector(restaurantsListSelector);
+  const {isSuccess: mReady, data: metadata} = useSelector(metadataSelector)
   const dispatch = useDispatch();
   const history = useHistory();
   const [area, setArea] = useState("TPHCM");
 
   const [name, setName] = useState(``);
   const [open, setOpen] = useState(false);
+
 
   const onAreaChange = (event) => {
     const text = `${event.target.value}`;
@@ -56,8 +64,13 @@ export default function Search() {
 
   const search = function (name, area) {
     dispatch(clearRestaurantsListState());
-    dispatch(filterRestaurant({pageIndex: 1, area: area, name: name}));
+    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name}));
   };
+
+  const handleBack = () => {
+    history.goBack()
+    dispatch(setCategoryIds([]))
+  }
 
   const handleItemClick = (id) => history.push(`/store/${id}`);
   const handleSearchButtonClick = () => search(name, area);
@@ -74,13 +87,6 @@ export default function Search() {
   );
 
   useEffect(function () {
-    if (restaurants.length === 0) {
-      search(``, area);
-      //Cache history result when back from details
-    }
-  }, []);
-
-  useEffect(function () {
     if (name && area)
       throttleSearch(name, area);
   }, [name]);
@@ -92,6 +98,16 @@ export default function Search() {
       }
     }
     , [isError]);
+
+  useEffect(() => {
+    if (categoryIds?.length > 0)
+      dispatch(filterRestaurant({categoryIds}))
+  }, [categoryIds])
+
+  if (!mReady) {
+    history.replace('/')
+    return null
+  }
 
   const centerComponent = (
     <InputBase className={classes.textField}
@@ -105,7 +121,14 @@ export default function Search() {
     <>
       <Ribbon onClick={() => setOpen(!open)}>
         <Box mx={2} pb={1}>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justify="flex-end" spacing={1}>
+            {categoryIds.length !== 0 && (
+              categoryIds.map((categoryId) => (
+                <Grid item>
+                  <FilterTitle>{metadata._categories[categoryId]}</FilterTitle>
+                </Grid>
+              ))
+            )}
             <Grid item xs>
               <FilterTitle>{areaConstant[area].name}</FilterTitle>
             </Grid>
@@ -169,6 +192,7 @@ export default function Search() {
     <Box>
       <TopNavigationBar rightIcon={isFetching ? Spinner : SearchIcon}
                         rightAction={handleSearchButtonClick}
+                        leftAction={handleBack}
                         centerComponent={centerComponent}
                         bottomComponent={bottomComponent}
       />
