@@ -4,7 +4,7 @@ import TopNavigationBar from "../../common/TopNavigationBar";
 import SwipeableViews from "react-swipeable-views";
 import Draft from "./components/Draft";
 import {OrderApi} from "../../../api/OrderApi";
-import {RefreshOutlined} from "@material-ui/icons";
+import {Autorenew, RefreshOutlined} from "@material-ui/icons";
 
 export default function OrderHistory() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -48,6 +48,8 @@ export default function OrderHistory() {
             fetchOrders={OrderApi.fetchOnOnGoing}
             forceRefresh={forceRefresh}
             linkPattern={`/order/{orderId}`}
+            draftName={`Đang xử lí`}
+            draftIcon={Autorenew}
           />
         </Box>
         <Box p={2}>

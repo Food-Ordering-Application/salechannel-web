@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Box, Chip, Grid, TextField, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {makeStyles} from "@material-ui/core/styles";
-import {useHistory, useParams} from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearOrderState, fetchOrderData, orderSelector} from "../OrderSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
@@ -141,7 +141,7 @@ export default function OrderReview() {
               <Typography variant="h3">
                 <Box textAlign={`center`} marginX={2
                 }>
-                  {`Bạn thấy "Nhà hàng ${restaurant?.name}" sao?`}
+                  {`Bạn thấy "Nhà hàng ${restaurant?.name}" thế nào?`}
                 </Box>
               </Typography>
             </Grid>
@@ -176,7 +176,7 @@ export default function OrderReview() {
           </Grid>
         </Grid>
       </Grid>
-      <BottomButton variant={`contained`} disabled={review.length === 0}>
+      <BottomButton variant={`contained`} component={Link} to={'/orders'}>
         Gửi
       </BottomButton>
     </>

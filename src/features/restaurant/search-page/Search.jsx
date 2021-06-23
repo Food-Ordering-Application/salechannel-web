@@ -163,26 +163,6 @@ export default function Search() {
               </FormControl>
             </Grid>
           </Grid>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item>
-              <Typography variant="h4">
-                <Box fontSize={14}>Khu vực</Box>
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <FormControl fullWidth>
-                <Select value={area}
-                        onChange={onAreaChange}
-                >
-                  {Object.keys(areaConstant).map((code) => (
-                    <MenuItem key={code}
-                              value={code}
-                              children={areaConstant[code].name}/>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
         </Box>
       </Collapse>
     </>

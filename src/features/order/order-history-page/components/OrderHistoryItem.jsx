@@ -51,7 +51,17 @@ const mapStatusIcon = (status) => {
   return Autorenew;
 };
 
-export default function OrderHistoryItem({status, name, itemCount, date, cost, paymentMethod: paymentType, onClick}) {
+export default function OrderHistoryItem({
+                                           status,
+                                           name,
+                                           itemCount,
+                                           date,
+                                           cost,
+                                           paymentMethod: paymentType,
+                                           onClick,
+                                           draftText = "Đơn nháp",
+                                           draftIcon = DescriptionTwoTone
+                                         }) {
   const classes = useStyles({status: status.trim()});
 
   return (
@@ -62,12 +72,14 @@ export default function OrderHistoryItem({status, name, itemCount, date, cost, p
             <Box>
               <Grid container alignItems="center" spacing={1}>
                 <Grid item>
-                  <Box className={classes.statusIcon} component={mapStatusIcon(status.trim())}/>
+                  <Box className={classes.statusIcon}
+                       component={status === "DRAFT" ? draftIcon : mapStatusIcon(status.trim())}/>
                 </Grid>
                 <Grid item>
                   <Typography variant="h4">
-                    {/*<Box className={classes.statusText}>{orderConstant[status].name}</Box>*/}
-                    <Box className={classes.statusText}>{status}</Box>
+                    <Box
+                      className={classes.statusText}>{status === "DRAFT" ? draftText : orderConstant[status].name}</Box>
+                    {/*<Box className={classes.statusText}>{status}</Box>*/}
                   </Typography>
                 </Grid>
                 <Grid item xs/>

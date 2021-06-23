@@ -191,6 +191,9 @@ export const orderSlice = createSlice({
       },
       updateOrderStatus: (state, {payload}) => {
         state.data = Object.assign(state.data, payload);
+      },
+      updateDriverLocation: (state, {payload}) => {
+        console.log(payload)
       }
     },
     extraReducers: {
@@ -309,6 +312,7 @@ export const {
   setNote,
   clearOrder,
   cacheOrderPending,
-  updateOrderStatus
+  updateOrderStatus,
+  updateDriverLocation,
 } = orderSlice.actions;
 export const orderSelector = (state) => state.order;

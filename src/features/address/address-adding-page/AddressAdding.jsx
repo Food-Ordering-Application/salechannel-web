@@ -3,9 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Box, ButtonBase, Divider, Grid, InputBase, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
-import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete";
-import AddressItemLarge from "./components/AddressItemLarge";
-import Ribbon from "../../common/Ribbon";
+import {geocodeByAddress, getLatLng} from "react-places-autocomplete";
 import Spinner from "../../common/Spinner";
 import {Link, useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,6 +12,9 @@ import {userSelector} from "../../user/UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {EditLocationOutlined, GpsFixed} from "@material-ui/icons";
 import PlaceHolder from "../../common/PlaceHolder";
+import {addressToLocationV2, autoCompleteV2} from "../../../helpers/location";
+import Ribbon from "../../common/Ribbon";
+import AddressItemLarge from "./components/AddressItemLarge";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -36,53 +37,29 @@ export default function AddressAdding() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const [text, setText] = useState('');
   const {id: userId} = useSelector(userSelector);
   const {isPending, isSuccess, isError, errorMessage} = useSelector(addressSelector);
 
-  const [suggestions, setSuggestion] = useState([
-    {
-      placeId: 1,
-      description: ``,
-      formattedSuggestion: {
-        mainText: `227 Đường Nguyễn Văn Cừ`,
-        secondaryText: `phường 4, Quận 5, Thành phố Hồ Chí Minh`,
-      }
-    },
-    {
-      placeId: 2,
-      description: ``,
-      formattedSuggestion: {
-        mainText: `227 Đường Nguyễn Văn Cừ`,
-        secondaryText: `An Hòa, Ninh Kiều, Cần Thơ`,
-      }
-    },
-    {
-      placeId: 3,
-      description: ``,
-      formattedSuggestion: {
-        mainText: `227 Đường Nguyễn Văn Cừ`,
-        secondaryText: `Ngọc Lâm, Long Biên, Hà Nội`,
-      }
-    },
-    {
-      placeId: 4,
-      description: ``,
-      formattedSuggestion: {
-        mainText: `227 Nguyễn Văn Cừ nối dài`,
-        secondaryText: `An Khánh, Ninh Kiều, Cần Thơ`,
-      }
-    },
-  ]);
+  const [suggestions, setSuggestion] = useState([]);
   const [isFetching, setFetching] = useState(false);
   const handleSearch = () => {
   };
   const [address, setAddress] = useState(``);
   const handleTextChange = (address) => setAddress(address);
   const handleSelect = (address) => {
-    geocodeByAddress(address)
-      .then((geocode) => getLatLng(geocode[0]))
-      .then((location) => submitAddress(address, location))
-      .catch((error) => console.log(error));
+    // geocodeByAddress(address)
+    //   .then((geocode) => getLatLng(geocode[0]))
+    //   .then((location) => submitAddress(address, location))
+    //   .catch((error) => console.log(error));
+    addressToLocationV2(address)
+      .then(({items}) => {
+        submitAddress(address, items[0]?.position)
+      })
+      .catch((e) => {
+        console.log(e)
+        history.goBack()
+      })
   };
 
   const submitAddress = (address, location) => {
@@ -101,26 +78,48 @@ export default function AddressAdding() {
     }
   }, [dispatch, isError, isSuccess]);
 
+  // const centerComponent = (
+  //   <PlacesAutocomplete value={address}
+  //                       onChange={handleTextChange}
+  //                       onSelect={handleSelect}
+  //                       debounce={1000}
+  //   >
+  //     {({getInputProps, suggestions, loading}) => {
+  //       setFetching(loading);
+  //       if (suggestions.length !== 0)
+  //         setSuggestion(suggestions);
+  //       return (
+  //         <InputBase className={classes.input}
+  //                    placeholder="Nhập địa chỉ"
+  //                    autoFocus={true}
+  //                    fullWidth
+  //                    {...getInputProps()}/>
+  //       );
+  //     }}
+  //   </PlacesAutocomplete>
+  // );
+
+  useEffect(async () => {
+    try {
+      if (text?.length > 0 && text.length % 5 === 0) {
+        setFetching(true)
+        const data = await autoCompleteV2(String(text))
+        setSuggestion(data.items)
+      }
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setFetching(false)
+    }
+  }, [text])
+
   const centerComponent = (
-    <PlacesAutocomplete value={address}
-                        onChange={handleTextChange}
-                        onSelect={handleSelect}
-                        debounce={1000}
-    >
-      {({getInputProps, suggestions, loading}) => {
-        setFetching(loading);
-        if (suggestions.length !== 0)
-          setSuggestion(suggestions);
-        return (
-          <InputBase className={classes.input}
-                     placeholder="Nhập địa chỉ"
-                     autoFocus={true}
-                     fullWidth
-                     {...getInputProps()}/>
-        );
-      }}
-    </PlacesAutocomplete>
-  );
+    <InputBase
+      value={text}
+      onChange={e => setText(String(e.target.value))}
+      placeholder={"Nhập địa chỉ"}
+    />
+  )
 
   return (
     <Box mt={8} px={2}>
@@ -129,32 +128,40 @@ export default function AddressAdding() {
                         centerComponent={centerComponent}
                         isPending={isPending}
       />
-      <Box mb={1} display="flex" alignItems="flex-end" flexDirection="column">
-        <ButtonBase component={Link} to="/address/add/current-location">
-          <Grid container spacing={1}>
-            <Grid item>
-              <Typography variant="h4">
-                <Box fontSize={12}>Lấy vị trí hiện tại</Box>
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Box fontSize={18} color="primary.main" component={GpsFixed}/>
-            </Grid>
-          </Grid>
-        </ButtonBase>
-      </Box>
+      {/*<Box mb={1} display="flex" alignItems="flex-end" flexDirection="column">*/}
+      {/*  <ButtonBase component={Link} to="/address/add/current-location">*/}
+      {/*    <Grid container spacing={1}>*/}
+      {/*      <Grid item>*/}
+      {/*        <Typography variant="h4">*/}
+      {/*          <Box fontSize={12}>Lấy vị trí hiện tại</Box>*/}
+      {/*        </Typography>*/}
+      {/*      </Grid>*/}
+      {/*      <Grid item>*/}
+      {/*        <Box fontSize={18} color="primary.main" component={GpsFixed}/>*/}
+      {/*      </Grid>*/}
+      {/*    </Grid>*/}
+      {/*  </ButtonBase>*/}
+      {/*</Box>*/}
       <Box hidden={suggestions.length === 0}>
         <Box mb={2}>
           <Typography variant="h4">
             <Box fontSize={12} color="onSurface.mediumEmphasis">Địa chỉ gợi ý</Box>
           </Typography>
         </Box>
-        {suggestions.map(({placeId, description, formattedSuggestion: {mainText, secondaryText}}) => (
-          <Ribbon key={placeId} onClick={() => handleSelect(description)}>
-            <AddressItemLarge primaryText={mainText} secondaryText={secondaryText}/>
-            <Divider variant="fullWidth"/>
-          </Ribbon>
-        ))}
+        {/*{suggestions.map(({placeId, description, formattedSuggestion: {mainText, secondaryText}}) => (*/}
+        {/*  <Ribbon key={placeId} onClick={() => handleSelect(description)}>*/}
+        {/*    <AddressItemLarge primaryText={mainText} secondaryText={secondaryText}/>*/}
+        {/*    <Divider variant="fullWidth"/>*/}
+        {/*  </Ribbon>*/}
+        {/*))}*/}
+        {
+          suggestions.length !== 0 && suggestions.map(({address: {label, street}}, index) => (
+            <Ribbon key={index} onClick={() => handleSelect(label)}>
+              <AddressItemLarge primaryText={street} secondaryText={label}/>
+              <Divider variant="fullWidth"/>
+            </Ribbon>
+          ))
+        }
       </Box>
       <Box hidden={suggestions.length > 0}>
         <PlaceHolder icon={EditLocationOutlined} text="Nhập địa chỉ đi bạn ơi"/>

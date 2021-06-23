@@ -24,6 +24,7 @@ import VerifyEmail from "../features/user/verify-email-page/VerifyEmail";
 import FavoriteRestaurant from "../features/restaurant/favorite-page/FavoriteRestaurant";
 import OrderReview from "../features/order/review-page/OrderReview";
 import AnalyseLocation from "../features/position";
+import DriverLocation from "../features/driver/DriverLocation";
 
 
 export default function IndexComponent() {
@@ -43,6 +44,7 @@ export default function IndexComponent() {
       <Route exact path='/checkout/:id'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
       <Route exact path='/order/:id/review'><OrderReview/></Route>
+      <Route exact path='/order/:id/location'><DriverLocation/></Route>
       <Route exact path='/order/:id'><OrderStatus/></Route>
       <Route exact path='/address'><AddressManagement/></Route>
       <Route exact path='/address/add'><AddressAdding/></Route>

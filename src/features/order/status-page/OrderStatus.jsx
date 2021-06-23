@@ -9,7 +9,7 @@ import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import BottomButton from "../../common/BottomButton";
 import {useDispatch, useSelector} from "react-redux";
-import {clearOrderState, fetchOrderData, orderSelector, updateOrderStatus} from "../OrderSlice";
+import {clearOrderState, fetchOrderData, orderSelector, updateDriverLocation, updateOrderStatus} from "../OrderSlice";
 import {useHistory, useParams} from "react-router-dom";
 import {paymentConstant} from "../../../constants/paymentConstant";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
@@ -49,6 +49,10 @@ export default function OrderStatus() {
     channel.bind('order-status', function (data) {
       dispatch(updateOrderStatus(data));
     });
+    channel.bind("delivery-location", function (data) {
+      console.log(data, '<==delivery change')
+      dispatch(updateDriverLocation(data))
+    })
   }, []);
 
   useEffect(() => {
@@ -96,9 +100,11 @@ export default function OrderStatus() {
                       }}
           />
         </Box>
-        <Box pb={2}>
-          <RiderInfo/>
-        </Box>
+        {(status !== `DRAFT` && status !== `ASSIGNING_DRIVER`) && (
+          <Box pb={2}>
+            <RiderInfo link={`/order/${orderId}/location`}/>
+          </Box>
+        )}
         <Box pb={2}>
           <OrderDetails
             orderData={data}

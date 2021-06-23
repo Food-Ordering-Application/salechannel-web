@@ -8,13 +8,13 @@ const orderConstant = {
   ASSIGNING_DRIVER: {
     code: "ASSIGNING_DRIVER",
     name: "Đang tìm tài xế",
-    description: "Đang tìm tài xế cho đơn hàng của bạn",
+    description: "Đang tìm tài xế",
     step: 1,
   },
   ON_GOING: {
     code: "ON_GOING",
     name: "Đang lấy đơn",
-    description: "Tài xế đang lấy đơn hàng của bạn",
+    description: "Đang chuẩn bị đơn hàng",
     step: 2,
   },
   PICKED_UP: {

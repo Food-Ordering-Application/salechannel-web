@@ -15,6 +15,7 @@ export function getLocation(onSuccess, onError = () => {
     }
   });
 }
+
 export function getCurrentLocation(options) {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -41,19 +42,19 @@ export async function getAddressV2(lng, lat) {
     if (items[0]) {
       const {address} = items[0];
       const result = [];
-      if(address.houseNumber){
+      if (address.houseNumber) {
         result.push(address.houseNumber);
       }
-      if(address.street){
+      if (address.street) {
         result.push(address.street);
       }
-      if(address.district){
+      if (address.district) {
         result.push(address.district);
       }
-      if(address.city){
+      if (address.city) {
         result.push(address.city);
       }
-      if(address.county){
+      if (address.county) {
         result.push(address.county);
       }
       return result.join(', ');
@@ -61,6 +62,24 @@ export async function getAddressV2(lng, lat) {
     return "Không tìm thấy địa chỉ của bạn";
   } catch (error) {
     throw new Error("Không tìm thấy địa chỉ của bạn");
+  }
+}
+
+export async function autoCompleteV2(text) {
+  try {
+    const response = await axios.get(`https://autocomplete.search.hereapi.com/v1/autocomplete?q=${text}&apiKey=${process.env.REACT_APP_HERE_MAP_KEY}&lang=vi`)
+    return response.data
+  } catch (error) {
+    throw new Error("Không tìm thấy địa chỉ của bạn");
+  }
+}
+
+export async function addressToLocationV2(text) {
+  try {
+    const response = await axios.get(`https://autocomplete.search.hereapi.com/v1/geocode?q=${text}&apiKey=${process.env.REACT_APP_HERE_MAP_KEY}&lang=vi`)
+    return response.data
+  } catch (error) {
+    console.log(error)
   }
 }
 

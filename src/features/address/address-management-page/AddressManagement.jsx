@@ -37,7 +37,7 @@ export default function AddressManagement() {
   return (
     <Box my={6} mx={2}>
       <TopNavigationBar label="Địa chỉ giao hàng" isPending={isPending}/>
-      <Box pt={2}>
+      <Box pt={2} pb={6}>
         {address.map((data) => (
           <Box mb={2} key={data.id}>
             <AddressItem addressText={data.address}
@@ -48,7 +48,7 @@ export default function AddressManagement() {
       <Box hidden={address.length > 0}>
         <PlaceHolder icon={LocationIcon} text="Bạn chưa lưu địa chỉ nào"/>
       </Box>
-      <BottomButton variant="contained" component={Link} to="/address/add/current-location">
+      <BottomButton variant="contained" component={Link} to="/address/add">
         Thêm địa chỉ mới
       </BottomButton>
     </Box>

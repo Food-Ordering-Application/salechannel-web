@@ -53,7 +53,7 @@ export default function AddressSelector({address}) {
     <AppBar className={classes.appBar}>
       <Toolbar className={classes.toolBar}>
         <span className={classes.logo1}>Smart</span>
-        <span className={classes.logo2}>FOOD</span>
+        <span className={classes.logo2}>Sale</span>
         <span className={classes.address}>{address}</span>
         <ChevronRight className={classes.indicator}/>
       </Toolbar>

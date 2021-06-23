@@ -2,8 +2,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar, Box, Grid, IconButton, Paper, Typography} from "@material-ui/core";
 import LocationIcon from "../../../../asserts/icons/Location";
-import PhoneIcon from "../../../../asserts/icons/Phone";
-import ChatIcon from "../../../../asserts/icons/Chat";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,49 +10,39 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.effect.dp10.boxShadow,
     padding: theme.spacing(1, 1, 1, 2),
   },
-  name:{
+  name: {
     fontSize: theme.spacing(1.5),
     color: theme.palette.surface.dark,
     textTransform: `capitalize`,
   },
-  plate:{
+  plate: {
     fontSize: theme.spacing(1.5),
     color: theme.palette.surface.dark,
     textTransform: `uppercase`,
   }
 }));
 
-export default function RiderInfo() {
+export default function RiderInfo({link}) {
   const classes = useStyles();
 
   return (
     <Paper className={classes.root}>
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
-          <Avatar src="https://i.pinimg.com/564x/e6/57/55/e65755e73d8085e30aedfa21fde07f1b.jpg"/>
+          <Avatar src="https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"/>
         </Grid>
         <Grid item xs>
           <Box pl={1}>
             <Typography variant="h6">
-              <Box className={classes.name}>nguyễn văn tài xế</Box>
+              <Box className={classes.name}>nguyễn văn A</Box>
             </Typography>
-            <Typography variant="h4">
-              <Box className={classes.plate}>60ld-99999</Box>
-            </Typography>
+            {/*<Typography variant="h4">*/}
+            {/*  <Box className={classes.plate}>60ld-99999</Box>*/}
+            {/*</Typography>*/}
           </Box>
         </Grid>
         <Grid item>
-          <IconButton>
-            <ChatIcon color="primary"/>
-          </IconButton>
-        </Grid>
-        <Grid item>
-          <IconButton>
-            <PhoneIcon color="primary"/>
-          </IconButton>
-        </Grid>
-        <Grid item>
-          <IconButton>
+          <IconButton component={Link} to={link}>
             <LocationIcon color="primary"/>
           </IconButton>
         </Grid>

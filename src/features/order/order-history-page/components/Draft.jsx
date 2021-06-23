@@ -17,7 +17,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Draft({isActive, fetchOrders, forceRefresh, linkPattern = `/orders`}) {
+export default function Draft({
+                                isActive,
+                                fetchOrders,
+                                forceRefresh,
+                                linkPattern = `/orders`,
+                                draftName = `Đơn nháp`,
+                                draftIcon
+                              }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -76,6 +83,8 @@ export default function Draft({isActive, fetchOrders, forceRefresh, linkPattern 
             date={updatedAt}
             cost={subTotal}
             onClick={() => onItemClick(id, restaurantId)}
+            draftText={draftName}
+            draftIcon={draftIcon}
           />
         ))}
       </Box>

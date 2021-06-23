@@ -22,7 +22,14 @@ const autoComplete = async (longitude, latitude) => {
   throw new Error("Không tìm thấy địa chỉ của bạn");
 }
 
+const autoCompleteV1 = async (text) => {
+  const response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${process.env.REACT_APP_MAP_BOX_KEY}&country=VN&language=vi`);
+  return response
+  // throw new Error("Không tìm thấy địa chỉ của bạn");
+}
+
 export const MapboxAPI = {
   getMapInstance,
   autoComplete,
+  autoCompleteV1
 }

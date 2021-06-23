@@ -1,15 +1,19 @@
 import React, {useEffect, useState} from "react";
-import {getAddressV2, getLocation} from "../../../helpers/location";
 import {makeStyles} from "@material-ui/core/styles";
-import TopNavigationBar from "../../common/TopNavigationBar";
-import {Done} from "@material-ui/icons";
-import {useHistory} from "react-router-dom";
+
+// import mapboxgl from '!mapbox-gl';
 import {useDispatch, useSelector} from "react-redux";
-import {addAddress, addressSelector, clearAddressState} from "../AddressSlice";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {useHistory} from "react-router-dom";
 import {userSelector} from "../../user/UserSlice";
+import {addAddress, addressSelector, clearAddressState} from "../AddressSlice";
+import {getAddressV2, getLocation} from "../../../helpers/location";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
+import TopNavigationBar from "../../../components/TopNavigationBar";
 import GoogleMapReact from "google-map-react";
 import MarkerComponent from "./components/MarkerComponent";
+import {Done} from "@material-ui/icons"; // eslint-disable-line import/no-webpack-loader-syntax
+
+// mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_KEY;
 
 const GoogleMapConfig = {
   // key: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -43,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     zIndex: 1,
+  },
+  mapContainer: {
+    height: `100vh`,
+    width: `100%`,
   }
 }));
 
@@ -110,4 +118,40 @@ export default function LocationAdding() {
       </div>
     </>
   );
+
+  // const mapContainer = useRef(null);
+  // const map = useRef(null);
+  // const [lng, setLng] = useState(-70.9);
+  // const [lat, setLat] = useState(42.35);
+  // const [zoom, setZoom] = useState(9);
+  //
+  // useEffect(() => {
+  //   if (map.current) return; // initialize map only once
+  //   map.current = new mapboxgl.Map({
+  //     container: mapContainer.current,
+  //     style: 'mapbox://styles/mapbox/streets-v11',
+  //     center: [lng, lat],
+  //     zoom: zoom
+  //   });
+  // });
+  // useEffect(() => {
+  //     getLocation(({coords: {longitude: lng, latitude: lat}}) => setLocation({lng, lat}));
+  //   }, [])
+  //
+  //
+  // useEffect(() => {
+  //   if (!map.current) return; // wait for map to initialize
+  //   map.current.on('move', () => {
+  //     setLng(map.current.getCenter().lng.toFixed(4));
+  //     setLat(map.current.getCenter().lat.toFixed(4));
+  //     setZoom(map.current.getZoom().toFixed(2));
+  //   });
+  // });
+  //
+  // return (
+  //   <div>
+  //     <div ref={mapContainer} className={classes.mapContainer}/>
+  //   </div>
+  // );
 }
+
