@@ -90,14 +90,14 @@ export default function RestaurantItemLarge({
               <Star className={classes.star}/>
               <Typography className={classes.info}>{rating}</Typography>
             </div>
-            <div className={`${classes.horizontalContent} ${classes.timeContent}`}>
-              <AvTimer className={classes.timer}/>
-              <Typography className={classes.info}>{`${timeToPrepare} phút`}</Typography>
-            </div>
-            <div className={`${classes.horizontalContent} ${classes.timeContent}`}>
-              <CreditCard className={classes.timer}/>
-              <Typography className={classes.info}>{currencyFormatter(averagePrice)}</Typography>
-            </div>
+            {/*<div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
+            {/*  <AvTimer className={classes.timer}/>*/}
+            {/*  <Typography className={classes.info}>{`${timeToPrepare} phút`}</Typography>*/}
+            {/*</div>*/}
+            {/*<div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
+            {/*  <CreditCard className={classes.timer}/>*/}
+            {/*  <Typography className={classes.info}>{currencyFormatter(averagePrice)}</Typography>*/}
+            {/*</div>*/}
           </div>
         </CardContent>
       </div>

@@ -64,15 +64,15 @@ export default function BottomNavigationBar({initSate}) {
                                       component={Link}
                                       to="/search"
         />
-        <StyledBottomNavigationAction label="Giỏ hàng"
-                                      icon={
-                                        <StyledBadge badgeContent={1} color='primary'>
-                                          <ShoppingBagIcon/>
-                                        </StyledBadge>
-                                      }
-                                      component={Link}
-                                      to="/checkout"
-        />
+        {/*<StyledBottomNavigationAction label="Giỏ hàng"*/}
+        {/*                              icon={*/}
+        {/*                                <StyledBadge badgeContent={1} color='primary'>*/}
+        {/*                                  <ShoppingBagIcon/>*/}
+        {/*                                </StyledBadge>*/}
+        {/*                              }*/}
+        {/*                              component={Link}*/}
+        {/*                              to="/checkout"*/}
+        {/*/>*/}
         <StyledBottomNavigationAction label="Tài khoản"
                                       icon={<UserIcon/>}
                                       component={Link}

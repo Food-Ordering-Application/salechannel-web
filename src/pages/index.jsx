@@ -25,6 +25,7 @@ import FavoriteRestaurant from "../features/restaurant/favorite-page/FavoriteRes
 import OrderReview from "../features/order/review-page/OrderReview";
 import AnalyseLocation from "../features/position";
 import DriverLocation from "../features/driver/DriverLocation";
+import DriverReview from "../features/driver/DriverReview";
 
 
 export default function IndexComponent() {
@@ -55,6 +56,7 @@ export default function IndexComponent() {
       <Route exact path='/orders/history/:id'><OrderHistoryDetails/></Route>
       <Route exact path='/add-email/verify/:token'><VerifyEmail/></Route>
       <Route exact path='/location/analyse'><AnalyseLocation/></Route>
+      <Route exact path='/driver/:id/review'><DriverReview/></Route>
     </Switch>
   );
 }

@@ -103,6 +103,8 @@ export default function DriverLocation() {
         center: customerGeom.coordinates,
         speed: 0.5
       });
+
+
     });
   }, [])
 
