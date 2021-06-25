@@ -87,7 +87,7 @@ function degreeToRadian(deg) {
   return deg * (Math.PI / 180);
 }
 
-function calculateDistance(point1, point2) {
+export function calculateDistance(point1, point2) {
   const R = 6371;
   const dLat = degreeToRadian(point2.latitude - point1.latitude);
   const dLon = degreeToRadian(point2.longitude - point1.longitude);

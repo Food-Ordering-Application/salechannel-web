@@ -22,6 +22,8 @@ import Ribbon from "../../common/Ribbon";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../../common/Spinner";
 import {metadataSelector} from "../../home/MetadataSlice";
+import {locationSelector} from "../../home/LocationSlice";
+import RestaurantFilter from "./components/Filter";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,6 +49,7 @@ export default function Search() {
   const classes = useStyles();
   const {data: restaurants, isFetching, isError, errorMessage, categoryIds} = useSelector(restaurantsListSelector);
   const {isSuccess: mReady, data: metadata} = useSelector(metadataSelector)
+  const {isSuccess: lReady, location: userLocation} = useSelector(locationSelector)
   const dispatch = useDispatch();
   const history = useHistory();
   const [area, setArea] = useState("TPHCM");
@@ -102,9 +105,9 @@ export default function Search() {
   useEffect(() => {
     if (categoryIds?.length > 0)
       dispatch(filterRestaurant({categoryIds}))
-  }, [categoryIds])
+  }, [])
 
-  if (!mReady) {
+  if (!mReady || !lReady) {
     history.replace('/')
     return null
   }
@@ -114,6 +117,7 @@ export default function Search() {
                placeholder="Tìm kiếm cửa hàng, món ăn"
                onChange={handleTextChange}
                fullWidth
+               autoFocus
     />
   );
 
@@ -174,7 +178,7 @@ export default function Search() {
                         rightAction={handleSearchButtonClick}
                         leftAction={handleBack}
                         centerComponent={centerComponent}
-                        bottomComponent={bottomComponent}
+                        bottomComponent={<RestaurantFilter onSubmit={() => search(name, area)}/>}
       />
       <InfiniteScroll
         next={() => dispatch(filterRestaurant({append: true, pageIndex: 1, area: area, name: ""}))}
@@ -183,12 +187,15 @@ export default function Search() {
         dataLength={restaurants.length}
         className={classes.container}
       >
-        {restaurants.map(({id, name, address, coverImageUrl, rating}, index) => (
-          <Box key={index} mb={2}>
+        {restaurants.map(({id, name, address, coverImageUrl, rating, merchantIdInPayPal, position}) => (
+          <Box key={id} mb={2}>
             <RestaurantItemLarge name={`${name} - ${address}`}
                                  image={coverImageUrl}
                                  onClick={() => handleItemClick(id)}
                                  rating={rating}
+                                 paypalId={merchantIdInPayPal}
+                                 location={position}
+                                 customerLocation={userLocation}
             />
           </Box>
         ))}

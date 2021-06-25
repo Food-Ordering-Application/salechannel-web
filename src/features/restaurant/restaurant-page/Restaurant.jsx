@@ -178,12 +178,12 @@ export default function Restaurant() {
                                   distance={2.5}
             />
           </div>
-          <div className={classes.label}>
-            <Label uppercase>Recommended</Label>
-          </div>
-          <div className={classes.recommendMenu}>
-            <RecommendedMenuHorizontal/>
-          </div>
+          {/*<div className={classes.label}>*/}
+          {/*  <Label uppercase>Recommended</Label>*/}
+          {/*</div>*/}
+          {/*<div className={classes.recommendMenu}>*/}
+          {/*  <RecommendedMenuHorizontal/>*/}
+          {/*</div>*/}
           <div className={classes.menu}>
             <MenuVertical productList={menu.menu}
                           onAddToCart={handleAddToCart}

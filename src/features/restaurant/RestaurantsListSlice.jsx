@@ -25,7 +25,7 @@ export const restaurantsListSlice = createSlice({
       longitude: null,
     },
     data: [],
-    sortId: [],
+    sortId: null,
     filterIds: [],
     areaIds: [],
     categoryIds: [],
@@ -38,7 +38,19 @@ export const restaurantsListSlice = createSlice({
       return state;
     },
     setCategoryIds: (state, {payload}) => {
-      state.categoryIds = payload
+      state.categoryIds = [...payload]
+    },
+    addFilter: (state, {payload: {id}}) => {
+      state.filterIds = [...state.filterIds, id]
+    },
+    changeSort: (state, {payload: {id}}) => {
+      state.sortId = id
+    },
+    clearAllFilter: (state)=>{
+      state.categoryIds = []
+      state.filterIds = []
+      state.sortId = null
+      return state
     }
   },
   extraReducers: {
@@ -62,5 +74,5 @@ export const restaurantsListSlice = createSlice({
   },
 });
 
-export const {clearRestaurantsListState, setCategoryIds} = restaurantsListSlice.actions;
+export const {clearRestaurantsListState, setCategoryIds, addFilter, changeSort, clearAllFilter} = restaurantsListSlice.actions;
 export const restaurantsListSelector = (state) => state.restaurants;

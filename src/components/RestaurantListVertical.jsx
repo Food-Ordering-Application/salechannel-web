@@ -5,6 +5,7 @@ import RestaurantItemLarge from "./RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {metadataSelector} from "../features/home/MetadataSlice";
+import {locationSelector} from "../features/home/LocationSlice";
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,9 +18,9 @@ const useStyles = makeStyles(theme => ({
 export default function RestaurantListVertical() {
   const classes = useStyles()
   const history = useHistory()
-  const {isSuccess, data} = useSelector(metadataSelector)
-
-  if (!isSuccess) return null
+  const {isSuccess: mOk, data} = useSelector(metadataSelector)
+  const {isSuccess: lOk, location: userLocation} = useSelector(locationSelector)
+  if (!mOk || !lOk) return null
 
   const {restaurants} = data
 
@@ -30,6 +31,9 @@ export default function RestaurantListVertical() {
             rating={data?.rating}
             name={`${data?.name} - ${data?.address}`}
             image={data?.coverImageUrl}
+            location={data?.position}
+            customerLocation={userLocation}
+            paypalId={data?.merchantIdInPayPal}
             onClick={() => history.push(`/store/${data?.id}`)}/>
         </div>
       )

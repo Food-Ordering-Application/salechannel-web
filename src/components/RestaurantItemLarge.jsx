@@ -1,7 +1,8 @@
 import React from "react";
 import {Card, CardContent, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
-import {AvTimer, CreditCard, Star} from "@material-ui/icons";
-import {currencyFormatter} from "../untils/formatter";
+import {Star} from "@material-ui/icons";
+import PayPalIcon from "../asserts/icons/PayPalIcon";
+import {calculateDistance} from "../helpers/location";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,14 +26,14 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.font.family,
     letterSpacing: theme.font.letterSpacing,
     fontWeight: 600,
-    fontSize: '11px',
+    fontSize: '12px',
     lineHeight: '16px',
   },
   info: {
     color: theme.palette.onSurface.disabled,
     fontFamily: theme.font.family,
     letterSpacing: theme.font.letterSpacing,
-    fontSize: '9px',
+    fontSize: '11px',
     lineHeight: '16px',
   },
   divider: {
@@ -48,17 +49,23 @@ const useStyles = makeStyles((theme) => ({
   },
   star: {
     color: theme.palette.primary.main,
-    height: '10px',
-    width: '10px',
+    height: '12px',
+    width: '12px',
   },
   timeContent: {
     flexGrow: 2,
     justifyContent: 'flex-end',
   },
   timer: {
-    color: theme.palette.onSurface.mediumEmphasis,
-    height: '10px',
-    width: '10px',
+    // color: theme.palette.onSurface.mediumEmphasis,
+    color: theme.palette.primary.main,
+    height: '15px',
+    width: '15px',
+  },
+  paypal: {
+    color: theme.palette.primary.main,
+    height: '15px',
+    width: '15px',
   }
 }));
 
@@ -69,7 +76,10 @@ export default function RestaurantItemLarge({
                                               rating = 0,
                                               timeToPrepare = 0,
                                               averagePrice = 0,
-                                              onClick
+                                              location,
+                                              customerLocation,
+                                              onClick,
+                                              paypalId,
                                             }) {
   const classes = useStyles();
 
@@ -88,16 +98,21 @@ export default function RestaurantItemLarge({
           <div className={classes.horizontalContent}>
             <div className={`${classes.horizontalContent} ${classes.ratingContent}`}>
               <Star className={classes.star}/>
-              <Typography className={classes.info}>{rating}</Typography>
+              <Typography
+                className={classes.info}>{`${rating}  ●  ${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</Typography>
             </div>
-            {/*<div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
-            {/*  <AvTimer className={classes.timer}/>*/}
-            {/*  <Typography className={classes.info}>{`${timeToPrepare} phút`}</Typography>*/}
-            {/*</div>*/}
-            {/*<div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
-            {/*  <CreditCard className={classes.timer}/>*/}
-            {/*  <Typography className={classes.info}>{currencyFormatter(averagePrice)}</Typography>*/}
-            {/*</div>*/}
+            {/*{location && customerLocation && (*/}
+            {/*  <div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
+            {/*    <LocationIcon className={classes.paypal}/>*/}
+            {/*    <Typography*/}
+            {/*      className={classes.info}>{`${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</Typography>*/}
+            {/*  </div>*/}
+            {/*)}*/}
+            {paypalId && (
+              <div className={`${classes.horizontalContent} ${classes.timeContent}`}>
+                <PayPalIcon className={classes.timer}/>
+              </div>
+            )}
           </div>
         </CardContent>
       </div>

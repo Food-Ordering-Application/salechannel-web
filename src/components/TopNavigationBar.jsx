@@ -1,7 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {ChevronLeft, Favorite, FavoriteBorder} from "@material-ui/icons";
-import SearchIcon from "../asserts/icons/Search";
 import {IconButton} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 
@@ -22,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
     favoriteIcon: ({isFavorite}) => ({
       color: isFavorite ? `red` : `inherit`,
-      paddingRight: 0,
+      padding: theme.spacing(2),
     }),
   })
 );
@@ -41,9 +40,6 @@ export default function TopNavigationBar({isFavorite, onFavoriteClick, onBack}) 
           {isFavorite ? <Favorite/> : <FavoriteBorder/>}
         </IconButton>
       </div>
-      <IconButton className={classes.button}>
-        <SearchIcon/>
-      </IconButton>
     </div>
   );
 }

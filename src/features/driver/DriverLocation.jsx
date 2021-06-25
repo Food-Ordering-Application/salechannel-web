@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect} from "react";
 import {useHistory, useParams} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchOrderData, orderSelector, updateOrderStatus} from "../order/OrderSlice";
-import ReactMapboxGl, {Layer, Feature} from 'react-mapbox-gl';
+import {orderSelector} from "../order/OrderSlice";
+import ReactMapboxGl from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {DriverApi} from "../../api/RiderApi";
@@ -108,48 +108,14 @@ export default function DriverLocation() {
     });
   }, [])
 
-  // const {isSuccess, data: {delivery}} = useSelector(orderSelector)
-  //
-  // const [driver, setDriver] = useState({
-  //   "latitude": 10.754902742289849,
-  //   "longitude": 106.67038252476121
-  // })
-  //
-  //
-  // useEffect(async () => {
-  //   if (!isSuccess) {
-  //     dispatch(fetchOrderData({orderId}))
-  //   }
-  // }, [isSuccess])
-  //
-  //
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     const {customerGeom, restaurantGeom, driverId} = delivery;
-  //     console.log(customerGeom, restaurantGeom)
-  //     DriverApi.getDriverLocation(driverId).then((data) => console.log(data))
-  //
-  //   }
-  // }, [isSuccess])
   if (!isSuccess) {
     history.replace(`order/${orderId}`)
     return null
   }
 
   return (
-    // <Map
-    //   style="mapbox://styles/mapbox/streets-v8"
-    //   containerStyle={{
-    //     height: '100vh',
-    //     width: '100%'
-    //   }}
-    // >
-    //   <Layer type="symbol" id="marker" layout={{'icon-image': 'rocket-15'}}>
-    //     <Feature coordinates={[39.657325, -4.024902]}/>
-    //   </Layer>
-    // </Map>
     <>
-      <TopNavigationBar label={`Vị trí tài xế`} homeButton={false} />
+      <TopNavigationBar label={`Vị trí tài xế`} homeButton={false}/>
       <div id="map" className={classes.mapContainer}/>
     </>
   )

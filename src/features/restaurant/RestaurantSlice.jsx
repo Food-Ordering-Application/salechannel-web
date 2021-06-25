@@ -26,6 +26,20 @@ export const setFavoriteRestaurant = createAsyncThunk(
 );
 
 
+//TODO: fetch top items
+
+// export const fetchTopOrderItems = createAsyncThunk(
+//   `restaurant/fetchTopOrderItems`,
+//   async ({restaurantId}, thunkAPI) => {
+//     try {
+//       return await RestaurantApi.setFavorite(restaurantId, isFavorite);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+// )
+
+
 export const restaurantSlice = createSlice({
   name: `restaurant`,
   initialState: {
