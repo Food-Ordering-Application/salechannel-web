@@ -26,6 +26,7 @@ import OrderReview from "../features/order/review-page/OrderReview";
 import AnalyseLocation from "../features/position";
 import DriverLocation from "../features/driver/DriverLocation";
 import DriverReview from "../features/driver/DriverReview";
+import DefaultAddress from "../features/address/default-address-page/DefaultAddress";
 
 
 export default function IndexComponent() {
@@ -57,6 +58,7 @@ export default function IndexComponent() {
       <Route exact path='/add-email/verify/:token'><VerifyEmail/></Route>
       <Route exact path='/location/analyse'><AnalyseLocation/></Route>
       <Route exact path='/driver/:id/review'><DriverReview/></Route>
+      <Route exact path='/address/default'><DefaultAddress/></Route>
     </Switch>
   );
 }

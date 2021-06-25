@@ -12,18 +12,20 @@ export default function AnalyseLocation() {
   const dispatch = useDispatch()
 
   //Global state
-  const {isSuccess: lSuccess} = useSelector(locationSelector)
+  const {isSuccess: lSuccess, location: currentLocation} = useSelector(locationSelector)
   const {isSuccess: mSuccess} = useSelector(metadataSelector)
 
   //Side effect
-  useEffect(async () => {
-    dispatch(analyseCurrentLocation({}))
-    dispatch(fetchMetadata({latitude: 10.759092606200658, longitude: 106.6829820685133}))
-  }, [])
-
   useEffect(() => {
-    if (lSuccess && mSuccess) {
-      history.replace(location.state?.ref || '/')
+    if (!lSuccess) {
+      dispatch(analyseCurrentLocation({}))
+    } else {
+      if (!mSuccess) {
+        dispatch(fetchMetadata({latitude: 10.759092606200658, longitude: 106.6829820685133}))
+        // dispatch(fetchMetadata({latitude: currentLocation.latitude, longitude: currentLocation.longitude}))
+      } else {
+        history.replace(location.state?.ref || '/')
+      }
     }
   }, [lSuccess, mSuccess])
 

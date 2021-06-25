@@ -46,11 +46,11 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
-export default function AddressSelector({address}) {
+export default function AddressSelector({address, onClick}) {
   const classes = useStyles();
 
   return (
-    <AppBar className={classes.appBar}>
+    <AppBar className={classes.appBar} onClick={onClick}>
       <Toolbar className={classes.toolBar}>
         <span className={classes.logo1}>Smart</span>
         <span className={classes.logo2}>Sale</span>

@@ -34,6 +34,11 @@ export const locationSlice = createSlice({
       state.isPending = false;
       state.isError = false;
       state.isSuccess = false;
+    },
+    setDefaultLocation: (state, {payload}) => {
+      state.location.longitude = payload.location.longitude || state.location.longitude;
+      state.location.latitude = payload.location.latitude || state.location.latitude;
+      state.address = payload.address || state.address;
     }
   },
   extraReducers: {
@@ -55,5 +60,5 @@ export const locationSlice = createSlice({
   }
 })
 
-export const {clearLocationState} = locationSlice.actions;
+export const {clearLocationState, setDefaultLocation} = locationSlice.actions;
 export const locationSelector = (state) => state.location;

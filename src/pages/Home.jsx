@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <>
-      <AddressSelector address={address}/>
+      <AddressSelector address={address} onClick={() => history.push('/address/default')}/>
       <div className={classes.content}>
         {/*<div className={classes.favoriteRestaurants}>*/}
         {/*  <FavoriteListHorizontal/>*/}
