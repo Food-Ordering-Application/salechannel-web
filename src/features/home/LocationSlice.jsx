@@ -16,19 +16,21 @@ export const analyseCurrentLocation = createAsyncThunk(
   }
 )
 
+const defaultState = {
+  isPending: false,
+  isSuccess: false,
+  isError: false,
+  errorMessage: ``,
+  location: {
+    longitude: null,
+    latitude: null,
+  },
+  address: `Nhập địa chỉ giao hàng`,
+}
+
 export const locationSlice = createSlice({
   name: `location`,
-  initialState: {
-    isPending: false,
-    isSuccess: false,
-    isError: false,
-    errorMessage: ``,
-    location: {
-      longitude: null,
-      latitude: null,
-    },
-    address: ``,
-  },
+  initialState: defaultState,
   reducers: {
     clearLocationState: (state) => {
       state.isPending = false;
@@ -39,6 +41,9 @@ export const locationSlice = createSlice({
       state.location.longitude = payload.location.longitude || state.location.longitude;
       state.location.latitude = payload.location.latitude || state.location.latitude;
       state.address = payload.address || state.address;
+    },
+    clearDefaultLocationData: (state) => {
+      return defaultState
     }
   },
   extraReducers: {
@@ -60,5 +65,5 @@ export const locationSlice = createSlice({
   }
 })
 
-export const {clearLocationState, setDefaultLocation} = locationSlice.actions;
+export const {clearLocationState, setDefaultLocation, clearDefaultLocationData} = locationSlice.actions;
 export const locationSelector = (state) => state.location;

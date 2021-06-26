@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory, useParams, useLocation} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import TopNavigationBar from "../../../components/TopNavigationBar";
 import RestaurantInfoSumary from "../../../components/RestaurantInfoSumary";
-import Label from "../../../components/Label";
-import RecommendedMenuHorizontal from "../../../components/RecommendedMenuHorizontal";
 import MenuVertical from "../../../components/MenuVertical";
 import ScrollToShowBackground from "../../../components/ScrollToShowBackground";
 import CategoryMenu from "../../../components/CategoryMenu";
@@ -151,6 +149,7 @@ export default function Restaurant() {
   if (restaurant.isSuccess && menu.isSuccess) {
     const categoryMenu = menu.menu.map(category => ({name: category.name, count: category.menuItems.length}));
     const restaurantData = restaurant.restaurant;
+    const distance = null;
     return (
       <>
         <ScrollToShowBackground>
@@ -175,7 +174,7 @@ export default function Restaurant() {
             <RestaurantInfoSumary id={restaurantData["id"]}
                                   name={`${restaurantData.name} - ${restaurantData.address}`}
                                   address={restaurantData.address}
-                                  distance={2.5}
+                                  distance={distance}
             />
           </div>
           {/*<div className={classes.label}>*/}

@@ -57,7 +57,7 @@ export default function CartSummaryBottom({cart, toCheckout, isLoading}) {
       <Box id="CartInfo">
         <Typography variant="h3">
           <Box className={classes.text}>
-            {`${quantity} ${quantity > 1 ? "Items" : "Item"}｜${currencyFormatter(subTotal)}`}
+            {`${quantity} Món｜${currencyFormatter(subTotal)}`}
           </Box>
         </Typography>
       </Box>
@@ -72,7 +72,7 @@ export default function CartSummaryBottom({cart, toCheckout, isLoading}) {
             )
             : (
               <Typography variant="h3">
-                <Box className={classes.text}>View Cart</Box>
+                <Box className={classes.text}>Xem</Box>
               </Typography>
             )
         }

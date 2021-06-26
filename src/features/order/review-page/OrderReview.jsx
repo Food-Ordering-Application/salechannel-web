@@ -11,6 +11,7 @@ import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../../r
 import * as PropTypes from "prop-types";
 import {Star} from "@material-ui/icons";
 import BottomButton from "../../common/BottomButton";
+import {metadataSelector} from "../../home/MetadataSlice";
 
 const reviewConstant = [
   {
@@ -61,7 +62,10 @@ export default function OrderReview() {
   const [label, setLabel] = useState(`đơn hàng`)
   const [rating, setRating] = useState(4)
   const [review, setReview] = useState(``)
-  const [suggestion, setSuggestion] = useState(reviewConstant);
+  const [suggestion, setSuggestion] = useState([]);
+
+  const {isSuccess: mOK, data: mData} = useSelector(metadataSelector)
+
   //Global state
   const {
     isRequesting: oFetching,
@@ -77,7 +81,6 @@ export default function OrderReview() {
     errorMessage: rErrorMessage,
     restaurant
   } = useSelector(restaurantSelector)
-
   //Hook
   const dispatch = useDispatch()
   const history = useHistory()
@@ -96,6 +99,15 @@ export default function OrderReview() {
       dispatch(fetchRestaurant({id: order?.restaurantId}))
     }
   }, [oSuccess])
+
+  useEffect(() => {
+    if (!mOK) {
+      history.replace('/')
+    } else {
+      const {feedbackReason} = mData
+      setSuggestion(feedbackReason.filter((feedback) => feedback.rate === rating && feedback.type === 1))
+    }
+  }, [mOK, rating])
 
   useEffect(() => {
     if (oError) {
@@ -128,6 +140,8 @@ export default function OrderReview() {
     setReview(`${event.target.value}`)
   }
 
+  // return null
+
   return (
     <>
       <TopNavigationBar label={`Đánh giá ${label}`}/>
@@ -156,9 +170,9 @@ export default function OrderReview() {
             </Grid>
             <Grid item>
               <Box display={`flex`} flexDirection={`row`} flexWrap={`wrap`} justifyContent={`center`}>
-                {suggestion.map((data, index) => (
-                  <Box key={index} mx={0.5} my={1}>
-                    <Chip label={data.title}/>
+                {suggestion.map(({id, content}) => (
+                  <Box key={id} mx={0.5} my={1}>
+                    <Chip label={content}/>
                   </Box>
                 ))}
               </Box>

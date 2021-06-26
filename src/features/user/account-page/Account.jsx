@@ -10,15 +10,22 @@ import {removeUser, userSelector} from "../UserSlice";
 import UserAuthButtonGroup from "../login-page/components/UserAuthButtonGroup";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {clearOrder} from "../../order/OrderSlice";
+import {clearDefaultLocationData} from "../../home/LocationSlice";
+import {useHistory} from "react-router-dom";
+import {clearMetadata} from "../../home/MetadataSlice";
 
 
 export default function Account() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {isAuthenticated, phoneNumber, name, email, avatar} = useSelector(userSelector);
 
   const onLogout = () => {
     dispatch(removeUser());
     dispatch(clearOrder());
+    dispatch(clearDefaultLocationData());
+    dispatch(clearMetadata());
+    history.replace('/');
   }
 
   return (

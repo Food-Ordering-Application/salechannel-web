@@ -12,7 +12,7 @@ export default function AnalyseLocation() {
   const dispatch = useDispatch()
 
   //Global state
-  const {isSuccess: lSuccess, location: currentLocation} = useSelector(locationSelector)
+  const {isSuccess: lSuccess, location: currentLocation, address} = useSelector(locationSelector)
   const {isSuccess: mSuccess} = useSelector(metadataSelector)
 
   //Side effect
@@ -33,7 +33,14 @@ export default function AnalyseLocation() {
     <>
       <Box py={10}/>
       <div>
-        <Box mx={`auto`}>Analysing your location</Box>
+        {lSuccess ? (
+          <Box>
+            <Box>Giao hàng đến</Box>
+            <Box>{address}</Box>
+          </Box>
+        ) : (
+          <Box mx={`auto`}>Analysing your location</Box>
+        )}
       </div>
     </>
   )

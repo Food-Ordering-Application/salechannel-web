@@ -6,6 +6,7 @@ import {showError} from "../../common/Snackbar/SnackbarSlice";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {clearFavRestaurantState, favoriteRestaurantSelector, fetchFavoriteRestaurant} from "../RestaurantFavoriteSlice";
+import {locationSelector} from "../../home/LocationSlice";
 
 export default function FavoriteRestaurant() {
   const dispatch = useDispatch()
@@ -17,6 +18,8 @@ export default function FavoriteRestaurant() {
     errorMessage,
     data: restaurants
   } = useSelector(favoriteRestaurantSelector)
+
+  const {isSuccess: lOK, location: userLocation} = useSelector(locationSelector)
 
   const onItemClick = (restaurantID) => {
     history.push(`/store/${restaurantID}`)
@@ -33,15 +36,32 @@ export default function FavoriteRestaurant() {
     }
   }, [fetchingError])
 
+  if (!lOK) {
+    history.replace('/')
+    return null
+  }
+
   return (
     <Box mt={8} mx={2}>
       <TopNavigationBar label={`Nhà hàng yêu thích`} homeButton={false} isPending={isFetching}/>
-      {fetchingSuccess && restaurants.map(({id, name, address, coverImageUrl, rating}) => (
+      {fetchingSuccess && restaurants.map(({
+                                             id,
+                                             name,
+                                             address,
+                                             coverImageUrl,
+                                             rating,
+                                             merchantIdInPayPal,
+                                             position
+                                           }) => (
         <Box key={id} mb={2}>
-          <RestaurantItemLarge name={`${name} - ${address}`}
+          <RestaurantItemLarge description={address}
+                               name={name}
                                image={coverImageUrl}
                                onClick={() => onItemClick(id)}
                                rating={rating}
+                               paypalId={merchantIdInPayPal}
+                               location={position}
+                               customerLocation={userLocation}
           />
         </Box>
       ))}

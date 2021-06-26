@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {makeStyles} from "@material-ui/core";
+import {Box, makeStyles} from "@material-ui/core";
 
 import AddressSelector from "../components/AddressSelector";
 import SearchBar from "../components/SearchBar";
@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <>
       <AddressSelector address={address} onClick={() => history.push('/address/default')}/>
-      <div className={classes.content}>
+      <Box className={classes.content}>
         {/*<div className={classes.favoriteRestaurants}>*/}
         {/*  <FavoriteListHorizontal/>*/}
         {/*</div>*/}
@@ -68,15 +68,18 @@ export default function Home() {
           </Ribbon>
         </div>
         <div className={classes.label}>
-          <Label uppercase>Quanh đây có gì ngon?</Label>
+          <Label uppercase>Danh mục cho bạn</Label>
         </div>
         <div className={classes.categoryList}>
           <CategoryListHorizontal/>
         </div>
+        <Box p={2}>
+          <Label uppercase>Nhà hàng nổi bật</Label>
+        </Box>
         <div className={classes.restaurantList}>
           <RestaurantListVertical/>
         </div>
-      </div>
+      </Box>
       <BottomNavigationBar/>
     </>
   );

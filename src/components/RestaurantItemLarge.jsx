@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.onSurface.disabled,
     fontFamily: theme.font.family,
     letterSpacing: theme.font.letterSpacing,
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
     fontSize: '11px',
     lineHeight: '16px',
   },
