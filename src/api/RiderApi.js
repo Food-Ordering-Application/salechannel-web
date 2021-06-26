@@ -13,6 +13,16 @@ export async function getDriverLocation(driverId) {
   }
 }
 
+export async function getDriverInfo(driverId) {
+  try {
+    const response = await axios.get(`${BASEURL}/user/driver/${driverId}/driver-info`, {headers: authHeader()})
+    return response.data.data
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const DriverApi = {
-  getDriverLocation
+  getDriverLocation,
+  getDriverInfo,
 }

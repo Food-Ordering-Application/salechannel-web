@@ -135,20 +135,20 @@ export default function ProductDetail({open, handleClose, product, onSubmit, isP
     setPricePerUnit(basePrice + toppingPrice);
   }
 
-  const RadioButtonLabel = ({name, price}) => (
-    <Box width={1} display="flex" alignItems="center">
-      <Box flexGrow={1}>
-        <Typography variant="h6">
-          <Box fontSize={11}>{name}</Box>
-        </Typography>
-      </Box>
-      <Box>
-        <Typography variant="h6">
-          <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(price)}</Box>
-        </Typography>
-      </Box>
-    </Box>
-  );
+  // const RadioButtonLabel = ({name, price}) => (
+  //   <Box width={1} display="flex" alignItems="center">
+  //     <Box flexGrow={1}>
+  //       <Typography variant="h6">
+  //         <Box fontSize={11}>{name}</Box>
+  //       </Typography>
+  //     </Box>
+  //     <Box>
+  //       <Typography variant="h6">
+  //         <Box fontSize={14} color="onSurface.disabled">{currencyFormatter(price)}</Box>
+  //       </Typography>
+  //     </Box>
+  //   </Box>
+  // );
 
   return (
     <Dialog
@@ -226,7 +226,7 @@ export default function ProductDetail({open, handleClose, product, onSubmit, isP
                   >
                     <Typography variant="h3">
                       <Box fontSize={theme.spacing(2)} color={`onPrimary.highEmphasis`}>
-                        {`ADD ● ${currencyFormatter(quantity * pricePerUnit)}`}
+                        {`Thêm ● ${currencyFormatter(quantity * pricePerUnit)}`}
                       </Box>
                     </Typography>
                   </Button>

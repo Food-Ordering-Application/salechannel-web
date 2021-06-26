@@ -9,12 +9,13 @@ import MoneyItem from "../checkout-page/components/OrderDetails/MoneyItem";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import BottomButton from "../../common/BottomButton";
 import {useDispatch, useSelector} from "react-redux";
-import {clearOrderState, fetchOrderData, orderSelector, updateDriverLocation, updateOrderStatus} from "../OrderSlice";
+import {clearOrderState, fetchOrderData, orderSelector, updateOrderStatus} from "../OrderSlice";
 import {useHistory, useParams} from "react-router-dom";
 import {paymentConstant} from "../../../constants/paymentConstant";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import orderConstant from "../../../constants/orderConstant";
 import Pusher from "pusher-js";
+import {DriverApi} from "../../../api/RiderApi";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -34,8 +35,6 @@ export default function OrderStatus() {
 
   const {isRequesting, isSuccess, isError, errorMessage, data} = useSelector(orderSelector);
 
-  //=========================================
-
   useEffect(function () {
     Pusher.log = (msg) => {
       console.log("[Pusher]", msg);
@@ -47,12 +46,18 @@ export default function OrderStatus() {
 
     const channel = pusher.subscribe(`order_${orderId}`);
     channel.bind('order-status', function (data) {
-      dispatch(updateOrderStatus(data));
+      console.log(data)
+      if (data.delivery?.driverId && !data.delivery?.driverInfo) {
+        DriverApi
+          .getDriverLocation(data.delivery.driverId)
+          .then((info) => {
+            dispatch(updateOrderStatus({...data, ...info}))
+          })
+          .catch((e) => console.log(e))
+      } else {
+        dispatch(updateOrderStatus(data));
+      }
     });
-    channel.bind("delivery-location", function (data) {
-      console.log(data, '<==delivery change')
-      dispatch(updateDriverLocation(data))
-    })
   }, []);
 
   useEffect(() => {
@@ -85,7 +90,7 @@ export default function OrderStatus() {
     )
   }
 
-  const {paymentType, subTotal, delivery: {shippingFee, status}} = data;
+  const {paymentType, subTotal, delivery: {shippingFee, status, driverId, driverInfo}} = data;
 
   return (
     <>
@@ -100,9 +105,15 @@ export default function OrderStatus() {
                       }}
           />
         </Box>
-        {(status !== `DRAFT` && status !== `ASSIGNING_DRIVER`) && (
+        {(status !== `DRAFT` && status !== `ASSIGNING_DRIVER` && driverId && driverInfo) && (
           <Box pb={2}>
-            <RiderInfo link={`/order/${orderId}/location`}/>
+            <RiderInfo
+              id={driverId}
+              orderId={orderId}
+              avatar={driverInfo.avatar}
+              name={driverInfo?.name}
+              licensePlate={driverInfo?.licensePlate}
+            />
           </Box>
         )}
         <Box pb={2}>

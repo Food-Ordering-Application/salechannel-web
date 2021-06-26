@@ -1,12 +1,6 @@
 import React, {useState} from "react";
 import {Collapse, List, Typography} from "@material-ui/core";
-import {
-  AccountBalanceWalletOutlined,
-  EditOutlined,
-  FavoriteBorder,
-  LocationOnOutlined,
-  ReceiptOutlined
-} from "@material-ui/icons";
+import {EditOutlined, FavoriteBorder, LocationOnOutlined, ReceiptOutlined} from "@material-ui/icons";
 
 import CategoryLabel from "../../../../../components/CategoryLabel";
 import StyledListItem from "./StyledListItem";
@@ -38,10 +32,10 @@ export default function AccountActionList({initOpen}) {
                           icon={ReceiptOutlined}
                           to="/orders"
           />
-          <StyledListItem label="Ví coupon"
-                          icon={AccountBalanceWalletOutlined}
-                          to="/coupons"
-          />
+          {/*<StyledListItem label="Ví coupon"*/}
+          {/*                icon={AccountBalanceWalletOutlined}*/}
+          {/*                to="/coupons"*/}
+          {/*/>*/}
         </List>
       </Collapse>
     </>

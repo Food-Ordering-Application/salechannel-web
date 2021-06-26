@@ -10,19 +10,12 @@ import CategoryMenu from "../../../components/CategoryMenu";
 import {Box, LinearProgress} from "@material-ui/core";
 import CartSummaryBottom from "../../../components/CartSummaryBottom";
 import theme from "../../../asserts/Theme";
-import {
-  clearRestaurantState,
-  fetchRestaurant,
-  restaurantSelector,
-  setAbleToDelivery,
-  setFavoriteRestaurant
-} from "../RestaurantSlice";
+import {clearRestaurantState, fetchRestaurant, restaurantSelector, setFavoriteRestaurant} from "../RestaurantSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
 import {clearOrder, fetchOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
 import RestaurantClosedAlert from "./components/RestaurantCloseAlert";
-import {getLocation, isAbleToDelivery} from "../../../helpers/location";
 import OutForDeliveryAlert from "./components/OutForDeliveryAlert";
 
 const useStyles = makeStyles(theme => ({
@@ -109,18 +102,6 @@ export default function Restaurant() {
       dispatch(fetchOrder({restaurantId: id, customerId: customerId}));
     }
   }, [id]);
-
-  useEffect(() => {
-    if (restaurant.isSuccess) {
-      getLocation(function ({coords}) {
-          const canDelivery = isAbleToDelivery(restaurant.restaurant.geo, coords);
-          dispatch(setAbleToDelivery(canDelivery));
-        },
-        function () {
-          dispatch(showError(`Vui lòng cấp quyền truy cập vị trí`));
-        });
-    }
-  }, [restaurant.isSuccess]);
 
   /*
   HANDLE ERROR

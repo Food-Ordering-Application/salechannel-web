@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {OrderApi} from "../../api/OrderApi";
 import {paymentConstant} from "../../constants/paymentConstant";
+import {DriverApi} from "../../api/RiderApi";
 
 /*
 DEFAULT HANDLERS
@@ -65,7 +66,13 @@ export const fetchOrderData = createAsyncThunk(
   `order/fetch`,
   async ({orderId}, thunkAPI) => {
     try {
-      return await OrderApi.fetchOrderData(orderId);
+      const orderData = await OrderApi.fetchOrderData(orderId)
+      const {order: {delivery}} = orderData
+      if (delivery?.driverId) {
+        const driverInfo = await DriverApi.getDriverInfo(delivery.driverId)
+        return {order: {...orderData.order, ...driverInfo}}
+      }
+      return orderData
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }

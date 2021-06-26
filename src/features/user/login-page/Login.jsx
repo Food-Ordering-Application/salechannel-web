@@ -10,6 +10,8 @@ import {clearUserState, loginUser, userSelector} from "../UserSlice";
 import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import {otpSelector, requestOTP} from "./components/otpVerification-dialog/otpSlice";
 import firebase from "../../../helpers/firebase";
+import {clearLocationState} from "../../home/LocationSlice";
+import {clearMetadataState} from "../../home/MetadataSlice";
 
 
 const useStyles = makeStyles(theme => ({
@@ -78,11 +80,19 @@ export default function Login() {
         }).verify();
       } else {
         dispatch(showInfo(`Đăng nhập thành công`));
+        if (!location.state?.ref) {
+          dispatch(clearLocationState())
+          dispatch(clearMetadataState())
+        }
         history.replace(location.state?.ref || '/');
       }
     }
     if (isVerifySuccess) {
       dispatch(showInfo(`Đăng nhập thành công`));
+      if (!location.state?.ref) {
+        dispatch(clearLocationState())
+        dispatch(clearMetadataState())
+      }
       history.replace(location.state?.ref || '/');
     }
   }, [isError, isSuccess, isVerifySuccess])

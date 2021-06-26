@@ -22,27 +22,27 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function RiderInfo({link}) {
+export default function RiderInfo({id, avatar, name, licensePlate, orderId}) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root}>
+    <Paper key={id} className={classes.root}>
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
-          <Avatar src="https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"/>
+          <Avatar src={avatar || `https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg`}/>
         </Grid>
         <Grid item xs>
           <Box pl={1}>
             <Typography variant="h6">
-              <Box className={classes.name}>nguyễn văn A</Box>
+              <Box className={classes.name}>{name}</Box>
             </Typography>
-            {/*<Typography variant="h4">*/}
-            {/*  <Box className={classes.plate}>60ld-99999</Box>*/}
-            {/*</Typography>*/}
+            <Typography variant="h4">
+              <Box className={classes.plate}>{licensePlate}</Box>
+            </Typography>
           </Box>
         </Grid>
         <Grid item>
-          <IconButton component={Link} to={link}>
+          <IconButton component={Link} to={`/order/${orderId}/location`}>
             <LocationIcon color="primary"/>
           </IconButton>
         </Grid>

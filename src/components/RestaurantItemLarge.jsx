@@ -100,8 +100,12 @@ export default function RestaurantItemLarge({
           <div className={classes.horizontalContent}>
             <div className={`${classes.horizontalContent} ${classes.ratingContent}`}>
               <Star className={classes.star}/>
-              <Typography
-                className={classes.info}>{`${rating}  ●  ${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</Typography>
+              <Typography className={classes.info}>
+                <span>{rating}</span>
+                {location && customerLocation && (
+                  <span>{`  ●  ${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</span>
+                )}
+              </Typography>
             </div>
             {/*{location && customerLocation && (*/}
             {/*  <div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}

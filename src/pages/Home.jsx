@@ -48,16 +48,14 @@ export default function Home() {
   //Effects
   useEffect(() => {
     if (!locationReady) {
-      history.replace({
-        pathname: `/location/analyse`,
-        state: {ref: location.pathname}
-      });
+      history.replace(`/location/analyse`, {ref: location.pathname});
     }
   }, [locationReady]);
 
+  //TODO: change default address
   return (
     <>
-      <AddressSelector address={address} onClick={() => history.push('/address/default')}/>
+      <AddressSelector address={address} onClick={() => console.log("TODO: change default address")}/>
       <Box className={classes.content}>
         {/*<div className={classes.favoriteRestaurants}>*/}
         {/*  <FavoriteListHorizontal/>*/}

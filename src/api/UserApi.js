@@ -212,6 +212,21 @@ const UserApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+
+  getDefaultAddress: async function (customerId) {
+    try {
+      return (await axios.get(`${BASEURL}/user/customer/${customerId}/address/default`, {headers: authHeader()})).data.data;
+    } catch (error) {
+      const response = error.response;
+      if (response) {
+        if (response.status === 403)
+          throw new Error(`Máy chủ từ chối thao tác`);
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 }
 

@@ -25,7 +25,7 @@ const defaultState = {
     longitude: null,
     latitude: null,
   },
-  address: `Nhập địa chỉ giao hàng`,
+  address: null,
 }
 
 export const locationSlice = createSlice({
@@ -38,9 +38,9 @@ export const locationSlice = createSlice({
       state.isSuccess = false;
     },
     setDefaultLocation: (state, {payload}) => {
-      state.location.longitude = payload.location.longitude || state.location.longitude;
-      state.location.latitude = payload.location.latitude || state.location.latitude;
-      state.address = payload.address || state.address;
+      state.isSuccess = true
+      state.location = payload.location
+      state.address = payload.address
     },
     clearDefaultLocationData: (state) => {
       return defaultState

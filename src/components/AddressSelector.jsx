@@ -54,8 +54,10 @@ export default function AddressSelector({address, onClick}) {
       <Toolbar className={classes.toolBar}>
         <span className={classes.logo1}>Smart</span>
         <span className={classes.logo2}>Sale</span>
-        <span className={classes.address}>{address}</span>
-        <ChevronRight className={classes.indicator}/>
+        {address && (<>
+          <span className={classes.address}>{address}</span>
+          <ChevronRight className={classes.indicator}/>
+        </>)}
       </Toolbar>
     </AppBar>
   );

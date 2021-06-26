@@ -1,7 +1,6 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
-import GoogleMap from "./components/RestaurantLocation";
 import Title from "./components/Title";
 import {makeStyles} from "@material-ui/core/styles";
 import {useHistory, useParams} from "react-router-dom";
@@ -9,19 +8,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../RestaurantSlice";
 import OpenHourItem from "./components/OpenHourItem";
 import {weekDayOfToday} from "../../../untils/formatter";
-import {Marker} from "google-maps-react";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
+import ReactMapGL, {FlyToInterpolator, Marker} from "react-map-gl"
+import {LocationOn} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: theme.spacing(1.5),
     color: theme.palette.onSurface.mediumEmphasis,
   },
-  map: {
-    padding: theme.spacing(2),
-    width: `200px`,
-    height: `200px`,
-  },
+  marker: {
+    transform: `translateX(-50%) translateY(-100%)`,
+  }
 }));
 
 export default function RestaurantInfo() {
@@ -29,13 +27,28 @@ export default function RestaurantInfo() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const [viewport, setViewport] = useState({
+    latitude: 45.211,
+    longitude: -75.6903,
+    zoom: 15,
+  })
   const {isError, isFetching, isSuccess, restaurant} = useSelector(restaurantSelector);
 
   useEffect(() => {
     if (!isSuccess) {
       dispatch(fetchRestaurant({id}));
+    } else {
+      setViewport({
+        ...viewport,
+        longitude: restaurant["position"]?.longitude,
+        latitude: restaurant["position"]?.latitude,
+        zoom: 15,
+        transitionDuration: 5000,
+        transitionInterpolator: new FlyToInterpolator(),
+      })
     }
-  }, []);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
@@ -56,15 +69,23 @@ export default function RestaurantInfo() {
           </Typography>
         </Box>
         <Box mt={2}>
-          <GoogleMap centerLocation={{
-            lat: restaurant["position"]?.latitude,
-            lng: restaurant["position"]?.longitude,
-          }}>
-            <Marker position={{
-              lat: restaurant["position"]?.latitude,
-              lng: restaurant["position"]?.longitude,
-            }}/>
-          </GoogleMap>
+          <ReactMapGL
+            width={"100%"}
+            height={"400px"}
+            {...viewport}
+            mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_KEY}
+            mapStyle={"mapbox://styles/mapbox/streets-v11"}
+            onViewportChange={(_viewport) => setViewport(_viewport)}
+          >
+            <Marker
+              longitude={restaurant["position"]?.longitude}
+              latitude={restaurant["position"]?.latitude}
+            >
+              <div className={classes.marker}>
+                <Box fontSize={40} color={'status.EXPIRED'} component={LocationOn}/>
+              </div>
+            </Marker>
+          </ReactMapGL>
         </Box>
         <Box mt={1}>
           <Title text="Giờ mở cửa"/>
