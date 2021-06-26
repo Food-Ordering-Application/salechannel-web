@@ -194,6 +194,7 @@ export const orderSlice = createSlice({
       },
       updateDriverLocation: (state, {payload}) => {
         console.log(payload)
+        state["driverGeom"] = {...payload}
       }
     },
     extraReducers: {

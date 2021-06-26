@@ -31,11 +31,14 @@ export default function RestaurantInfoSumary({id, name, address, distance}) {
 
   return (
     <Ribbon className={classes.root} component={Link} to={`/store/${id}/info`}>
+      <Typography variant="h5">
+        <Box textAlign={"center"} pb={0.5}>Nhà hàng</Box>
+      </Typography>
       <Typography variant="h4">
         <Box textAlign="center">{name}</Box>
       </Typography>
       <Typography variant="body2" component="div">
-        <Box className={classes.address}>{distance} km - {address}</Box>
+        <Box className={classes.address}>{`${distance ? `${distance} km` : ''} ${address}`}</Box>
       </Typography>
     </Ribbon>
   );

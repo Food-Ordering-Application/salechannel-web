@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import TopNavigationBar from "../../../components/TopNavigationBar";
 import RestaurantInfoSumary from "../../../components/RestaurantInfoSumary";
 import MenuVertical from "../../../components/MenuVertical";
@@ -17,7 +17,7 @@ import {
   setAbleToDelivery,
   setFavoriteRestaurant
 } from "../RestaurantSlice";
-import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
+import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {clearMenuState, fetchMenu, menuSelector} from "../MenuSlice";
 import {clearOrder, fetchOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
@@ -80,7 +80,6 @@ export default function Restaurant() {
   const menu = useSelector(menuSelector);
   const {isEmpty: cartIsEmpty, data: cartData, isCreating} = useSelector(orderSelector);
   const orderState = useSelector(orderSelector);
-  const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const {id} = useParams();
@@ -108,12 +107,6 @@ export default function Restaurant() {
     dispatch(fetchMenu({id: id}));
     if (isAuthenticated) {
       dispatch(fetchOrder({restaurantId: id, customerId: customerId}));
-    } else {
-      dispatch(showInfo(`Bạn cần đăng nhập để tiếp tục!`))
-      history.replace({
-        pathname: `/login`,
-        state: {ref: location.pathname}
-      });
     }
   }, [id]);
 
@@ -172,8 +165,8 @@ export default function Restaurant() {
         <div className={classes.content}>
           <div className={classes.info}>
             <RestaurantInfoSumary id={restaurantData["id"]}
-                                  name={`${restaurantData.name} - ${restaurantData.address}`}
-                                  address={restaurantData.address}
+                                  name={restaurantData?.name}
+                                  address={restaurantData?.address}
                                   distance={distance}
             />
           </div>

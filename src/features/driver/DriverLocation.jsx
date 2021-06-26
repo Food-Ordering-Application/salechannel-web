@@ -1,34 +1,31 @@
 import React, {useEffect, useState} from "react";
 
 import ReactMapGL, {FlyToInterpolator, Marker, WebMercatorViewport} from "react-map-gl"
-import 'mapbox-gl/dist/mapbox-gl.css'
 import TopNavigationBar from "../common/TopNavigationBar";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchOrderData, orderSelector} from "../order/OrderSlice";
-import {useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {DriverApi} from "../../api/RiderApi";
 import Pusher from "pusher-js";
+import {useSize} from "react-hook-size";
+import LocationIcon from "../../asserts/icons/Location";
+import {Motorcycle, Refresh, Store} from "@material-ui/icons";
+import {Box, IconButton} from "@material-ui/core";
 
-///////
-
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import {MapboxAPI} from "../../helpers/mapbox";
-
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiZHVjaHV5bmg5OSIsImEiOiJja3B2ZHFneG0xanBqMnZxY2U5NzZraWl0In0.kaQIMOLUcxwQX_0hfiE34g';
-
-const Map = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAP_BOX_KEY
-});
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     marginTop: `48px`,
-    height: "calc(100vh - 48px)",
-    width: `100%`,
+  },
+  sideBar: {
+    position: "fixed",
+    right: 0,
+    bottom: 0,
+    zIndex: 2,
+    display: "flex",
+    flexDirection: "column",
   }
 }))
 
@@ -38,97 +35,97 @@ const dataConverter = (long, lat) => ({
   "properties": {}
 })
 
-export default function DriverLocation() {
-
-  const {id: orderId} = useParams()
-  const classes = useStyles()
-  const dispatch = useDispatch()
-  const history = useHistory()
-
-  const {isSuccess, data: orderData} = useSelector(orderSelector);
-
-
-  useEffect(() => {
-    const map = MapboxAPI.getMapInstance('map');
-
-    const {delivery: {driverId, customerGeom}} = orderData
-
-    map.on('load', function () {
-
-      const pusher = new Pusher('29ff5ecb5e2501177186', {
-        cluster: 'ap1'
-      });
-
-      const channel = pusher.subscribe(`order_${orderId}`);
-
-      channel.bind("delivery-location", function (data) {
-        const _data = {
-          "geometry": {"type": "Point", "coordinates": [data.longitude, data.latitude]},
-          "type": "Feature",
-          "properties": {}
-        }
-        map.getSource('drone').setData(_data);
-        map.fitBounds([
-          _data.geometry.coordinates,
-          customerGeom.coordinates,
-        ], {padding: 100});
-      })
-
-      map.addSource('drone', {
-        type: 'geojson', data: {
-          "geometry": {"type": "Point", "coordinates": [106.6139235315213, 10.762321401332274]},
-          "type": "Feature",
-          "properties": {}
-        }
-      });
-      map.addLayer({
-        'id': 'drone',
-        'type': 'symbol',
-        'source': 'drone',
-        'layout': {
-          'icon-image': 'rocket-15'
-        }
-      });
-      map.addSource('customer', {type: 'geojson', data: customerGeom});
-      map.addLayer({
-        'id': 'customer',
-        'type': 'symbol',
-        'source': 'customer',
-        'layout': {
-          'icon-image': 'rocket-15'
-        }
-      });
-
-      DriverApi.getDriverLocation(driverId).then((_location) => {
-        map.getSource('drone').setData({
-          "geometry": {"type": "Point", "coordinates": [_location?.longitude, _location?.latitude]},
-          "type": "Feature",
-          "properties": {}
-        })
-      })
-
-
-      map.flyTo({
-        center: customerGeom.coordinates,
-        speed: 0.5
-      });
-
-
-    });
-  }, [])
-
-  if (!isSuccess) {
-    history.replace(`order/${orderId}`)
-    return null
-  }
-
-  return (
-    <>
-      <TopNavigationBar label={`Vị trí tài xế`} homeButton={false}/>
-      <div id="map" className={classes.mapContainer}/>
-    </>
-  )
-}
+// export function _DriverLocation() {
+//
+//   const {id: orderId} = useParams()
+//   const classes = useStyles()
+//   const dispatch = useDispatch()
+//   const history = useHistory()
+//
+//   const {isSuccess, data: orderData} = useSelector(orderSelector);
+//
+//
+//   useEffect(() => {
+//     const map = MapboxAPI.getMapInstance('map');
+//
+//     const {delivery: {driverId, customerGeom}} = orderData
+//
+//     map.on('load', function () {
+//
+//       const pusher = new Pusher('29ff5ecb5e2501177186', {
+//         cluster: 'ap1'
+//       });
+//
+//       const channel = pusher.subscribe(`order_${orderId}`);
+//
+//       channel.bind("delivery-location", function (data) {
+//         const _data = {
+//           "geometry": {"type": "Point", "coordinates": [data.longitude, data.latitude]},
+//           "type": "Feature",
+//           "properties": {}
+//         }
+//         map.getSource('drone').setData(_data);
+//         map.fitBounds([
+//           _data.geometry.coordinates,
+//           customerGeom.coordinates,
+//         ], {padding: 100});
+//       })
+//
+//       map.addSource('drone', {
+//         type: 'geojson', data: {
+//           "geometry": {"type": "Point", "coordinates": [106.6139235315213, 10.762321401332274]},
+//           "type": "Feature",
+//           "properties": {}
+//         }
+//       });
+//       map.addLayer({
+//         'id': 'drone',
+//         'type': 'symbol',
+//         'source': 'drone',
+//         'layout': {
+//           'icon-image': 'rocket-15'
+//         }
+//       });
+//       map.addSource('customer', {type: 'geojson', data: customerGeom});
+//       map.addLayer({
+//         'id': 'customer',
+//         'type': 'symbol',
+//         'source': 'customer',
+//         'layout': {
+//           'icon-image': 'rocket-15'
+//         }
+//       });
+//
+//       DriverApi.getDriverLocation(driverId).then((_location) => {
+//         map.getSource('drone').setData({
+//           "geometry": {"type": "Point", "coordinates": [_location?.longitude, _location?.latitude]},
+//           "type": "Feature",
+//           "properties": {}
+//         })
+//       })
+//
+//
+//       map.flyTo({
+//         center: customerGeom.coordinates,
+//         speed: 0.5
+//       });
+//
+//
+//     });
+//   }, [])
+//
+//   if (!isSuccess) {
+//     history.replace(`order/${orderId}`)
+//     return null
+//   }
+//
+//   return (
+//     <>
+//       <TopNavigationBar label={`Vị trí tài xế`} homeButton={false}/>
+//       <div id="map" className={classes.mapContainer}/>
+//     </>
+//   )
+// }
 
 // const useStyles = makeStyles((theme) => ({
 //   mapContainer: {
@@ -137,116 +134,154 @@ export default function DriverLocation() {
 //   }
 // }))
 
+export default function DriverLocation() {
 
-// export function _DriverLocation() {
+  const mapRef = React.useRef(null);
+  const mapContainerRef = React.useRef(null);
+  const {width, height} = useSize(mapContainerRef);
+
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const {id: orderId} = useParams()
+
+  const [viewport, setViewport] = useState({
+    latitude: 45.211,
+    longitude: -75.6903,
+    zoom: 10,
+  })
+  const [lPending, setPending] = useState(false)
+  const [customer, setCustomer] = useState([106.68157012684986, 10.76249083188875])
+  const [restaurant, setRestaurant] = useState([106.68157012684986, 10.76249083188875])
+  const [driver, setDriver] = useState([106.68157012684986, 10.76249083188875])
+
+  const {isSuccess: oOK, isRequesting: oPending, data: oData} = useSelector(orderSelector)
+
+  const boundTo = function (location1, location2) {
+//     let padding = 20
 //
-//   const classes = useStyles()
-//   const dispatch = useDispatch()
-//   const {id: orderId} = useParams()
+//     const bounds = [ [-74.05, 40.598], [-73.767185, 40.862] ] // or whatever
+//     const { offsetHeight: height, offsetWidth: width } = mapRef.getContainer()
 //
-//   const [viewport, setViewport] = useState({
-//     latitude: 45.211,
-//     longitude: -75.6903,
-//     width: "100vw",
-//     height: "100vh",
-//     zoom: 10,
-//   })
+// // If you have some media queries where the map size changes, adjust these
+// // if (breakpoint === 'mobile' || breakpoint === 'tablet') padding = 25
+// // else padding = 100
 //
-//   const {isSuccess: oOK, isRequesting: oPending, data: oData} = useSelector(orderSelector)
-//
-//   const [customer, setCustomer] = useState([-75.6903, 45.211])
-//   const [restaurant, setRestaurant] = useState([-87.6803, 46.221])
-//   const [driver, setDriver] = useState([-87.6703, 47.221])
-//
-//   const boundTo = function (location1, location2) {
-//     const {longitude, latitude, zoom} = new WebMercatorViewport(viewport)
-//       .fitBounds([location1, location2], {
-//         padding: 20,
-//         offset: [0, -100]
-//       })
-//     console.log(longitude, latitude, zoom)
-//     setViewport({
-//       ...viewport,
-//       longitude,
-//       latitude,
-//       zoom,
-//       transitionDuration: 1000,
-//       transitionInterpolator: new FlyToInterpolator(),
-//     })
-//   }
-//
-//   const flyTo = function (location) {
-//     setViewport({
-//       ...viewport,
-//       longitude: location[0],
-//       latitude: location[1],
-//       zoom: 14,
-//       transitionDuration: 1000,
-//       transitionInterpolator: new FlyToInterpolator(),
-//     })
-//   }
-//
-//   useEffect(() => {
-//     if (!oOK) {
-//       dispatch(fetchOrderData({orderId}))
-//     } else {
-//       const {delivery: {driverId, customerGeom, restaurantGeom}} = oData
-//       setCustomer(customerGeom.coordinates)
-//       setRestaurant(restaurantGeom.coordinates)
-//       flyTo(customerGeom.coordinates)
-//       DriverApi.getDriverLocation(driverId)
-//         .then((_location) => {
-//           setDriver([_location.longitude, _location.latitude])
-//           flyTo([_location.longitude, _location.latitude])
-//         })
-//         .catch((e) => console.log(e))
-//     }
-//   }, [oOK])
-//
-//   useEffect(function () {
-//     const pusher = new Pusher('29ff5ecb5e2501177186', {
-//       cluster: 'ap1'
-//     })
-//     const channel = pusher.subscribe(`order_${orderId}`)
-//     channel.bind("delivery-location", function (_location) {
-//       console.log(_location, "<==Driver location")
-//       setDriver([_location.longitude, _location.latitude])
-//       flyTo([_location.longitude, _location.latitude])
-//     })
-//   }, [])
-//
-//   return (
-//     <>
-//       <TopNavigationBar label={"Vị trí tài xế"} homeButton={false} isPending={oPending}/>
-//       <div className={classes.mapContainer}>
-//         <ReactMapGL
-//           {...viewport}
-//           mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_KEY}
-//           mapStyle={"mapbox://styles/mapbox/streets-v11"}
-//           onViewportChange={(_viewport) => {
-//             setViewport(_viewport)
-//           }}
-//         >
-//           <Marker longitude={customer[0]} latitude={customer[1]}>
-//             <div onClick={() => boundTo(customer, restaurant)}>
-//               Customer
-//             </div>
-//           </Marker>
-//           <Marker longitude={restaurant[0]} latitude={restaurant[1]}>
-//             <div>
-//               Restaurant
-//             </div>
-//           </Marker>
-//           <Marker longitude={driver[0]} latitude={driver[1]}>
-//             <div>
-//               Driver
-//             </div>
-//           </Marker>
-//         </ReactMapGL>
-//       </div>
-//     </>
-//   )
-// }
+// // You could certainly improve on this, but I found it easiest to simply jump
+// // ship and set the padding to nothing instead of recalculating what would fit.
+//     if (padding * 2 > height || padding * 2 > width) padding = 0
+
+    const {longitude, latitude, zoom} = new WebMercatorViewport({...viewport, width, height})
+      .fitBounds([location1, location2], {
+        padding: 20,
+        offset: [-50, -100]
+      })
+    setViewport({
+      ...viewport,
+      longitude,
+      latitude,
+      zoom,
+      transitionDuration: 1000,
+      transitionInterpolator: new FlyToInterpolator(),
+    })
+  }
+
+  const flyTo = function (location) {
+    setViewport({
+      ...viewport,
+      longitude: location[0],
+      latitude: location[1],
+      zoom: 17,
+      transitionDuration: 1000,
+      transitionInterpolator: new FlyToInterpolator(),
+      width,
+      height,
+    })
+  }
+
+  const getDriverLocation = () => {
+    const {delivery} = oData
+    if (!delivery || !delivery.driverId)
+      return
+    setPending(true)
+    DriverApi.getDriverLocation(delivery.driverId)
+      .then((_location) => {
+        setDriver([_location.longitude, _location.latitude])
+        flyTo([_location.longitude, _location.latitude])
+      })
+      .catch((e) => console.log(e))
+      .finally(() => setPending(false))
+  }
+
+  useEffect(() => {
+    if (!oOK) {
+      dispatch(fetchOrderData({orderId}))
+    } else {
+      const {delivery: {customerGeom, restaurantGeom}} = oData
+      setCustomer(customerGeom.coordinates)
+      setRestaurant(restaurantGeom.coordinates)
+      getDriverLocation()
+    }
+  }, [oOK])
+
+  useEffect(function () {
+    const pusher = new Pusher('29ff5ecb5e2501177186', {
+      cluster: 'ap1'
+    })
+    const channel = pusher.subscribe(`order_${orderId}`)
+    channel.bind("delivery-location", function (__location) {
+      setDriver([__location.longitude, __location.latitude])
+      flyTo([__location.longitude, __location.latitude])
+    })
+  }, [])
+
+  return (
+    <>
+      <TopNavigationBar
+        label={"Vị trí tài xế"}
+        isPending={oPending || lPending}
+        rightIcon={Refresh}
+        rightAction={() => getDriverLocation()}
+      />
+      <div ref={mapContainerRef} className={classes.mapContainer}>
+        <ReactMapGL
+          ref={mapRef}
+          width={"100vw"}
+          height={"100vh"}
+          {...viewport}
+          mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_KEY}
+          mapStyle={"mapbox://styles/mapbox/light-v10"}
+          onViewportChange={(_viewport) => {
+            setViewport(_viewport)
+          }}
+        >
+          <Marker longitude={customer[0]} latitude={customer[1]}>
+            <div onClick={() => boundTo(customer, restaurant)}>
+              <Box component={LocationIcon} fontSize={40} color={"primary.main"}/>
+            </div>
+          </Marker>
+          <Marker longitude={restaurant[0]} latitude={restaurant[1]}>
+            <div>
+              <Box component={Store} fontSize={40} color={"primary.main"}/>
+            </div>
+          </Marker>
+          <Marker longitude={driver[0]} latitude={driver[1]}>
+            <div>
+              <Box component={Motorcycle} fontSize={50} color={"primary.main"}/>
+            </div>
+          </Marker>
+        </ReactMapGL>
+      </div>
+      <div className={classes.sideBar}>
+        <IconButton onClick={() => boundTo(driver, restaurant)}>
+          <Store/>
+        </IconButton>
+        <IconButton onClick={() => boundTo(driver, customer)}>
+          <Motorcycle/>
+        </IconButton>
+      </div>
+    </>
+  )
+}
 
 // export default function DriverLocation() {
 //   const mapContainer = useRef(null)

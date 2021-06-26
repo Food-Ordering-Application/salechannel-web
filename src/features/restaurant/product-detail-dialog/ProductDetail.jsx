@@ -10,8 +10,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {addItem, clearOrderState, createOrder, orderSelector} from "../../order/OrderSlice";
 import {userSelector} from "../../user/UserSlice";
 import {restaurantSelector} from "../RestaurantSlice";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import Skeleton from "react-loading-skeleton";
+import {useHistory, useLocation} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -60,10 +61,13 @@ export default function ProductDetail({open, handleClose, product, onSubmit, isP
   const [quantity, setQuantity] = useState(1);
   const [pricePerUnit, setPricePerUnit] = useState(basePrice);
   const [toppings, setToppings] = useState([]);
-  const {id: userId} = useSelector(userSelector);
+  const {id: userId, isAuthenticated} = useSelector(userSelector);
   const {restaurant} = useSelector(restaurantSelector);
   const orderState = useSelector(orderSelector);
   const dispatch = useDispatch();
+  const history = useHistory()
+  const location = useLocation()
+
 
   useEffect(() => {
     if (open) {
@@ -82,6 +86,14 @@ export default function ProductDetail({open, handleClose, product, onSubmit, isP
   };
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      dispatch(showInfo(`Bạn cần đăng nhập để tiếp tục!`))
+      history.replace({
+        pathname: `/login`,
+        state: {ref: location.pathname}
+      });
+      return
+    }
     onSubmit({
       name: product.name,
       quantity: quantity,
