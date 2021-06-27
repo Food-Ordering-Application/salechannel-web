@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Search() {
   const classes = useStyles();
-  const {data: restaurants, isFetching, isError, errorMessage, categoryIds} = useSelector(restaurantsListSelector);
+  const {data: restaurants, isFetching, isError, errorMessage, categoryIds, sortId, filterIds} = useSelector(restaurantsListSelector);
   const {isSuccess: mReady, data: metadata} = useSelector(metadataSelector)
   const {isSuccess: lReady, location: userLocation} = useSelector(locationSelector)
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ export default function Search() {
 
   const search = function (name, area) {
     dispatch(clearRestaurantsListState());
-    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name}));
+    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name, sortId, filterIds}));
   };
 
   const handleBack = () => {

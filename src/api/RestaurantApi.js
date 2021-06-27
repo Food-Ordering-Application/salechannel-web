@@ -4,7 +4,7 @@ import {authHeader} from "../helpers/header";
 const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
 const RestaurantApi = {
-  filter: async (pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, position) => {
+  filter: async (pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, position, filterIds) => {
     try {
       return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {
         page: 1,
@@ -16,6 +16,7 @@ const RestaurantApi = {
         categoryIds,
         sortId,
         position,
+        filterIds,
       })).data.data;
     } catch (error) {
       if (error.response) {

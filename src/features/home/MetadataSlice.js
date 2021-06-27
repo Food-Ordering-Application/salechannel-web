@@ -24,13 +24,6 @@ const feedbackReason = [
     "id": 124
   },
   {
-    "content": "Không giữ khoảng cách an toàn (2m)",
-    "rate": 1,
-    "display_order": 6,
-    "type": 1,
-    "id": 128
-  },
-  {
     "content": "Quá trễ",
     "rate": 1,
     "display_order": 10,
@@ -101,18 +94,18 @@ const feedbackReason = [
     "id": 89
   },
   {
+    "content": "Không giữ khoảng cách an toàn (2m)",
+    "rate": 1,
+    "display_order": 6,
+    "type": 1,
+    "id": 128
+  },
+  {
     "content": "Không đeo khẩu trang",
     "rate": 2,
     "display_order": 3,
     "type": 1,
     "id": 123
-  },
-  {
-    "content": "Không giữ khoảng cách an toàn (2m)",
-    "rate": 2,
-    "display_order": 6,
-    "type": 1,
-    "id": 127
   },
   {
     "content": "Quá trễ",
@@ -183,6 +176,13 @@ const feedbackReason = [
     "display_order": 100,
     "type": 1,
     "id": 79
+  },
+  {
+    "content": "Không giữ khoảng cách an toàn (2m)",
+    "rate": 2,
+    "display_order": 6,
+    "type": 1,
+    "id": 127
   },
   {
     "content": "Không đeo khẩu trang",
@@ -269,18 +269,18 @@ const feedbackReason = [
     "id": 69
   },
   {
+    "content": "Không giữ khoảng cách an toàn (2m)",
+    "rate": 3,
+    "display_order": 6,
+    "type": 1,
+    "id": 126
+  },
+  {
     "content": "Không đeo khẩu trang",
     "rate": 4,
     "display_order": 3,
     "type": 1,
     "id": 121
-  },
-  {
-    "content": "Không giữ khoảng cách an toàn (2m)",
-    "rate": 4,
-    "display_order": 6,
-    "type": 1,
-    "id": 125
   },
   {
     "content": "Quá trễ",
@@ -351,6 +351,13 @@ const feedbackReason = [
     "display_order": 100,
     "type": 1,
     "id": 59
+  },
+  {
+    "content": "Không giữ khoảng cách an toàn (2m)",
+    "rate": 4,
+    "display_order": 6,
+    "type": 1,
+    "id": 125
   },
   {
     "content": "Dịch vụ tốt",

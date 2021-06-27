@@ -2,39 +2,16 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Box, Chip, Grid, TextField, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {makeStyles} from "@material-ui/core/styles";
-import {Link, useHistory, useParams} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearOrderState, fetchOrderData, orderSelector} from "../OrderSlice";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {showError, showSuccess} from "../../common/Snackbar/SnackbarSlice";
 import {Rating} from "@material-ui/lab";
 import {clearRestaurantState, fetchRestaurant, restaurantSelector} from "../../restaurant/RestaurantSlice";
-import * as PropTypes from "prop-types";
 import {Star} from "@material-ui/icons";
 import BottomButton from "../../common/BottomButton";
 import {metadataSelector} from "../../home/MetadataSlice";
-
-const reviewConstant = [
-  {
-    title: `Ngon xỉu`,
-    selected: false,
-  },
-  {
-    title: `Tươi sạch`,
-    selected: false,
-  },
-  {
-    title: `No căn bụng`,
-    selected: false,
-  },
-  {
-    title: `Đóng gói đẹp`,
-    selected: false,
-  },
-  {
-    title: `Đáng đồng tiền`,
-    selected: false,
-  },
-];
+import {OrderApi} from "../../../api/OrderApi";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -48,21 +25,20 @@ const useStyles = makeStyles((theme) => ({
   })
 )
 
-function StarBorderIcon(props) {
-  return null;
-}
-
-StarBorderIcon.propTypes = {fontSize: PropTypes.string};
 export default function OrderReview() {
   //Styles
   const classes = useStyles()
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   //Local state
   const {id: orderId} = useParams()
-  const [label, setLabel] = useState(`đơn hàng`)
-  const [rating, setRating] = useState(4)
+  const [step, setStep] = useState(1)
+  const [rating, setRating] = useState(5)
   const [review, setReview] = useState(``)
-  const [suggestion, setSuggestion] = useState([]);
+  const [suggestion, setSuggestion] = useState([])
+  const [isPending, setPending] = useState(false)
 
   const {isSuccess: mOK, data: mData} = useSelector(metadataSelector)
 
@@ -74,6 +50,7 @@ export default function OrderReview() {
     errorMessage: oErrorMessage,
     data: order
   } = useSelector(orderSelector)
+
   const {
     isRequesting: rFetching,
     isSuccess: rSuccess,
@@ -81,9 +58,6 @@ export default function OrderReview() {
     errorMessage: rErrorMessage,
     restaurant
   } = useSelector(restaurantSelector)
-  //Hook
-  const dispatch = useDispatch()
-  const history = useHistory()
 
   //Side effect
   useEffect(() => {
@@ -102,10 +76,13 @@ export default function OrderReview() {
 
   useEffect(() => {
     if (!mOK) {
-      history.replace('/')
+      history.replace('/location/analyse', {ref: location.pathname})
     } else {
       const {feedbackReason} = mData
-      setSuggestion(feedbackReason.filter((feedback) => feedback.rate === rating && feedback.type === 1))
+      const filtered = feedbackReason
+        .filter((feedback) => feedback.rate === rating && feedback.type === step)
+        .map((data) => ({...data, selected: false}))
+      setSuggestion(filtered)
     }
   }, [mOK, rating])
 
@@ -124,41 +101,114 @@ export default function OrderReview() {
 
   if (!oSuccess || !rSuccess) {
     return (
-      <TopNavigationBar
-        label={`Đánh giá ${label}`}
-        isPending={oFetching || rFetching}
-      />
+      <TopNavigationBar label={`Đánh giá ${step === 1 ? "tài xế" : "nhà hàng"}`} isPending={true}/>
     )
   }
 
   //Callback
   const onRatingChange = (event, newValue) => {
+    if (newValue < 1) return
     setRating(newValue);
   }
+
   const onReviewChange = (event) => {
     event.preventDefault()
     setReview(`${event.target.value}`)
   }
 
-  // return null
+  const onChipClick = (id) => {
+    const newArr = [...suggestion]
+    for (let i = 0; i < suggestion.length; i++) {
+      if (suggestion[i].id === id) {
+        newArr[i].selected = !suggestion[i].selected
+        setSuggestion(newArr)
+        return
+      }
+    }
+  }
+
+  const onSubmit = () => {
+    const reasonIds = []
+    for (let i = 0; i < suggestion.length; i++) {
+      if (suggestion[i].selected) {
+        reasonIds.push(suggestion[i].id)
+      }
+    }
+    if (step === 1) {
+      setPending(true)
+      OrderApi.rateDriver(orderId, reasonIds, rating, review)
+        .then((data) => {
+          setStep(2)
+          const {feedbackReason} = mData
+          const filtered = feedbackReason
+            .filter((feedback) => feedback.rate === rating && feedback.type === 2)
+            .map((data) => ({...data, selected: false}))
+          setSuggestion(filtered)
+          setReview('')
+          dispatch(showSuccess("Cảm ơn bạn đã đánh giá tài xế!"))
+        })
+        .catch((e) => {
+          dispatch(showError(e.message))
+        })
+        .finally(() => {
+          setPending(false)
+        })
+    }
+    if (step === 2) {
+      setPending(true)
+      OrderApi.rateRestaurant(orderId, reasonIds, rating, review)
+        .then((data) => {
+          console.log(data)
+          dispatch(showSuccess("Cảm ơn bạn đã đánh giá nhà hàng!"))
+        })
+        .catch((e) => {
+          dispatch(showError(e.message))
+        })
+        .finally(() => {
+          setPending(false)
+        })
+    }
+  }
 
   return (
     <>
-      <TopNavigationBar label={`Đánh giá ${label}`}/>
-      <Grid container justify={`center`} alignItems={`center`} className={classes.container}>
+      <TopNavigationBar label={`Đánh giá ${step === 1 ? "tài xế" : "nhà hàng"}`}/>
+      <Grid container justify={`center`} alignItems={`center`}>
         <Grid item>
-          <Grid container direction={`column`} justify={`center`} alignItems={`center`} spacing={2}>
-            <Grid item>
-              <Avatar src={restaurant?.coverImageUrl} className={classes.avatar}/>
-            </Grid>
-            <Grid item>
-              <Typography variant="h3">
-                <Box textAlign={`center`} marginX={2
-                }>
-                  {`Bạn thấy "Nhà hàng ${restaurant?.name}" thế nào?`}
-                </Box>
-              </Typography>
-            </Grid>
+          <Grid container direction={`column`} justify={`center`} alignItems={`center`} spacing={2}
+                className={classes.container}>
+            {step === 1 ? (
+              <>
+                <Grid item>
+                  <Typography variant="h3">
+                    <Box textAlign={`center`} m={2}>Vui lòng đánh giá tài xế của chúng tôi!</Box>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Avatar src={order.driverInfo?.avatar} className={classes.avatar}/>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5">
+                    <Box textAlign={`center`} m={2}>
+                      {`Tài xế: ${order.driverInfo?.name}`}
+                    </Box>
+                  </Typography>
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item>
+                  <Avatar src={restaurant?.coverImageUrl} className={classes.avatar}/>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h3">
+                    <Box textAlign={`center`} mx={2}>
+                      {`Bạn thấy "Nhà hàng ${restaurant?.name}" thế nào?`}
+                    </Box>
+                  </Typography>
+                </Grid>
+              </>
+            )}
             <Grid item>
               <Rating
                 name={`ratingOrder`}
@@ -170,15 +220,21 @@ export default function OrderReview() {
             </Grid>
             <Grid item>
               <Box display={`flex`} flexDirection={`row`} flexWrap={`wrap`} justifyContent={`center`}>
-                {suggestion.map(({id, content}) => (
-                  <Box key={id} mx={0.5} my={1}>
-                    <Chip label={content}/>
+                {suggestion.map(({id, content, selected}) => (
+                  <Box p={0.5}>
+                    <Chip
+                      key={id}
+                      label={content}
+                      color={selected ? "primary" : "default"}
+                      variant={selected ? "default" : "outlined"}
+                      onClick={() => onChipClick(id)}
+                    />
                   </Box>
                 ))}
               </Box>
             </Grid>
             <Grid item>
-              <Box py={5}/>
+              <Box py={3}/>
             </Grid>
             <Grid item>
               <TextField
@@ -190,9 +246,75 @@ export default function OrderReview() {
           </Grid>
         </Grid>
       </Grid>
-      <BottomButton variant={`contained`} component={Link} to={'/orders'}>
+      <BottomButton
+        variant={`contained`}
+        disabled={isPending}
+        onClick={() => onSubmit()}
+      >
         Gửi
       </BottomButton>
     </>
   )
+
+  // //Driver review
+  // return (
+  //   <>
+  //     <TopNavigationBar label={`Đánh giá tài xế`}/>
+  //     <Grid container direction={`column`} justify={`center`} alignItems={`center`} className={classes.container}>
+  //       <Grid item>
+  //         <Typography variant="h3">
+  //           <Box textAlign={`center`} m={2}>Vui lòng đánh giá tài xế của chúng tôi!</Box>
+  //         </Typography>
+  //       </Grid>
+  //       <Grid item>
+  //         <Avatar src={driverData?.avatar} className={classes.avatar}/>
+  //       </Grid>
+  //       <Grid item>
+  //         <Typography variant="h5">
+  //           <Box textAlign={`center`} m={2}>
+  //             {`Tài xế: ${driverData?.name}`}
+  //           </Box>
+  //         </Typography>
+  //       </Grid>
+  //       <Grid item>
+  //         <Rating
+  //           name={`ratingOrder`}
+  //           value={rating}
+  //           onChange={onRatingChange}
+  //           size={`large`}
+  //           icon={<Star/>}
+  //         />
+  //       </Grid>
+  //       <Grid item>
+  //         <Box display={`flex`} flexDirection={`row`} flexWrap={`wrap`} justifyContent={`center`} p={2}>
+  //           {suggestion.map(({id, content, selected}) => (
+  //             <Box key={id} mx={0.5} my={1}>
+  //               <Chip
+  //                 label={content}
+  //                 color={selected ? "primary" : "default"}
+  //                 variant={selected ? "default" : "outlined"}
+  //                 onClick={() => onChipClick(id)}
+  //               />
+  //             </Box>
+  //           ))}
+  //         </Box>
+  //       </Grid>
+  //       <Grid item>
+  //         <Box py={3}/>
+  //       </Grid>
+  //       <Grid item>
+  //         <TextField
+  //           value={review}
+  //           onChange={onReviewChange}
+  //           placeholder={`Để lại cảm nhận của bạn`}
+  //         />
+  //       </Grid>
+  //     </Grid>
+  //     <div className={classes.bottom}>
+  //       <BottomButton variant={`contained`} onClick={() => onSubmit()}>
+  //         Gửi
+  //       </BottomButton>
+  //     </div>
+  //   </>
+  // )
 }

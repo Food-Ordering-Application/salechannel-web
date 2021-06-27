@@ -279,5 +279,43 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
+  },
+  rateRestaurant: async (orderId, reasonIds, rate, message) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/order/${orderId}/rate-restaurant`,
+        {reasonIds, rate, message},
+        {headers: authHeader()}
+      );
+      return response.data.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        if(response.status === 400)
+          throw new Error('Không thể đánh giá đơn hàng sau 3 ngày')
+        throw new Error(`Lỗi máy chủ, vui lòng liên hệ quản trị viên`)
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
+  rateDriver: async (orderId, reasonIds, rate, message) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/order/${orderId}/rate-driver`,
+        {reasonIds, rate, message},
+        {headers: authHeader()}
+      );
+      return response.data.data;
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        if(response.status === 400)
+          throw new Error('Không thể đánh giá đơn hàng sau 3 ngày')
+        throw new Error(`Lỗi máy chủ, vui lòng liên hệ quản trị viên`)
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
   }
 };

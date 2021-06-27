@@ -3,9 +3,19 @@ import RestaurantApi from "../../api/RestaurantApi";
 
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
-  async ({pageIndex, rowsPerPage = 25, area, category, name, append = false, categoryIds}, thunkAPI) => {
+  async ({
+           pageIndex,
+           rowsPerPage = 25,
+           area,
+           category,
+           name,
+           append = false,
+           categoryIds,
+           filterIds,
+           sortId
+         }, thunkAPI) => {
     try {
-      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name, categoryIds)
+      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, undefined, filterIds)
       return {...data, append}
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message)
@@ -46,7 +56,7 @@ export const restaurantsListSlice = createSlice({
     changeSort: (state, {payload: {id}}) => {
       state.sortId = id
     },
-    clearAllFilter: (state)=>{
+    clearAllFilter: (state) => {
       state.categoryIds = []
       state.filterIds = []
       state.sortId = null
@@ -74,5 +84,11 @@ export const restaurantsListSlice = createSlice({
   },
 });
 
-export const {clearRestaurantsListState, setCategoryIds, addFilter, changeSort, clearAllFilter} = restaurantsListSlice.actions;
+export const {
+  clearRestaurantsListState,
+  setCategoryIds,
+  addFilter,
+  changeSort,
+  clearAllFilter
+} = restaurantsListSlice.actions;
 export const restaurantsListSelector = (state) => state.restaurants;

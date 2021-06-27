@@ -90,6 +90,7 @@ export default function RestaurantFilter({onSubmit}) {
                         onChange={(event) => {
                           dispatch(changeSort({id: event.target.value}))
                         }}
+                        placeholder={"Sắp xếp theo"}
                 >
                   {metadata.restaurantSortType.map(({id, name}) => (
                     <MenuItem key={id}
