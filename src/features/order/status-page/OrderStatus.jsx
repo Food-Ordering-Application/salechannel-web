@@ -106,7 +106,7 @@ export default function OrderStatus() {
     )
   }
 
-  const {paymentType, subTotal, updatedAt, delivery: {shippingFee, status, driverId, driverInfo}} = data;
+  const {paymentType, subTotal, updatedAt, driverInfo, delivery: {shippingFee, status, driverId}} = data;
 
   return (
     <>
@@ -143,7 +143,7 @@ export default function OrderStatus() {
             />
           )}
         </Box>
-        {(status !== `DRAFT` && status !== `ASSIGNING_DRIVER` && driverId && driverInfo) && (
+        {(status !== orderConstant.DRAFT.code && status !== orderConstant.ASSIGNING_DRIVER.code) && driverId && driverInfo && (
           <Box pb={2}>
             <RiderInfo
               id={driverId}

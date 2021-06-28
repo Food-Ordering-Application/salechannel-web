@@ -40,6 +40,8 @@ export default function OrderReview() {
   const [suggestion, setSuggestion] = useState([])
   const [isPending, setPending] = useState(false)
 
+  const [focus, setFocus] = useState(false)
+
   const {isSuccess: mOK, data: mData} = useSelector(metadataSelector)
 
   //Global state
@@ -175,10 +177,10 @@ export default function OrderReview() {
   return (
     <>
       <TopNavigationBar label={`Đánh giá ${step === 1 ? "tài xế" : "nhà hàng"}`}/>
-      <Grid container justify={`center`} alignItems={`center`}>
+      <Grid container justify={`center`} alignItems={`center`} wrap={`nowrap`}>
         <Grid item>
           <Grid container direction={`column`} justify={`center`} alignItems={`center`} spacing={2}
-                className={classes.container}>
+                className={classes.container} wrap={`nowrap`}>
             {step === 1 ? (
               <>
                 <Grid item>
@@ -243,18 +245,23 @@ export default function OrderReview() {
                 value={review}
                 onChange={onReviewChange}
                 placeholder={`Để lại cảm nhận của bạn`}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <BottomButton
-        variant={`contained`}
-        disabled={isPending}
-        onClick={() => onSubmit()}
-      >
-        Gửi
-      </BottomButton>
+      {!focus && (
+        <BottomButton
+          variant={`contained`}
+          disabled={isPending}
+          onClick={() => onSubmit()}
+        >
+          Gửi
+        </BottomButton>
+      )
+      }
     </>
   )
 
