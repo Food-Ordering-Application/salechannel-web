@@ -41,7 +41,9 @@ export default function AddressManagement() {
         {address.map((data) => (
           <Box mb={2} key={data.id}>
             <AddressItem addressText={data.address}
-                         deleteAction={() => handleDeleteAddress(data.id)}/>
+                         deleteAction={() => handleDeleteAddress(data.id)}
+                         isDefault={data.default}
+            />
           </Box>
         ))}
       </Box>

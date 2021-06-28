@@ -4,7 +4,6 @@ import {Box} from '@material-ui/core';
 
 import LocationCard from './components/LocationCard';
 import OrderDetails from './components/OrderDetails';
-import CouponList from './components/CouponList';
 import MainActionsBottom from './components/MainActionsBottom';
 import TopNavigationBar from '../../common/TopNavigationBar';
 import {useHistory, useParams} from 'react-router-dom';
@@ -86,9 +85,6 @@ export default function Checkout() {
             note={note}
             handleRemoveItem={onItemRemove}
           />
-        </Box>
-        <Box mx={-1.5}>
-          <CouponList/>
         </Box>
         <Box className={classes.mainActionsBottom}>
           <MainActionsBottom

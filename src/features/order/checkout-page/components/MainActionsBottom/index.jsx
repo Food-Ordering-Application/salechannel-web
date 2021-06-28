@@ -47,7 +47,12 @@ export default function MainActionsBottom({
   return (
     <Box p={2} className={classes.root}>
       <Box mb={2}>
-        <Grid container>
+        <Grid container alignItems={"center"} justify={"center"} spacing={2}>
+          <Grid item>
+            <Typography variant={"h4"}>
+              <Box fontSize={14}>Thanh toán bằng:</Box>
+            </Typography>
+          </Grid>
           <Grid item xs>
             <Button variant="text" fullWidth onClick={handlePaymentChange}>
               <Grid container alignItems="center">
@@ -63,19 +68,6 @@ export default function MainActionsBottom({
                   <ExpandLess/>
                 </Grid>
               </Grid>
-            </Button>
-          </Grid>
-          <Grid item>
-            <Divider orientation="vertical"/>
-          </Grid>
-          <Grid item xs>
-            <Button
-              variant="text"
-              color="primary"
-              fullWidth
-              className={classes.couponBtn}
-            >
-              Chọn Coupon
             </Button>
           </Grid>
         </Grid>

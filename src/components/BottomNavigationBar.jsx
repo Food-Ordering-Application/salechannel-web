@@ -1,13 +1,11 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import StyledBadge from "./StyledBadge";
 import StyledBottomNavigationAction from "./StyledBottomNavigationAction";
-import LocationIcon from "../asserts/icons/Location";
 import SearchIcon from "../asserts/icons/Search";
-import ShoppingBagIcon from "../asserts/icons/ShoppingBag";
 import UserIcon from "../asserts/icons/User";
 import {Link} from "react-router-dom";
+import {FavoriteBorderOutlined, HomeOutlined, ReceiptOutlined} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -46,23 +44,26 @@ export default function BottomNavigationBar({initSate}) {
         showLabels
         className={classes.root}
       >
-        <StyledBottomNavigationAction label="Gần tôi"
-                                      icon={<LocationIcon/>}
+        <StyledBottomNavigationAction label="Trang chủ"
+                                      icon={<HomeOutlined/>}
                                       component={Link}
                                       to="/"
         />
-        {/*<StyledBottomNavigationAction label="Thông báo"*/}
-        {/*                              component={Link}*/}
-        {/*                              to="/notifications"*/}
-        {/*                              icon={*/}
-        {/*                                <StyledBadge badgeContent={1} color='primary'>*/}
-        {/*                                  <NotificationIcon/>*/}
-        {/*                                </StyledBadge>*/}
-        {/*                              }/>*/}
-        <StyledBottomNavigationAction label="Khám phá"
+        <StyledBottomNavigationAction label="Đơn hàng"
+                                      component={Link}
+                                      to="/orders"
+                                      icon={
+                                        <ReceiptOutlined/>
+                                      }/>
+        <StyledBottomNavigationAction label="Tìm kiếm"
                                       icon={<SearchIcon/>}
                                       component={Link}
                                       to="/search"
+        />
+        <StyledBottomNavigationAction label="Đã lưu"
+                                      icon={<FavoriteBorderOutlined/>}
+                                      component={Link}
+                                      to="/store/favorite"
         />
         {/*<StyledBottomNavigationAction label="Giỏ hàng"*/}
         {/*                              icon={*/}

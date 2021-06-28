@@ -17,6 +17,7 @@ export function MapContainer({centerLocation, ...props}) {
         center={centerLocation}
         {...props}
         containerStyle={styles}
+        visible={true}
       >
         {props.children}
       </Map>

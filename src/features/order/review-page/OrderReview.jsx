@@ -34,7 +34,7 @@ export default function OrderReview() {
 
   //Local state
   const {id: orderId} = useParams()
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(location.state?.step || 2)
   const [rating, setRating] = useState(5)
   const [review, setReview] = useState(``)
   const [suggestion, setSuggestion] = useState([])
@@ -138,14 +138,15 @@ export default function OrderReview() {
       setPending(true)
       OrderApi.rateDriver(orderId, reasonIds, rating, review)
         .then((data) => {
-          setStep(2)
-          const {feedbackReason} = mData
-          const filtered = feedbackReason
-            .filter((feedback) => feedback.rate === rating && feedback.type === 2)
-            .map((data) => ({...data, selected: false}))
-          setSuggestion(filtered)
-          setReview('')
+          // setStep(2)
+          // const {feedbackReason} = mData
+          // const filtered = feedbackReason
+          //   .filter((feedback) => feedback.rate === rating && feedback.type === 2)
+          //   .map((data) => ({...data, selected: false}))
+          // setSuggestion(filtered)
+          // setReview('')
           dispatch(showSuccess("Cảm ơn bạn đã đánh giá tài xế!"))
+          history.goBack()
         })
         .catch((e) => {
           dispatch(showError(e.message))
@@ -158,8 +159,9 @@ export default function OrderReview() {
       setPending(true)
       OrderApi.rateRestaurant(orderId, reasonIds, rating, review)
         .then((data) => {
-          console.log(data)
+          // console.log(data)
           dispatch(showSuccess("Cảm ơn bạn đã đánh giá nhà hàng!"))
+          history.goBack()
         })
         .catch((e) => {
           dispatch(showError(e.message))

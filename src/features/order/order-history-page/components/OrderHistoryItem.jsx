@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Grid, Paper, Typography} from "@material-ui/core";
+import {Box, Button, Divider, Grid, Paper, Typography} from "@material-ui/core";
 import {
   AssignmentIndTwoTone,
   Autorenew,
@@ -60,7 +60,9 @@ export default function OrderHistoryItem({
                                            paymentMethod: paymentType,
                                            onClick,
                                            draftText = "Đơn nháp",
-                                           draftIcon = DescriptionTwoTone
+                                           draftIcon = DescriptionTwoTone,
+                                           allowReview,
+                                           onReviewClick,
                                          }) {
   const classes = useStyles({status: status.trim()});
 
@@ -117,6 +119,14 @@ export default function OrderHistoryItem({
             </Box>
           </Box>
         </Ribbon>
+        {allowReview && (<>
+          <Divider variant={"fullWidth"}/>
+          <Box>
+            <Button variant={"text"} fullWidth onClick={onReviewClick}>
+              <Box color="primary.main">Đánh giá</Box>
+            </Button>
+          </Box>
+        </>)}
         {/*<Divider variant="fullWidth" hidden={isDelivering(status)}/>*/}
         {/*<Box>*/}
         {/*  <Grid container>*/}

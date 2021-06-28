@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, Divider, Typography} from "@material-ui/core";
+import {Box, Divider, Grid, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import StatusCard from "./components/StatusCard/StatusCard";
 import RiderInfo from "./components/RiderInfo";
@@ -16,6 +16,8 @@ import {showError} from "../../common/Snackbar/SnackbarSlice";
 import orderConstant from "../../../constants/orderConstant";
 import Pusher from "pusher-js";
 import {DriverApi} from "../../../api/RiderApi";
+import {CheckCircleTwoTone} from "@material-ui/icons";
+import {datetimeFormatter} from "../../../untils/formatter";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -25,6 +27,13 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     padding: theme.spacing(0, 2, 2, 2)
   },
+  successCard: {
+    borderRadius: theme.spacing(1),
+    boxShadow: theme.effect.dp10.boxShadow,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  }
 }));
 
 export default function OrderStatus() {
@@ -52,10 +61,16 @@ export default function OrderStatus() {
           .getDriverLocation(data.delivery.driverId)
           .then((info) => {
             dispatch(updateOrderStatus({...data, ...info}))
+            if (data?.status === orderConstant.COMPLETED.code) {
+              history.push(`/order/${orderId}/review`, {step: 1})
+            }
           })
           .catch((e) => console.log(e))
       } else {
         dispatch(updateOrderStatus(data));
+        if (data?.status === orderConstant.COMPLETED.code) {
+          history.push(`/order/${orderId}/review`, {step: 1})
+        }
       }
     });
   }, []);
@@ -77,8 +92,9 @@ export default function OrderStatus() {
   useEffect(() => {
     if (isSuccess) {
       const {delivery: {status: deliveryStatus}} = data;
-      if (deliveryStatus === orderConstant.COMPLETED.code)
-        history.replace(`/order/${orderId}/review`)
+      if (deliveryStatus === orderConstant.COMPLETED.code) {
+      }
+      // history.replace(`/order/${orderId}/review`)
     }
   }, [data])
 
@@ -90,20 +106,42 @@ export default function OrderStatus() {
     )
   }
 
-  const {paymentType, subTotal, delivery: {shippingFee, status, driverId, driverInfo}} = data;
+  const {paymentType, subTotal, updatedAt, delivery: {shippingFee, status, driverId, driverInfo}} = data;
 
   return (
     <>
       <TopNavigationBar label="Trạng thái đơn hàng" isPending={isRequesting}/>
       {isSuccess && <Box my={6} p={2}>
         <Box py={2}>
-          <StatusCard statusText={''}
-                      actionText={orderConstant[status.trim()].description}
-                      step={orderConstant[status.trim()].step}
-                      onCancel={() => {
-                        console.log(`Cancel order`)
-                      }}
-          />
+          {status === orderConstant.COMPLETED.code ? (
+            <Box className={classes.successCard}>
+              <Grid container justify={"center"} alignItems={"center"}>
+                <Grid item>
+                  <Box color={"status.COMPLETED"} component={CheckCircleTwoTone}/>
+                </Grid>
+                <Grid item>
+                  <Box p={2}>
+                    <Typography variant={"h4"}>
+                      <Box fontSize={16}>Giao hàng thành công</Box>
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Box textAlign={"center"}>
+                <Typography variant={"h5"}>
+                  <Box fontSize={12} color={`disabled`}>{datetimeFormatter(new Date(updatedAt))}</Box>
+                </Typography>
+              </Box>
+            </Box>
+          ) : (
+            <StatusCard statusText={''}
+                        actionText={orderConstant[status.trim()].description}
+                        step={orderConstant[status.trim()].step}
+                        onCancel={() => {
+                          console.log(`Cancel order`)
+                        }}
+            />
+          )}
         </Box>
         {(status !== `DRAFT` && status !== `ASSIGNING_DRIVER` && driverId && driverInfo) && (
           <Box pb={2}>
@@ -139,7 +177,7 @@ export default function OrderStatus() {
         <Box py={3}>
           <OrderInfo/>
         </Box>
-        <Box className={classes.helpBtn}>
+        <Box className={classes.helpBtn} hidden={status === orderConstant.COMPLETED.code}>
           <BottomButton variant="outlined">
             Gọi trợ giúp?
           </BottomButton>

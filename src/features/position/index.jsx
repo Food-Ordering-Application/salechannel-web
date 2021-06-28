@@ -108,6 +108,7 @@ export default function AnalyseLocation() {
         <Grid item>
           <div>
             <Box className={`${classes.picker} ${classes.bounce}`} fontSize={150} color={"primary.main"} component={LocationOnTwoTone}/>
+            {/*<LocationOnTwoTone fontSize={"large"}/>*/}
           </div>
         </Grid>
       </Grid>

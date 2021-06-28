@@ -14,9 +14,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.spacing(1.5),
     padding: theme.spacing(1, 0, 1, 0),
   },
+  default: {
+    color: theme.palette.primary.main,
+  }
 }));
 
-export default function AddressItem({addressText, deleteAction}) {
+export default function AddressItem({addressText, deleteAction, isDefault}) {
   const classes = useStyles();
 
   return (
@@ -24,13 +27,16 @@ export default function AddressItem({addressText, deleteAction}) {
       <Grid container alignItems="center">
         <Grid item xs>
           <Typography variant="h4">
-            <Box className={classes.text}>{addressText}</Box>
+            <Box className={classes.text}>
+              {addressText}
+              {isDefault && (<span className={classes.default}> [Mặc định]</span>)}
+            </Box>
           </Typography>
         </Grid>
         {
-          deleteAction && (
+          deleteAction && !isDefault && (
             <Grid item>
-              <IconButton className={classes.button} onClick={deleteAction}>
+              <IconButton disabled={isDefault} onClick={deleteAction}>
                 <Delete color="disabled"/>
               </IconButton>
             </Grid>

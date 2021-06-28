@@ -9,6 +9,8 @@ const useStyles = makeStyles((theme) => ({
   })
 }));
 
+const padStart = (num) => String(num).padStart(2, '0')
+
 export default function ({dayOfWeek, fromHour, fromMinute, toHour, toMinute, highlighted}) {
   const classes = useStyles({highlighted});
 
@@ -21,7 +23,9 @@ export default function ({dayOfWeek, fromHour, fromMinute, toHour, toMinute, hig
       </Grid>
       <Grid item>
         <Typography variant={highlighted ? `h4` : `h5`}>
-          <Box className={classes.text}>{`${fromHour}:${fromMinute} - ${toHour}:${toMinute}`}</Box>
+          <Box className={classes.text}>
+            {`${padStart(fromHour)}:${padStart(fromMinute)} - ${padStart(toHour)}:${padStart(toMinute)}`}
+          </Box>
         </Typography>
       </Grid>
     </Grid>

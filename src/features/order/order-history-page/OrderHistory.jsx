@@ -57,7 +57,8 @@ export default function OrderHistory() {
             isActive={tabIndex === 1}
             fetchOrders={OrderApi.fetchHistory}
             forceRefresh={forceRefresh}
-            linkPattern={`/order/{orderId}/review`}
+            linkPattern={`/order/{orderId}`}
+            allowReview={true}
           />
         </Box>
         <Box p={2}>

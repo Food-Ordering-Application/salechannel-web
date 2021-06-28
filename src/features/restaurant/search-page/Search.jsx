@@ -187,13 +187,14 @@ export default function Search() {
         dataLength={restaurants.length}
         className={classes.container}
       >
-        {restaurants.map(({id, name, address, coverImageUrl, rating, merchantIdInPayPal, position}) => (
+        {restaurants.map(({id, name, address, coverImageUrl, rating, numRate, merchantIdInPayPal, position}) => (
           <Box key={id} mb={2}>
             <RestaurantItemLarge name={`${name}`}
                                  description={address}
                                  image={coverImageUrl}
                                  onClick={() => handleItemClick(id)}
                                  rating={rating}
+                                 numRate={numRate}
                                  paypalId={merchantIdInPayPal}
                                  location={position}
                                  customerLocation={userLocation}

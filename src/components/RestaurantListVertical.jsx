@@ -29,6 +29,7 @@ export default function RestaurantListVertical() {
         <div key={data?.id} className={classes.item}>
           <RestaurantItemLarge
             rating={data?.rating}
+            numRate={data?.numRate}
             description={data?.address}
             name={`${data?.name}`}
             image={data?.coverImageUrl}

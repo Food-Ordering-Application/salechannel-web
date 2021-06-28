@@ -49,6 +49,7 @@ export default function FavoriteRestaurant() {
                                              name,
                                              address,
                                              coverImageUrl,
+                                             numRate,
                                              rating,
                                              merchantIdInPayPal,
                                              position
@@ -59,6 +60,7 @@ export default function FavoriteRestaurant() {
                                image={coverImageUrl}
                                onClick={() => onItemClick(id)}
                                rating={rating}
+                               numRate={numRate}
                                paypalId={merchantIdInPayPal}
                                location={position}
                                customerLocation={userLocation}

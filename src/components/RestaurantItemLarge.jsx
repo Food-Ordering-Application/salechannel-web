@@ -71,6 +71,28 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const numRateFormatter = (numRate) => {
+  if (!numRate || numRate < 15) {
+    return ``
+  } else {
+    if (numRate >= 1000) {
+      return ` (999+)`
+    } else if (numRate >= 500) {
+      return " (500+)"
+    } else if (numRate >= 300) {
+      return " (300+)"
+    } else if (numRate >= 100) {
+      return " (100+)"
+    } else if (numRate >= 50) {
+      return " (50+)"
+    } else if (numRate >= 15) {
+      return " (15+)"
+    } else {
+      return ""
+    }
+  }
+}
+
 export default function RestaurantItemLarge({
                                               image,
                                               name,
@@ -82,6 +104,7 @@ export default function RestaurantItemLarge({
                                               customerLocation,
                                               onClick,
                                               paypalId,
+                                              numRate = 0
                                             }) {
   const classes = useStyles();
 
@@ -102,6 +125,7 @@ export default function RestaurantItemLarge({
               <Star className={classes.star}/>
               <Typography className={classes.info}>
                 <span>{rating}</span>
+                <span>{numRateFormatter(numRate)}</span>
                 {location && customerLocation && (
                   <span>{`  ●  ${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</span>
                 )}

@@ -17,13 +17,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const checkAllowReview = (date1, date2) => {
+  if (!date1 || !date2)
+    return false
+  return date2 - date1 <= 72 * 60 * 60 * 1000
+}
+
 export default function Draft({
                                 isActive,
                                 fetchOrders,
                                 forceRefresh,
                                 linkPattern = `/orders`,
                                 draftName = `Đơn nháp`,
-                                draftIcon
+                                draftIcon,
+                                allowReview = false,
                               }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -74,7 +81,7 @@ export default function Draft({
         <Box hidden={isLoading || (isSuccess && draft.length !== 0)}>
           <PlaceHolder icon={ReceiptTwoTone} text={`Không có đơn hàng nào`}/>
         </Box>
-        {draft.map(({id, subTotal, restaurantId, delivery: {restaurantName, updatedAt, status}}) => (
+        {draft.map(({id, subTotal, restaurantId, feedback, delivery: {restaurantName, updatedAt, status}}) => (
           <OrderHistoryItem
             key={id}
             status={status}
@@ -85,6 +92,8 @@ export default function Draft({
             onClick={() => onItemClick(id, restaurantId)}
             draftText={draftName}
             draftIcon={draftIcon}
+            allowReview={allowReview && !feedback && checkAllowReview(new Date(updatedAt), new Date())}
+            onReviewClick={() => history.push(`/order/${id}/review`, {step: 2, ref: '/orders'})}
           />
         ))}
       </Box>
