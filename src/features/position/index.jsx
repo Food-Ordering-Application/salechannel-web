@@ -107,9 +107,9 @@ export default function AnalyseLocation() {
       <Grid container direction={"column"} justify={"flex-end"} alignItems={"center"} className={classes.iconContainer}>
         <Grid item>
           <div>
-            <Box className={`${classes.picker} ${classes.bounce}`} fontSize={150} color={"primary.main"}
-                 component={LocationOnTwoTone}/>
-            {/*<LocationOnTwoTone fontSize={"large"}/>*/}
+            {/*<Box className={`${classes.picker} ${classes.bounce}`} fontSize={150} color={"primary.main"}*/}
+            {/*     component={LocationOnTwoTone}/>*/}
+            <LocationOnTwoTone style={{fontSize: 150, color: "#FF6B35"}}/>
           </div>
         </Grid>
       </Grid>

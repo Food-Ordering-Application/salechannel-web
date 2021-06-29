@@ -9,9 +9,8 @@ import {useParams} from "react-router-dom";
 import {DriverApi} from "../../api/RiderApi";
 import Pusher from "pusher-js";
 import {useSize} from "react-hook-size";
-import LocationIcon from "../../asserts/icons/Location";
-import {Motorcycle, Refresh, Store} from "@material-ui/icons";
-import {Box, IconButton} from "@material-ui/core";
+import {Motorcycle, PersonPinCircleTwoTone, Refresh, Store, StorefrontTwoTone} from "@material-ui/icons";
+import {IconButton} from "@material-ui/core";
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -145,8 +144,8 @@ export default function DriverLocation() {
   const {id: orderId} = useParams()
 
   const [viewport, setViewport] = useState({
-    latitude: 45.211,
-    longitude: -75.6903,
+    latitude: 10.7058661,
+    longitude: 106.7049702,
     zoom: 10,
   })
   const [lPending, setPending] = useState(false)
@@ -190,8 +189,8 @@ export default function DriverLocation() {
       ...viewport,
       longitude: location[0],
       latitude: location[1],
-      zoom: 17,
-      transitionDuration: 1000,
+      zoom: 15,
+      transitionDuration: 1500,
       transitionInterpolator: new FlyToInterpolator(),
       width,
       height,
@@ -249,24 +248,24 @@ export default function DriverLocation() {
           height={"100vh"}
           {...viewport}
           mapboxApiAccessToken={process.env.REACT_APP_MAP_BOX_KEY}
-          mapStyle={"mapbox://styles/mapbox/light-v10"}
+          mapStyle={"mapbox://styles/mapbox/streets-v11"}
           onViewportChange={(_viewport) => {
             setViewport(_viewport)
           }}
         >
           <Marker longitude={customer[0]} latitude={customer[1]}>
             <div onClick={() => boundTo(customer, restaurant)}>
-              <Box component={LocationIcon} fontSize={40} color={"primary.main"}/>
+              <PersonPinCircleTwoTone style={{fontSize: 40, color: `#FF6B35`}}/>
             </div>
           </Marker>
           <Marker longitude={restaurant[0]} latitude={restaurant[1]}>
             <div>
-              <Box component={Store} fontSize={40} color={"primary.main"}/>
+              <StorefrontTwoTone style={{fontSize: 40, color: `#FF6B35`}}/>
             </div>
           </Marker>
           <Marker longitude={driver[0]} latitude={driver[1]}>
             <div>
-              <Box component={Motorcycle} fontSize={50} color={"primary.main"}/>
+              <Motorcycle style={{fontSize: 50, color: `#FF6B35`}}/>
             </div>
           </Marker>
         </ReactMapGL>

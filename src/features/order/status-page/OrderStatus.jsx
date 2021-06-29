@@ -55,17 +55,18 @@ export default function OrderStatus() {
 
     const channel = pusher.subscribe(`order_${orderId}`);
     channel.bind('order-status', function (_data) {
-      if (_data?.driverId) {
+      console.log(_data)
+      if (_data.delivery?.driverId && !data?.driverInfo) {
         DriverApi
-          .getDriverLocation(_data.driverId)
+          .getDriverInfo(_data.delivery.driverId)
           .then((info) => {
-            dispatch(updateOrderStatus({...data, ...info}))
+            dispatch(updateOrderStatus({..._data, ...info}))
           })
           .catch((e) => console.log(e))
       } else {
-        dispatch(updateOrderStatus(data));
+        dispatch(updateOrderStatus(_data));
       }
-      if (_data.deliver?.status === orderConstant.COMPLETED.code) {
+      if (_data.delivery?.status === orderConstant.COMPLETED.code) {
         history.push(`/order/${orderId}/review`, {step: 1})
       }
     });
