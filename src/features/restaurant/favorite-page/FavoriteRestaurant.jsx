@@ -2,11 +2,12 @@ import React, {useEffect} from "react";
 import {Box} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import {useDispatch, useSelector} from "react-redux";
-import {showError} from "../../common/Snackbar/SnackbarSlice";
+import {showError, showInfo} from "../../common/Snackbar/SnackbarSlice";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {clearFavRestaurantState, favoriteRestaurantSelector, fetchFavoriteRestaurant} from "../RestaurantFavoriteSlice";
 import {locationSelector} from "../../home/LocationSlice";
+import {userSelector} from "../../user/UserSlice";
 
 export default function FavoriteRestaurant() {
   const dispatch = useDispatch()
@@ -19,6 +20,8 @@ export default function FavoriteRestaurant() {
     data: restaurants
   } = useSelector(favoriteRestaurantSelector)
 
+  const {isAuthenticated} = useSelector(userSelector)
+
   const {isSuccess: lOK, location: userLocation} = useSelector(locationSelector)
 
   const onItemClick = (restaurantID) => {
@@ -26,7 +29,8 @@ export default function FavoriteRestaurant() {
   }
 
   useEffect(() => {
-    dispatch(fetchFavoriteRestaurant({}));
+    if (isAuthenticated)
+      dispatch(fetchFavoriteRestaurant({}));
   }, [])
 
   useEffect(() => {
@@ -35,6 +39,12 @@ export default function FavoriteRestaurant() {
       dispatch(clearFavRestaurantState());
     }
   }, [fetchingError])
+
+  if (!isAuthenticated) {
+    history.replace('/login', {ref: '/store/favorite'})
+    dispatch(showInfo(`Bạn cần đăng nhập để tiếp tục`))
+    return null
+  }
 
   if (!lOK) {
     history.replace('/')

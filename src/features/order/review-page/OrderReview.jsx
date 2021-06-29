@@ -86,7 +86,7 @@ export default function OrderReview() {
         .map((data) => ({...data, selected: false}))
       setSuggestion(filtered)
     }
-  }, [mOK, rating])
+  }, [rating])
 
   useEffect(() => {
     if (oError) {
@@ -140,13 +140,6 @@ export default function OrderReview() {
       setPending(true)
       OrderApi.rateDriver(orderId, reasonIds, rating, review)
         .then((data) => {
-          // setStep(2)
-          // const {feedbackReason} = mData
-          // const filtered = feedbackReason
-          //   .filter((feedback) => feedback.rate === rating && feedback.type === 2)
-          //   .map((data) => ({...data, selected: false}))
-          // setSuggestion(filtered)
-          // setReview('')
           dispatch(showSuccess("Cảm ơn bạn đã đánh giá tài xế!"))
           history.goBack()
         })
@@ -161,7 +154,6 @@ export default function OrderReview() {
       setPending(true)
       OrderApi.rateRestaurant(orderId, reasonIds, rating, review)
         .then((data) => {
-          // console.log(data)
           dispatch(showSuccess("Cảm ơn bạn đã đánh giá nhà hàng!"))
           history.goBack()
         })

@@ -54,23 +54,19 @@ export default function OrderStatus() {
     });
 
     const channel = pusher.subscribe(`order_${orderId}`);
-    channel.bind('order-status', function (data) {
-      console.log(data)
-      if (data.delivery?.driverId && !data.delivery?.driverInfo) {
+    channel.bind('order-status', function (_data) {
+      if (_data?.driverId) {
         DriverApi
-          .getDriverLocation(data.delivery.driverId)
+          .getDriverLocation(_data.driverId)
           .then((info) => {
             dispatch(updateOrderStatus({...data, ...info}))
-            if (data?.status === orderConstant.COMPLETED.code) {
-              history.push(`/order/${orderId}/review`, {step: 1})
-            }
           })
           .catch((e) => console.log(e))
       } else {
         dispatch(updateOrderStatus(data));
-        if (data?.status === orderConstant.COMPLETED.code) {
-          history.push(`/order/${orderId}/review`, {step: 1})
-        }
+      }
+      if (_data.deliver?.status === orderConstant.COMPLETED.code) {
+        history.push(`/order/${orderId}/review`, {step: 1})
       }
     });
   }, []);
@@ -88,15 +84,6 @@ export default function OrderStatus() {
       history.replace('/search');
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      const {delivery: {status: deliveryStatus}} = data;
-      if (deliveryStatus === orderConstant.COMPLETED.code) {
-      }
-      // history.replace(`/order/${orderId}/review`)
-    }
-  }, [data])
 
   if (!isSuccess) {
     return (
@@ -143,7 +130,7 @@ export default function OrderStatus() {
             />
           )}
         </Box>
-        {(status !== orderConstant.DRAFT.code && status !== orderConstant.ASSIGNING_DRIVER.code) && driverId && driverInfo && (
+        {(status === orderConstant.ON_GOING.code || status === orderConstant.PICKED_UP.code) && driverId && driverInfo && (
           <Box pb={2}>
             <RiderInfo
               id={driverId}

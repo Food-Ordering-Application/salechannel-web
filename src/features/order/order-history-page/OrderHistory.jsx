@@ -5,10 +5,17 @@ import SwipeableViews from "react-swipeable-views";
 import Draft from "./components/Draft";
 import {OrderApi} from "../../../api/OrderApi";
 import {Autorenew, RefreshOutlined} from "@material-ui/icons";
+import {useDispatch, useSelector} from "react-redux";
+import {userSelector} from "../../user/UserSlice";
+import {useHistory} from "react-router-dom";
+import {showInfo} from "../../common/Snackbar/SnackbarSlice";
 
 export default function OrderHistory() {
+  const history = useHistory()
+  const dispatch = useDispatch()
   const [tabIndex, setTabIndex] = useState(0);
   const [forceRefresh, setRefresh] = useState(false);
+  const {isAuthenticated} = useSelector(userSelector)
 
   useEffect(() => {
     if (forceRefresh) {
@@ -16,27 +23,34 @@ export default function OrderHistory() {
     }
   }, [forceRefresh]);
 
+  if (!isAuthenticated) {
+    history.replace('/login', {ref: '/orders'})
+    dispatch(showInfo(`Bạn cần đăng nhập để tiếp tục`))
+    return null
+  }
+
   return (
     <Box mt={12}>
-      <TopNavigationBar label="Quản lí đơn hàng"
-                        bottomComponent={
-                          <>
-                            <Tabs
-                              value={tabIndex}
-                              onChange={(event, index) => setTabIndex(index)}
-                              indicatorColor="primary"
-                              textColor="primary"
-                              variant="fullWidth"
-                              centered
-                            >
-                              <Tab label={`Đang đến`}/>
-                              <Tab label={`Lịch sử`}/>
-                              <Tab label={`Đơn nháp`}/>
-                            </Tabs>
-                          </>
-                        }
-                        rightIcon={RefreshOutlined}
-                        rightAction={() => setRefresh(true)}
+      <TopNavigationBar
+        label="Quản lí đơn hàng"
+        bottomComponent={
+          <>
+            <Tabs
+              value={tabIndex}
+              onChange={(event, index) => setTabIndex(index)}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              centered
+            >
+              <Tab label={`Đang đến`}/>
+              <Tab label={`Lịch sử`}/>
+              <Tab label={`Đơn nháp`}/>
+            </Tabs>
+          </>
+        }
+        rightIcon={RefreshOutlined}
+        rightAction={() => setRefresh(true)}
       />
       <SwipeableViews
         index={tabIndex}

@@ -97,7 +97,7 @@ export default function AnalyseLocation() {
         const latitude = currentLocation?.latitude || 10.759092606200658
         dispatch(fetchMetadata({longitude, latitude}))
       } else {
-        history.replace(location.state?.ref || '/')
+        history.replace(location.state?.ref || '/', {...location.state})
       }
     }
   }, [lSuccess, mSuccess])
@@ -107,7 +107,8 @@ export default function AnalyseLocation() {
       <Grid container direction={"column"} justify={"flex-end"} alignItems={"center"} className={classes.iconContainer}>
         <Grid item>
           <div>
-            <Box className={`${classes.picker} ${classes.bounce}`} fontSize={150} color={"primary.main"} component={LocationOnTwoTone}/>
+            <Box className={`${classes.picker} ${classes.bounce}`} fontSize={150} color={"primary.main"}
+                 component={LocationOnTwoTone}/>
             {/*<LocationOnTwoTone fontSize={"large"}/>*/}
           </div>
         </Grid>
@@ -122,7 +123,7 @@ export default function AnalyseLocation() {
                 </Box>
                 <Typography variant={"h6"}>{address}</Typography>
               </Box>
-            ):(
+            ) : (
               <CircularProgress/>
             )}
           </Box>
