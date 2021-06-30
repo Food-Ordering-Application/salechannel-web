@@ -44,9 +44,11 @@ export default function OrderDetails({
 
   const orderItemsList = orderItems.map((item) => {
     let {id, price, orderItemToppings} = item;
+    const toppingNames = []
     if (orderItemToppings) {
       for (const topping of item.orderItemToppings) {
         price += topping[`price`];
+        toppingNames.push(topping["name"])
       }
     }
 
@@ -54,7 +56,7 @@ export default function OrderDetails({
                       quantity={item[`quantity`]}
                       name={item[`name`]}
                       price={price}
-                      description=""
+                      description={toppingNames.join(', ')}
                       handleRemove={isEditable ? () => handleRemoveItem(id) : null}/>
   });
 

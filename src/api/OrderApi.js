@@ -29,6 +29,7 @@ export const OrderApi = {
       toppingItemId: toppingItem.id,
       quantity: 1,
     }));
+    console.log(orderItemToppings)
     const data = {
       orderItem: {
         menuItemId: menuItem.id,

@@ -115,14 +115,16 @@ import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-auto
 import Spinner from "../../common/Spinner";
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {addAddress, addressSelector, clearAddressState} from "../AddressSlice";
+import {addAddress, addressSelector, clearAddressState, fetchAddress} from "../AddressSlice";
 import {userSelector} from "../../user/UserSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
 import {EditLocationOutlined, GpsFixed} from "@material-ui/icons";
 import PlaceHolder from "../../common/PlaceHolder";
 import Ribbon from "../../common/Ribbon";
 import AddressItemLarge from "../address-adding-page/components/AddressItemLarge";
-import {setDefaultLocation} from "../../home/LocationSlice";
+import {clearLocationState, setDefaultLocation} from "../../home/LocationSlice";
+import {SystemApi} from "../../../api/SystemApi";
+import {clearMetadataState} from "../../home/MetadataSlice";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -149,7 +151,7 @@ export default function DefaultAddress() {
   const location = useLocation()
   // GLOBAL STATE
   const {id: userId, isAuthenticated} = useSelector(userSelector)
-  const {isPending, isSuccess, isError, errorMessage} = useSelector(addressSelector)
+  const {isPending, isSuccess, isError, errorMessage, data: addresses} = useSelector(addressSelector)
   // LOCAL STATE
   const [suggestions, setSuggestion] = useState([])
   const [isFetching, setFetching] = useState(false)
@@ -178,15 +180,15 @@ export default function DefaultAddress() {
       dispatch(showError(errorMessage));
       dispatch(clearAddressState());
     }
-    if (isSuccess) {
-      dispatch(clearAddressState());
-      if (location.state?.ref) {
-        history.replace(location.state?.ref);
-      } else {
-        history.goBack()
-      }
-    }
-  }, [dispatch, isError, isSuccess]);
+    // if (isSuccess) {
+    //   dispatch(clearAddressState());
+    //   if (location.state?.ref) {
+    //     history.replace(location.state?.ref);
+    //   } else {
+    //     history.goBack()
+    //   }
+    // }
+  }, [dispatch, isError]);
 
   const centerComponent = (
     <PlacesAutocomplete value={address}
@@ -208,6 +210,39 @@ export default function DefaultAddress() {
       }}
     </PlacesAutocomplete>
   );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchAddress({userId}))
+    }
+  }, [])
+
+  if (isAuthenticated) {
+    return (
+      <Box mt={8} mx={2}>
+        <TopNavigationBar label="Giao hàng đến" isPending={isPending}/>
+        {isSuccess && (addresses.map((data) => (
+            <Ribbon key={data?.id} onClick={() => {
+              SystemApi
+                .setDefaultAddress(userId, data?.id)
+                .then(() => {
+                  dispatch(clearLocationState())
+                  dispatch(clearMetadataState())
+                  history.replace('/')
+                })
+                .catch((e) => {
+                  console.log(e)
+                  dispatch(showError("Lỗi khi đặt địa chỉ mặc định"))
+                })
+            }}>
+              <AddressItemLarge primaryText={data?.address}/>
+              <Divider variant="fullWidth"/>
+            </Ribbon>
+          ))
+        )}
+      </Box>
+    )
+  }
 
   return (
     <Box mt={8} px={2}>

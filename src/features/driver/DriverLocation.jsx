@@ -13,6 +13,8 @@ import {Motorcycle, PersonPinCircleTwoTone, Refresh, Store, StorefrontTwoTone} f
 import {IconButton} from "@material-ui/core";
 
 import 'mapbox-gl/dist/mapbox-gl.css'
+import CustomerMarker from "../../asserts/icons/CustomerMarker";
+import CustomerIcon from "../../asserts/icons/marker_person.svg"
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
@@ -255,7 +257,8 @@ export default function DriverLocation() {
         >
           <Marker longitude={customer[0]} latitude={customer[1]}>
             <div onClick={() => boundTo(customer, restaurant)}>
-              <PersonPinCircleTwoTone style={{fontSize: 40, color: `#FF6B35`}}/>
+              <CustomerMarker style={{fontSize: 40, color: `#FF6B35`}}/>
+              {/*<CustomerIcon/>*/}
             </div>
           </Marker>
           <Marker longitude={restaurant[0]} latitude={restaurant[1]}>

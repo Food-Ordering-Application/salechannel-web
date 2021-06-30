@@ -55,7 +55,7 @@ export default function Home() {
   //TODO: change default address
   return (
     <>
-      <AddressSelector address={address} onClick={() => console.log("TODO: change default address")}/>
+      <AddressSelector address={address} onClick={() => history.push('/address/default')}/>
       <Box className={classes.content}>
         {/*<div className={classes.favoriteRestaurants}>*/}
         {/*  <FavoriteListHorizontal/>*/}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {authHeader} from "../helpers/header";
 
 const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API : process.env.REACT_APP_LOCAL_API;
 
@@ -8,7 +9,22 @@ async function fetchMetadata() {
     return res.data.data;
   } catch (error) {
     if (error.response) {
-      throw new Error(error.response.message);
+      throw new Error("Lỗi máy chủ");
+    } else {
+      throw new Error(`Không có kết nối đến máy chủ`);
+    }
+  }
+}
+
+async function setDefaultAddress(customerID, customerAddressID) {
+  try {
+    const res = await axios.patch(`${BASEURL}/user/customer/${customerID}/address/${customerAddressID}/update-default-address`,
+      undefined,
+      {headers: authHeader()});
+    return res.data.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("Lỗi máy chủ");
     } else {
       throw new Error(`Không có kết nối đến máy chủ`);
     }
@@ -17,4 +33,5 @@ async function fetchMetadata() {
 
 export const SystemApi = {
   fetchMetadata,
+  setDefaultAddress
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, CircularProgress, Grid, IconButton, makeStyles, TextField, Typography} from "@material-ui/core";
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import StyledLink from "../../../components/StyledLink";
 import {ChevronLeft} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
@@ -9,9 +9,9 @@ import {clearUserState, registerUser, userSelector} from "../UserSlice";
 import OTPVerificationDialog from "../login-page/components/otpVerification-dialog/OTPVerificationDialog";
 
 export const passwordValidator = (password1, password2) => {
-  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,50})");
   if (!strongRegex.test(`${password1}`))
-    throw new Error("Mật khẩu tối thiểu 8 ký tự gồm chữ hoa, thường và số");
+    throw new Error("Mật khẩu tối thiểu 8, tối đa 50 ký tự gồm chữ hoa, thường và số");
   if (password1 !== password2)
     throw new Error("Mật khẩu không trùng khớp");
   return true;
@@ -48,6 +48,7 @@ const useStyles = makeStyles(theme => ({
 export default function Register() {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState(``);
   const [password1, setPassword1] = useState(``);
@@ -81,7 +82,7 @@ export default function Register() {
     if (isSuccess) {
       dispatch(clearUserState());
       dispatch(showSuccess("Đăng ký thành công"));
-      history.replace("/login");
+      history.replace(location.state?.ref || "/login");
     }
   }, [isError, isSuccess]);
 
