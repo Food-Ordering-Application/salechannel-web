@@ -16,6 +16,7 @@ import PlaceHolder from "../../common/PlaceHolder";
 import Ribbon from "../../common/Ribbon";
 import AddressItemLarge from "./components/AddressItemLarge";
 import {setDefaultLocation} from "../../home/LocationSlice";
+import {addressToLocationV2} from "../../../helpers/location";
 // import * as PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +52,10 @@ export default function AddressAdding() {
   const [address, setAddress] = useState(``);
   const handleTextChange = (address) => setAddress(address);
   const handleSelect = (address) => {
+    addressToLocationV2(String(address)).then((data) => {
+      const location = data.items[0]?.position || {lat: 10.762511912115652, lng: 106.68161304112337};
+      submitAddress(address, location)
+    })
     geocodeByAddress(address)
       .then((geocode) => getLatLng(geocode[0]))
       .then((location) => submitAddress(address, location))
