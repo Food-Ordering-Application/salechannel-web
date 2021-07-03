@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme => ({
       right: 0,
       zIndex: 5,
       display: `flex`,
+    },
+    rating: {
+      padding: theme.spacing(2),
     }
   })
 );
@@ -149,6 +152,8 @@ export default function Restaurant() {
                                   name={restaurantData?.name}
                                   address={restaurantData?.address}
                                   distance={distance}
+                                  rating={restaurantData?.rating}
+                                  numRate={restaurantData?.numRate}
             />
           </div>
           {/*<div className={classes.label}>*/}

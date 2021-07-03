@@ -7,7 +7,8 @@ import {
   CheckCircleTwoTone,
   ChevronRight,
   DescriptionTwoTone,
-  MotorcycleTwoTone
+  MotorcycleTwoTone,
+  Star
 } from "@material-ui/icons";
 import {currencyFormatter, dateFormatter} from "../../../../untils/formatter";
 import Ribbon from "../../../common/Ribbon";
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => {
       fontSize: theme.spacing(2),
       color: theme.palette.status[status.trim()],
     }),
+    star: {
+      color: theme.palette.primary.main,
+      fontSize: "15px",
+    }
   });
 });
 
@@ -63,6 +68,7 @@ export default function OrderHistoryItem({
                                            draftIcon = DescriptionTwoTone,
                                            allowReview,
                                            onReviewClick,
+                                           feedBack = false
                                          }) {
   const classes = useStyles({status: status.trim()});
 
@@ -105,17 +111,43 @@ export default function OrderHistoryItem({
               </Grid>
             </Box>
             <Box>
-              <Typography variant="h5">
-                <Box
-                  fontSize={12}
-                  color="onSurface.mediumEmphasis"
-                  component={"span"}
-                >
-                  <>{currencyFormatter(cost)}</>
-                  <>{paymentType ? ` (${paymentConstant[paymentType]?.name})` : ``}</>
-                  {/*<>{` ● ${itemCount} món`}</>*/}
-                </Box>
-              </Typography>
+              <Grid container>
+                <Grid item xs>
+                  <Typography variant="h5">
+                    <Box
+                      fontSize={12}
+                      color="onSurface.mediumEmphasis"
+                      component={"span"}
+                    >
+                      <>{currencyFormatter(cost)}</>
+                      <>{paymentType ? ` (${paymentConstant[paymentType]?.name})` : ``}</>
+                      {/*<>{` ● ${itemCount} món`}</>*/}
+                    </Box>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  {feedBack ? (
+                    <Grid container justify={"center"}>
+                      <Grid item>
+                        <Typography variant={"h5"}>
+                          <Box fontSize={12} pr={0.5}>
+                            {feedBack?.rate}
+                          </Box>
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Star className={classes.star}/>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Typography variant="h5">
+                      <Box fontSize={12} color="onSurface.mediumEmphasis">
+                        {feedBack === false ? '' : "Chưa đánh giá"}
+                      </Box>
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
             </Box>
           </Box>
         </Ribbon>

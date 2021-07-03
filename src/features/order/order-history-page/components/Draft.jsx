@@ -92,6 +92,7 @@ export default function Draft({
             onClick={() => onItemClick(id, restaurantId)}
             draftText={draftName}
             draftIcon={draftIcon}
+            feedBack={allowReview && feedback}
             allowReview={allowReview && !feedback && checkAllowReview(new Date(updatedAt), new Date())}
             onReviewClick={() => history.push(`/order/${id}/review`, {step: 2, ref: '/orders'})}
           />

@@ -23,15 +23,14 @@ export function getCurrentLocation(options) {
         reject(Object.assign(new Error(message), {name: "PositionError", code})),
       options);
   });
-};
+}
 
 export async function getAddress(lng, lat) {
   try {
+    return '280 An Dương Vương, Phường 4, Quận 5, Thành phố Hồ Chí Minh'
     const {data: {results}} = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=vi&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
     if (results[0])
       return results[0]?.formatted_address;
-    // throw new Error("Không tìm thấy địa chỉ của bạn");
-    return '31-33 Nguyễn Trãi, Phường 2, quận 5, Thành phố Hồ Chí Minh'
   } catch (error) {
     throw new Error("Không tìm thấy địa chỉ của bạn");
   }

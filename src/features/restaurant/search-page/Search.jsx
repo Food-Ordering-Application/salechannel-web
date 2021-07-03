@@ -9,16 +9,13 @@ import {
   setCategoryIds
 } from "../RestaurantsListSlice";
 import {showError} from "../../common/Snackbar/SnackbarSlice";
-import {Box, Collapse, Divider, FormControl, Grid, InputBase, MenuItem, Select, Typography} from "@material-ui/core";
+import {Box, InputBase} from "@material-ui/core";
 import RestaurantItemLarge from "../../../components/RestaurantItemLarge";
 import {useHistory} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import SearchIcon from "../../../asserts/icons/Search";
 import Skeleton from "react-loading-skeleton";
-import {areaConstant} from "../../../constants/areaConstant";
-import FilterTitle from "./components/FilterTitle";
-import Ribbon from "../../common/Ribbon";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../../common/Spinner";
 import {metadataSelector} from "../../home/MetadataSlice";
@@ -47,7 +44,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Search() {
   const classes = useStyles();
-  const {data: restaurants, isFetching, isError, errorMessage, categoryIds, sortId, filterIds} = useSelector(restaurantsListSelector);
+  const {
+    data: restaurants,
+    isFetching,
+    isError,
+    errorMessage,
+    categoryIds,
+    sortId,
+    filterIds,
+    areaIds
+  } = useSelector(restaurantsListSelector);
   const {isSuccess: mReady, data: metadata} = useSelector(metadataSelector)
   const {isSuccess: lReady, location: userLocation} = useSelector(locationSelector)
   const dispatch = useDispatch();
@@ -55,19 +61,10 @@ export default function Search() {
   const [area, setArea] = useState("TPHCM");
 
   const [name, setName] = useState(``);
-  const [open, setOpen] = useState(false);
-
-
-  const onAreaChange = (event) => {
-    const text = `${event.target.value}`;
-    setOpen(false);
-    setArea(text);
-    search(name, text);
-  };
 
   const search = function (name, area) {
     dispatch(clearRestaurantsListState());
-    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name, sortId, filterIds}));
+    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name, sortId, filterIds, areaIds}));
   };
 
   const handleBack = () => {
@@ -119,57 +116,6 @@ export default function Search() {
                fullWidth
                autoFocus
     />
-  );
-
-  const bottomComponent = (
-    <>
-      <Ribbon onClick={() => setOpen(!open)}>
-        <Box mx={2} pb={1}>
-          <Grid container alignItems="center" justify="flex-end" spacing={1}>
-            {categoryIds.length !== 0 && (
-              categoryIds.map((categoryId) => (
-                <Grid item>
-                  <FilterTitle>{metadata._categories[categoryId]}</FilterTitle>
-                </Grid>
-              ))
-            )}
-            <Grid item xs>
-              <FilterTitle>{areaConstant[area].name}</FilterTitle>
-            </Grid>
-            <Grid item>
-              <Typography variant="h4">
-                <Box fontSize={14} color="primary.main">Nâng cao</Box>
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-      </Ribbon>
-      <Collapse in={open}>
-        <Divider variant="fullWidth" light/>
-        <Box mt={2} mb={2} mx={2}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item>
-              <Typography variant="h4">
-                <Box fontSize={14}>Khu vực</Box>
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <FormControl fullWidth>
-                <Select value={area}
-                        onChange={onAreaChange}
-                >
-                  {Object.keys(areaConstant).map((code) => (
-                    <MenuItem key={code}
-                              value={code}
-                              children={areaConstant[code].name}/>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-      </Collapse>
-    </>
   );
 
   return (

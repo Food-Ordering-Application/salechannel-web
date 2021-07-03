@@ -6,10 +6,11 @@ import {Box, Button, Collapse, Divider, FormControl, Grid, MenuItem, Select, Typ
 import FilterTitle from "./FilterTitle";
 import React, {useState} from "react";
 import {
-  addFilter,
+  setFilterIds,
   changeSort,
   clearAllFilter,
   restaurantsListSelector,
+  setAreaIds,
   setCategoryIds
 } from "../../RestaurantsListSlice";
 
@@ -19,7 +20,7 @@ export default function RestaurantFilter({onSubmit}) {
   const dispatch = useDispatch()
 
   const {isSuccess: mOK, data: metadata} = useSelector(metadataSelector)
-  const {categoryIds, filterIds, sortId} = useSelector(restaurantsListSelector)
+  const {categoryIds, areaIds, filterIds, sortId} = useSelector(restaurantsListSelector)
 
   const [open, setOpen] = useState(false)
 
@@ -27,7 +28,6 @@ export default function RestaurantFilter({onSubmit}) {
     history.replace(`/`)
     return null
   }
-
 
   return (
     <>
@@ -63,8 +63,9 @@ export default function RestaurantFilter({onSubmit}) {
             <Grid item xs>
               <FormControl fullWidth>
                 <Select value={filterIds}
+                        multiple
                         onChange={(event) => {
-                          dispatch(addFilter({id: event.target.value}))
+                          dispatch(setFilterIds(event.target.value))
                         }}
                 >
                   {metadata.restaurantFilterType.map(({id, name}) => (
@@ -118,6 +119,31 @@ export default function RestaurantFilter({onSubmit}) {
                         }}
                 >
                   {metadata.categories.map(({id, name}) => (
+                    <MenuItem key={id}
+                              value={id}
+                              children={name}/>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box m={2}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Typography variant="h4">
+                <Box fontSize={14}>Khu vực</Box>
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <FormControl fullWidth>
+                <Select value={areaIds}
+                        multiple
+                        onChange={(event) => {
+                          dispatch(setAreaIds(event.target.value))
+                        }}
+                >
+                  {metadata.districts.map(({id, name}) => (
                     <MenuItem key={id}
                               value={id}
                               children={name}/>

@@ -1,8 +1,8 @@
 import React from "react";
-import {Card, CardContent, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
+import {Card, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
 import {Star} from "@material-ui/icons";
-import PayPalIcon from "../asserts/icons/PayPalIcon";
 import {calculateDistance} from "../helpers/location";
+import PayPal from "../asserts/icons/PayPal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   content: {
-    flex: '1 0 auto',
+    paddingLeft: theme.spacing(1.25),
   },
   cover: {
     minWidth: '82px',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.font.family,
     letterSpacing: theme.font.letterSpacing,
     fontWeight: 600,
-    fontSize: '12px',
+    fontSize: '13px',
     lineHeight: '16px',
   },
   info: {
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     fontSize: '11px',
     lineHeight: '16px',
+    paddingTop: theme.spacing(0.5),
   },
   divider: {
     margin: theme.spacing(0.75, 0),
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const numRateFormatter = (numRate) => {
+export const numRateFormatter = (numRate) => {
   if (!numRate || numRate < 15) {
     return ``
   } else {
@@ -116,7 +117,7 @@ export default function RestaurantItemLarge({
         title={name}
       />
       <div className={classes.details}>
-        <CardContent className={classes.content}>
+        <div className={classes.content}>
           <Typography className={classes.name}>{name}</Typography>
           <Typography className={classes.info}>{description}</Typography>
           <Divider variant='fullWidth' className={classes.divider}/>
@@ -131,20 +132,13 @@ export default function RestaurantItemLarge({
                 )}
               </Typography>
             </div>
-            {/*{location && customerLocation && (*/}
-            {/*  <div className={`${classes.horizontalContent} ${classes.timeContent}`}>*/}
-            {/*    <LocationIcon className={classes.paypal}/>*/}
-            {/*    <Typography*/}
-            {/*      className={classes.info}>{`${(calculateDistance(location, customerLocation) / 1000).toFixed(1)} km`}</Typography>*/}
-            {/*  </div>*/}
-            {/*)}*/}
             {paypalId && (
               <div className={`${classes.horizontalContent} ${classes.timeContent}`}>
-                <PayPalIcon className={classes.timer}/>
+                <PayPal className={classes.timer}/>
               </div>
             )}
           </div>
-        </CardContent>
+        </div>
       </div>
     </Card>
   );

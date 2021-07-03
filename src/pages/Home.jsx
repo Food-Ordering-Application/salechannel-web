@@ -52,7 +52,6 @@ export default function Home() {
     }
   }, [locationReady]);
 
-  //TODO: change default address
   return (
     <>
       <AddressSelector address={address} onClick={() => history.push('/address/default')}/>

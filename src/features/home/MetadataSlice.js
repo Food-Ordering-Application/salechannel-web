@@ -7,8 +7,9 @@ export const fetchMetadata = createAsyncThunk(
   async ({longitude, latitude}, thunkAPI) => {
     try {
       const _metadata = await SystemApi.fetchMetadata()
-      const _nearby = await RestaurantApi.filter(1, 25, 5, undefined, '', undefined, 2, {longitude, latitude})
-      return {..._metadata, ..._nearby}
+      const _districts = await SystemApi.fetchDistrict()
+      const _nearby = await RestaurantApi.filter(1, 25, 5, undefined, '', undefined, 2, undefined)
+      return {..._metadata, ..._nearby, districts: _districts.city.districts}
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message)
     }
