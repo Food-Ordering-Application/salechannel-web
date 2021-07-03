@@ -31,6 +31,7 @@ export default function Draft({
                                 draftName = `Đơn nháp`,
                                 draftIcon,
                                 allowReview = false,
+                                onEmpty
                               }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -52,6 +53,9 @@ export default function Draft({
       fetchOrders()
         .then(({orders}) => {
           setSuccess(true);
+          if (orders.length === 0) {
+            onEmpty()
+          }
           setDraft(orders);
         })
         .catch((error) => {
@@ -81,7 +85,15 @@ export default function Draft({
         <Box hidden={isLoading || (isSuccess && draft.length !== 0)}>
           <PlaceHolder icon={ReceiptTwoTone} text={`Không có đơn hàng nào`}/>
         </Box>
-        {draft.map(({id, grandTotal, subTotal, restaurantId, feedback, delivery: {restaurantName, restaurantAddress, updatedAt, status}, invoice}) => (
+        {draft.map(({
+                      id,
+                      grandTotal,
+                      subTotal,
+                      restaurantId,
+                      feedback,
+                      delivery: {restaurantName, restaurantAddress, updatedAt, status},
+                      invoice
+                    }) => (
           <OrderHistoryItem
             key={id}
             status={status}

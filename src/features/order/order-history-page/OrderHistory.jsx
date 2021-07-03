@@ -64,6 +64,7 @@ export default function OrderHistory() {
             linkPattern={`/order/{orderId}`}
             draftName={`Đang xử lí`}
             draftIcon={Autorenew}
+            onEmpty={() => setTabIndex(1)}
           />
         </Box>
         <Box p={2}>
@@ -73,6 +74,7 @@ export default function OrderHistory() {
             forceRefresh={forceRefresh}
             linkPattern={`/order/{orderId}`}
             allowReview={true}
+            onEmpty={() => setTabIndex(1)}
           />
         </Box>
         <Box p={2}>
@@ -81,6 +83,7 @@ export default function OrderHistory() {
             fetchOrders={OrderApi.fetchDraft}
             forceRefresh={forceRefresh}
             linkPattern={`/store/{restaurantId}`}
+            onEmpty={() => setTabIndex(1)}
           />
         </Box>
       </SwipeableViews>

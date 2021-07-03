@@ -20,6 +20,9 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     marginTop: `48px`,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   sideBar: {
     position: "fixed",
