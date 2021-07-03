@@ -282,6 +282,13 @@ const theme = createMuiTheme({
         paddingTop: `12px`,
       }
     },
+    MuiChip: {
+      sizeSmall: {
+        fontFamily: "'Lexend', sans-serif",
+        fontSize: "12.5px",
+        fontWeight: "600"
+      },
+    },
   },
 });
 

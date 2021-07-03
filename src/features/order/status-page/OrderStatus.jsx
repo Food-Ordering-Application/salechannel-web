@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Box, Divider, Grid, Typography} from "@material-ui/core";
+import {Box, Chip, Divider, Grid, Typography} from "@material-ui/core";
 import TopNavigationBar from "../../common/TopNavigationBar";
 import StatusCard from "./components/StatusCard/StatusCard";
 import RiderInfo from "./components/RiderInfo";
@@ -16,8 +16,9 @@ import {showError} from "../../common/Snackbar/SnackbarSlice";
 import orderConstant from "../../../constants/orderConstant";
 import Pusher from "pusher-js";
 import {DriverApi} from "../../../api/RiderApi";
-import {CheckCircleTwoTone} from "@material-ui/icons";
+import {ChevronRight, Print} from "@material-ui/icons";
 import {datetimeFormatter} from "../../../untils/formatter";
+import Ribbon from "../../common/Ribbon";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -29,10 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   successCard: {
     borderRadius: theme.spacing(1),
+    padding: theme.spacing(2, 0),
     boxShadow: theme.effect.dp10.boxShadow,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    textAlign: "center",
   }
 }));
 
@@ -89,12 +89,19 @@ export default function OrderStatus() {
   if (!isSuccess) {
     return (
       <>
-        <TopNavigationBar label="Trạng thái đơn hàng" isPending={isRequesting}/>
+        <TopNavigationBar label="Trạng thái đơn hàng" isPending={true}/>
       </>
     )
   }
 
-  const {paymentType, subTotal, updatedAt, driverInfo, delivery: {shippingFee, status, driverId}} = data;
+  const {
+    paymentType,
+    subTotal,
+    updatedAt,
+    driverInfo,
+    restaurantId,
+    delivery: {restaurantName, restaurantAddress, shippingFee, status, driverId}
+  } = data;
 
   return (
     <>
@@ -103,23 +110,50 @@ export default function OrderStatus() {
         <Box py={2}>
           {status === orderConstant.COMPLETED.code ? (
             <Box className={classes.successCard}>
-              <Grid container justify={"center"} alignItems={"center"}>
-                <Grid item>
-                  <Box color={"status.COMPLETED"} component={CheckCircleTwoTone}/>
-                </Grid>
-                <Grid item>
-                  <Box p={2}>
-                    <Typography variant={"h4"}>
-                      <Box fontSize={16}>Giao hàng thành công</Box>
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-              <Box textAlign={"center"}>
+              <Ribbon onClick={() => history.replace(`/store/${restaurantId}`)}>
+                <Box pl={2}>
+                  <Grid container justify="center" alignItems="flex-end">
+                    <Grid item xs>
+                      <Typography variant={"h4"}>
+                        <Box fontSize={16} color={`onSurface.highEmphasis`} textAlign="center">{restaurantName}</Box>
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <ChevronRight style={{fontSize: 16}}/>
+                    </Grid>
+                  </Grid>
+                </Box>
                 <Typography variant={"h5"}>
-                  <Box fontSize={12} color={`disabled`}>{datetimeFormatter(new Date(updatedAt))}</Box>
+                  <Box pb={1} fontSize={12} color={`onSurface.mediumEmphasis`}
+                       textAlign="center">{restaurantAddress}</Box>
+                </Typography>
+              </Ribbon>
+              <Divider variant="fullWidth" light/>
+              <Typography variant={"h4"}>
+                <Box pt={1} color={"status.COMPLETED"} fontSize={14}>Giao hàng thành công</Box>
+              </Typography>
+              <Box textAlign={"center"} mb={1}>
+                <Typography variant={"h5"}>
+                  <Box fontSize={12} color={`onSurface.mediumEmphasis`}>{datetimeFormatter(new Date(updatedAt))}</Box>
                 </Typography>
               </Box>
+              <Grid container justify="center" alignItems="center">
+                <Grid item>
+                  <Chip
+                    icon={<Print/>}
+                    label="Xuất hóa đơn"
+                    variant="outlined"
+                    size="small"
+                    onClick={() => {
+                      window.open(
+                        `${process.env.REACT_APP_PRODUCTION_API}/order/${orderId}/invoice`,
+                        `_blank`
+                      )
+                      return null
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </Box>
           ) : (
             <StatusCard statusText={''}

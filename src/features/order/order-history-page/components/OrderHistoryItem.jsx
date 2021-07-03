@@ -10,7 +10,7 @@ import {
   MotorcycleTwoTone,
   Star
 } from "@material-ui/icons";
-import {currencyFormatter, dateFormatter} from "../../../../untils/formatter";
+import {currencyFormatter, datetimeFormatter} from "../../../../untils/formatter";
 import Ribbon from "../../../common/Ribbon";
 import {makeStyles} from "@material-ui/core/styles";
 import orderConstant from "../../../../constants/orderConstant";
@@ -68,7 +68,8 @@ export default function OrderHistoryItem({
                                            draftIcon = DescriptionTwoTone,
                                            allowReview,
                                            onReviewClick,
-                                           feedBack = false
+                                           feedBack = false,
+                                           address
                                          }) {
   const classes = useStyles({status: status.trim()});
 
@@ -93,17 +94,22 @@ export default function OrderHistoryItem({
                 <Grid item xs/>
                 <Grid item>
                   <Typography variant="h5">
-                    <Box fontSize={12} color="onSurface.mediumEmphasis">{dateFormatter(new Date(date))}</Box>
+                    <Box fontSize={12} color="onSurface.mediumEmphasis">{datetimeFormatter(new Date(date))}</Box>
                   </Typography>
                 </Grid>
               </Grid>
             </Box>
             <Box my={2}>
-              <Grid container>
+              <Grid container justify="center" alignItems="center">
                 <Grid item xs>
                   <Typography variant="h4">
                     <Box fontSize={16} color="onSurface.highEmphasis">{name}</Box>
                   </Typography>
+                  {address && (
+                    <Typography variant="h5">
+                      <Box mt={0.5} fontSize={12} color="onSurface.mediumEmphasis">{address}</Box>
+                    </Typography>
+                  )}
                 </Grid>
                 <Grid item>
                   <Box fontSize={16} component={ChevronRight}/>
@@ -116,12 +122,12 @@ export default function OrderHistoryItem({
                   <Typography variant="h5">
                     <Box
                       fontSize={12}
-                      color="onSurface.mediumEmphasis"
+                      color="onSurface.highEmphasis"
                       component={"span"}
                     >
                       <>{currencyFormatter(cost)}</>
                       <>{paymentType ? ` (${paymentConstant[paymentType]?.name})` : ``}</>
-                      {/*<>{` ● ${itemCount} món`}</>*/}
+                      <>{itemCount && ` ● ${itemCount} món`}</>
                     </Box>
                   </Typography>
                 </Grid>
@@ -130,7 +136,7 @@ export default function OrderHistoryItem({
                     <Grid container justify={"center"}>
                       <Grid item>
                         <Typography variant={"h5"}>
-                          <Box fontSize={12} pr={0.5}>
+                          <Box fontSize={12} pr={0.5} color="onSurface.mediumEmphasis">
                             {feedBack?.rate}
                           </Box>
                         </Typography>

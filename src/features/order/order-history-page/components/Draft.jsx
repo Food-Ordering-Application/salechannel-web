@@ -61,7 +61,7 @@ export default function Draft({
           setLoading(false);
         })
     }
-  }, [forceRefresh]);
+  }, [forceRefresh])
 
   useEffect(() => {
     if (isActive) {
@@ -81,20 +81,21 @@ export default function Draft({
         <Box hidden={isLoading || (isSuccess && draft.length !== 0)}>
           <PlaceHolder icon={ReceiptTwoTone} text={`Không có đơn hàng nào`}/>
         </Box>
-        {draft.map(({id, subTotal, restaurantId, feedback, delivery: {restaurantName, updatedAt, status}}) => (
+        {draft.map(({id, grandTotal, subTotal, restaurantId, feedback, delivery: {restaurantName, restaurantAddress, updatedAt, status}, invoice}) => (
           <OrderHistoryItem
             key={id}
             status={status}
             name={restaurantName}
-            itemCount={1}
+            paymentMethod={invoice?.payment?.method}
             date={updatedAt}
-            cost={subTotal}
+            cost={grandTotal || subTotal}
             onClick={() => onItemClick(id, restaurantId)}
             draftText={draftName}
             draftIcon={draftIcon}
             feedBack={allowReview && feedback}
             allowReview={allowReview && !feedback && checkAllowReview(new Date(updatedAt), new Date())}
             onReviewClick={() => history.push(`/order/${id}/review`, {step: 2, ref: '/orders'})}
+            address={restaurantAddress}
           />
         ))}
       </Box>
