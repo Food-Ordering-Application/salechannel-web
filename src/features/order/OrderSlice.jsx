@@ -310,7 +310,15 @@ export const orderSlice = createSlice({
       },
       [fetchOrderData.pending]: handlePendingDefault,
       [fetchOrderData.rejected]: handleRejectDefault,
-      [fetchOrderData.fulfilled]: handleFulfillDefault,
+      [fetchOrderData.fulfilled]: (state, {payload}) => {
+        state.isRequesting = false;
+        state.isSuccess = true;
+        state.isEmpty = !payload.order;
+        state.data = Object.assign({
+          note: '',
+          paymentType: payload.order?.invoice?.payment?.method || paymentConstant.COD.code
+        }, payload.order)
+      },
     },
   })
 ;

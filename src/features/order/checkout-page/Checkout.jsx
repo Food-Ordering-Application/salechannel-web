@@ -6,9 +6,9 @@ import LocationCard from './components/LocationCard';
 import OrderDetails from './components/OrderDetails';
 import MainActionsBottom from './components/MainActionsBottom';
 import TopNavigationBar from '../../common/TopNavigationBar';
-import {useHistory, useParams} from 'react-router-dom';
+import {useHistory, useLocation, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearOrderState, confirmOrder, orderSelector, removeItem,} from '../OrderSlice';
+import {clearOrderState, confirmOrder, fetchOrderData, orderSelector, removeItem,} from '../OrderSlice';
 import {showError} from '../../common/Snackbar/SnackbarSlice';
 import AddressDialog from './components/AddressDialog';
 import NoteDialog from './components/NoteDialog';
@@ -33,6 +33,7 @@ export default function Checkout() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation()
   const {id: restaurantId} = useParams();
   const [addressOpen, setAddressOpen] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
@@ -63,6 +64,12 @@ export default function Checkout() {
   }, [isError, dispatch, orderSuccess]);
 
   if (isEmpty) {
+    if (location.state?.orderId) {
+      dispatch(fetchOrderData({orderId: location.state?.orderId}))
+      return (
+        <TopNavigationBar label="Chi tiết đơn hàng" isPending={true}/>
+      )
+    }
     history.replace(`/store/${restaurantId}`);
     return null;
   }

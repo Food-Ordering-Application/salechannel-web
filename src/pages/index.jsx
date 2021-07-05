@@ -59,7 +59,6 @@ export default function IndexComponent() {
       <Route exact path='/add-email/verify/:token'><VerifyEmail/></Route>
       <Route exact path='/location/analyse'><AnalyseLocation/></Route>
       <Route exact path='/address/default'><DefaultAddress/></Route>
-      <Route exact path='/address/default'><DefaultAddress/></Route>
     </Switch>
   );
 }

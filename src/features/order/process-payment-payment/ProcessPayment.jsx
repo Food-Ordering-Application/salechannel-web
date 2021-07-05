@@ -19,14 +19,13 @@ export default function ProcessPayment() {
       history.replace(`/order/${orderId}`)
     } else {
       dispatch(showError("Thanh toán thất bại. Vui lòng thử lại."))
-      dispatch(showError(`/checkout/${orderId}`))
+      history.replace(`/checkout/${orderId}`, {orderId})
     }
   }, [])
 
   return (
     <Box mt={6}>
       <TopNavigationBar label={"Xử lí thanh toán"} isPending={true}/>
-      <Box>{JSON.stringify(status)}</Box>
     </Box>
   )
 }
