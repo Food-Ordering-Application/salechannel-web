@@ -14,6 +14,7 @@ import AddressDialog from './components/AddressDialog';
 import NoteDialog from './components/NoteDialog';
 import PaymentDialog from './components/PaymentDialog';
 import SplashScreen from "../../common/SplashScreen";
+import {paymentConstant} from "../../../constants/paymentConstant";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,6 +53,13 @@ export default function Checkout() {
       dispatch(clearOrderState());
     }
     if (orderSuccess) {
+      if (data.paymentType === paymentConstant.ZALOPAY.code) {
+        window.open(
+          `${data?.orderUrl}`,
+          `_blank`
+        )
+        return
+      }
       dispatch(clearOrderState());
       history.replace(`/order/${orderId}`);
     }

@@ -14,6 +14,7 @@ import PayPalIcon from '../../../../asserts/icons/PayPalIcon';
 import {useDispatch, useSelector} from "react-redux";
 import {setPaymentType} from "../../OrderSlice";
 import {restaurantSelector} from "../../../restaurant/RestaurantSlice";
+import ZaloPay from "../../../../asserts/icons/ZaloPay";
 
 export const mapPaymentIcon = (paymentTypes) => {
   switch (paymentTypes) {
@@ -23,6 +24,8 @@ export const mapPaymentIcon = (paymentTypes) => {
       return LocalAtm;
     case paymentConstant.PAYPAL.code:
       return PayPalIcon;
+    case paymentConstant.ZALOPAY.code:
+      return ZaloPay;
     default:
       return null;
   }

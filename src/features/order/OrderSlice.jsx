@@ -291,9 +291,10 @@ export const orderSlice = createSlice({
         state.isError = true;
         state.errorMessage = payload;
       },
-      [confirmOrder.fulfilled]: (state) => {
+      [confirmOrder.fulfilled]: (state, {payload}) => {
         state.isPlacing = false;
-        state.orderSuccess = state.data.paymentType === paymentConstant.COD.code;
+        state.orderSuccess = state.data.paymentType !== paymentConstant.PAYPAL.code;
+        state.data = {...state.data, orderUrl: payload.orderUrl}
       },
       [approvePaypal.pending]: (state) => {
         state.isPlacing = true;

@@ -11,4 +11,8 @@ export const paymentConstant = {
     code: `VISA_MASTERCARD`,
     name: `Thẻ`
   },
+  ZALOPAY:{
+    code: `ZALOPAY`,
+    name: `ZaloPay`
+  }
 }

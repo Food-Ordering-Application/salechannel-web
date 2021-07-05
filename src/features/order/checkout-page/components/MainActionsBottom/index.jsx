@@ -107,6 +107,17 @@ export default function MainActionsBottom({
           {paymentType === paymentConstant.PAYPAL.code && <Grid item xs>
             <PayPalButtonComponent orderId={orderId} note={"note"} disabled={disablePlaceOrder}/>
           </Grid>}
+          {paymentType === paymentConstant.ZALOPAY.code&&<Grid item xs>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={disablePlaceOrder}
+              onClick={handleCheckout}
+            >
+              <Box className={classes.orderBtn}>Thanh toán</Box>
+            </Button>
+          </Grid>}
         </Grid>
       </Box>
     </Box>
