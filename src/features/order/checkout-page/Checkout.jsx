@@ -54,10 +54,7 @@ export default function Checkout() {
     }
     if (orderSuccess) {
       if (data.paymentType === paymentConstant.ZALOPAY.code) {
-        window.open(
-          `${data?.orderUrl}`,
-          `_blank`
-        )
+        window.location.href = data?.orderUrl
         return
       }
       dispatch(clearOrderState());

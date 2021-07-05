@@ -26,6 +26,7 @@ import OrderReview from "../features/order/review-page/OrderReview";
 import AnalyseLocation from "../features/position";
 import DriverLocation from "../features/driver/DriverLocation";
 import DefaultAddress from "../features/address/default-address-page/DefaultAddress";
+import ProcessPayment from "../features/order/process-payment-payment/ProcessPayment";
 
 
 export default function IndexComponent() {
@@ -44,6 +45,7 @@ export default function IndexComponent() {
       <Route exact path='/notifications'><Notifications/></Route>
       <Route exact path='/checkout/:id'><Checkout/></Route>
       <Route exact path='/search'><Search/></Route>
+      <Route exact path='/order/:id/payment-is-processing'><ProcessPayment/></Route>
       <Route exact path='/order/:id/review'><OrderReview/></Route>
       <Route exact path='/order/:id/location'><DriverLocation/></Route>
       <Route exact path='/order/:id'><OrderStatus/></Route>

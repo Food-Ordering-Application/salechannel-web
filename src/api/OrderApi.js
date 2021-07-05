@@ -318,5 +318,24 @@ export const OrderApi = {
         throw new Error(`Không có kết nối đến máy chủ`);
       }
     }
-  }
+  },
+  updateZaloPayment: async (orderId) => {
+    try {
+      return await axios.patch(
+        `${BASEURL}/order/${orderId}/update-zalopay-payment`,
+        {orderId},
+        {headers: authHeader()}
+      );
+    } catch (e) {
+      const response = e.response;
+      if (response) {
+        if (response.status === 403) {
+          throw new Error(`Máy chủ từ chối thao tác`);
+        }
+        throw new Error(`Lỗi máy chủ. Vui lòng liên hệ quản trị viên`);
+      } else {
+        throw new Error(`Không có kết nối đến máy chủ`);
+      }
+    }
+  },
 };
