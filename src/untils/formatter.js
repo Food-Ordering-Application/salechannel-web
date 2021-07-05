@@ -21,6 +21,10 @@ export const dateFormatter = (value) => {
   }
 };
 
+export const shortTimeFormatter = (value) => {
+  return moment(value).format(`hh:mm`)
+}
+
 export const weekDayOfToday = () => {
   return moment().format(`dddd`);
 };

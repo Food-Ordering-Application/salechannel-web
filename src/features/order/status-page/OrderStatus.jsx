@@ -17,7 +17,7 @@ import orderConstant from "../../../constants/orderConstant";
 import Pusher from "pusher-js";
 import {DriverApi} from "../../../api/RiderApi";
 import {ChevronRight, Print} from "@material-ui/icons";
-import {datetimeFormatter} from "../../../untils/formatter";
+import {shortTimeFormatter} from "../../../untils/formatter";
 import Ribbon from "../../common/Ribbon";
 
 const useStyles = makeStyles((theme) => ({
@@ -95,11 +95,12 @@ export default function OrderStatus() {
   }
 
   const {
-    paymentType,
     subTotal,
+    createdAt,
     updatedAt,
     driverInfo,
     restaurantId,
+    invoice,
     delivery: {restaurantName, restaurantAddress, shippingFee, status, driverId, deliveredAt}
   } = data;
 
@@ -130,12 +131,27 @@ export default function OrderStatus() {
               </Ribbon>
               <Divider variant="fullWidth" light/>
               <Typography variant={"h4"}>
-                <Box pt={1} color={"status.COMPLETED"} fontSize={14}>Giao hàng thành công</Box>
+                <Box pt={1} color={"status.COMPLETED"} fontSize={15}>Giao hàng thành công</Box>
               </Typography>
-              <Box textAlign={"center"} mb={1}>
-                <Typography variant={"h5"}>
-                  <Box fontSize={12} color={`onSurface.mediumEmphasis`}>{datetimeFormatter(new Date(deliveredAt || updatedAt))}</Box>
-                </Typography>
+              <Box mt={1} mb={2} textAlign={"center"}>
+                <Grid container>
+                  <Grid item xs>
+                    <Typography variant={"h5"}>
+                      <Box fontSize={12} fontWeight={600}>Đặt lúc</Box>
+                      <Box fontSize={12} color={`onSurface.mediumEmphasis`}>
+                        {shortTimeFormatter(createdAt)}
+                      </Box>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Typography variant={"h5"}>
+                      <Box fontSize={12} fontWeight={600}>Giao lúc</Box>
+                      <Box fontSize={12} color={`onSurface.mediumEmphasis`}>
+                        {shortTimeFormatter(deliveredAt || updatedAt)}
+                      </Box>
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Box>
               <Grid container justify="center" alignItems="center">
                 <Grid item>
@@ -173,9 +189,6 @@ export default function OrderStatus() {
               avatar={driverInfo.avatar}
               name={driverInfo?.name}
               licensePlate={driverInfo?.licensePlate}
-              // avatar={"https://www.shareicon.net/data/128x128/2016/06/27/787157_people_512x512.png"}
-              // name={"Nguyễn Thị Bích Ngọc"}
-              // licensePlate={"70LA-0582"}
             />
           </Box>
         )}
@@ -192,8 +205,7 @@ export default function OrderStatus() {
                 <Box pb={1.5} fontWeight="bold">
                   <MoneyItem label="Thanh toán bằng" rightNode={
                     <Typography variant="h4">
-                      <Box fontSize={12}>{paymentConstant[paymentType].name}</Box>
-                      {/*<Box fontSize={12}>PayPal</Box>*/}
+                      <Box fontSize={12}>{paymentConstant[invoice.payment?.method || `PAYPAL`].name}</Box>
                     </Typography>
                   }/>
                 </Box>
