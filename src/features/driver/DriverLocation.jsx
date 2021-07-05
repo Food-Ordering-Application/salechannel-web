@@ -20,9 +20,6 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     marginTop: `48px`,
-    left: 0,
-    bottom: 0,
-    right: 0,
   },
   sideBar: {
     position: "fixed",
@@ -51,7 +48,7 @@ export default function DriverLocation() {
   const [viewport, setViewport] = useState({
     latitude: 10.7058661,
     longitude: 106.7049702,
-    zoom: 10,
+    zoom: 15,
   })
   const [lPending, setPending] = useState(false)
   const [customer, setCustomer] = useState([106.68157012684986, 10.76249083188875])
@@ -82,7 +79,6 @@ export default function DriverLocation() {
       longitude: location[0],
       latitude: location[1],
       zoom: 15,
-      transitionDuration: 1500,
       transitionInterpolator: new FlyToInterpolator(),
       width,
       height,
@@ -101,7 +97,7 @@ export default function DriverLocation() {
       })
       .catch((e) => console.log(e))
       .finally(() => setPending(false))
-  }
+  };
 
   useEffect(() => {
     if (!oOK) {

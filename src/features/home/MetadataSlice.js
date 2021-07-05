@@ -2,56 +2,18 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {SystemApi} from "../../api/SystemApi";
 import RestaurantApi from "../../api/RestaurantApi";
 
-const districts = [
-  {"id": 131, "name": "Bình Chánh"},
-  {"id": 132, "name": "Cần Giờ"},
-  {
-    "id": 133,
-    "name": "Củ Chi"
-  },
-  {"id": 134, "name": "Hóc Môn"},
-  {"id": 135, "name": "Nhà Bè"},
-  {"id": 136, "name": "Quận 1"}, {
-    "id": 137,
-    "name": "Quận 10"
-  },
-  {"id": 138, "name": "Quận 11"},
-  {"id": 139, "name": "Quận 12"},
-  {"id": 140, "name": "Quận 2"}, {
-    "id": 141,
-    "name": "Quận 3"
-  },
-  {"id": 142, "name": "Quận 4"},
-  {"id": 143, "name": "Quận 5"},
-  {"id": 144, "name": "Quận 6"}, {
-    "id": 145,
-    "name": "Quận 7"
-  },
-  {"id": 146, "name": "Quận 8"},
-  {"id": 147, "name": "Quận 9"},
-  {"id": 148, "name": "Quận Bình Tân"}, {
-    "id": 149,
-    "name": "Quận Bình Thạnh"
-  },
-  {"id": 150, "name": "Quận Gò Vấp"},
-  {"id": 151, "name": "Quận Phú Nhuận"},
-  {
-    "id": 152,
-    "name": "Quận Tân Bình"
-  },
-  {"id": 153, "name": "Quận Tân Phú"},
-  {"id": 154, "name": "Quận Thủ Đức"}
-]
-
 export const fetchMetadata = createAsyncThunk(
   `metadata/fetch`,
   async ({longitude, latitude}, thunkAPI) => {
     try {
       const _metadata = await SystemApi.fetchMetadata()
-      // const _districts = await SystemApi.fetchDistrict()
-      const _nearby = await RestaurantApi.filter(1, 25, 5, undefined, '', undefined, 2, undefined)
-      // return {..._metadata, ..._nearby, districts: _districts.city.districts}
-      return {..._metadata, ..._nearby, districts}
+      const _city = await SystemApi.getCity(longitude, latitude)
+      const _districts = await SystemApi.fetchDistrict(_city.city?.id)
+      const _nearby = await RestaurantApi.filter(1, 25, 5, undefined, '', undefined, 2, {
+        latitude,
+        longitude
+      }, undefined, undefined, _city.city?.id || 5)
+      return {..._metadata, ..._nearby, districts: _districts.city.districts, ..._city}
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message)
     }

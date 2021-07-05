@@ -100,7 +100,7 @@ export default function OrderStatus() {
     updatedAt,
     driverInfo,
     restaurantId,
-    delivery: {restaurantName, restaurantAddress, shippingFee, status, driverId}
+    delivery: {restaurantName, restaurantAddress, shippingFee, status, driverId, deliveredAt}
   } = data;
 
   return (
@@ -134,7 +134,7 @@ export default function OrderStatus() {
               </Typography>
               <Box textAlign={"center"} mb={1}>
                 <Typography variant={"h5"}>
-                  <Box fontSize={12} color={`onSurface.mediumEmphasis`}>{datetimeFormatter(new Date(updatedAt))}</Box>
+                  <Box fontSize={12} color={`onSurface.mediumEmphasis`}>{datetimeFormatter(new Date(deliveredAt || updatedAt))}</Box>
                 </Typography>
               </Box>
               <Grid container justify="center" alignItems="center">
@@ -173,6 +173,9 @@ export default function OrderStatus() {
               avatar={driverInfo.avatar}
               name={driverInfo?.name}
               licensePlate={driverInfo?.licensePlate}
+              // avatar={"https://www.shareicon.net/data/128x128/2016/06/27/787157_people_512x512.png"}
+              // name={"Nguyễn Thị Bích Ngọc"}
+              // licensePlate={"70LA-0582"}
             />
           </Box>
         )}
@@ -190,6 +193,7 @@ export default function OrderStatus() {
                   <MoneyItem label="Thanh toán bằng" rightNode={
                     <Typography variant="h4">
                       <Box fontSize={12}>{paymentConstant[paymentType].name}</Box>
+                      {/*<Box fontSize={12}>PayPal</Box>*/}
                     </Typography>
                   }/>
                 </Box>

@@ -14,11 +14,11 @@ export default function PlaceHolder({icon, text}) {
   return (
     <Grid direction="column" alignItems="center" justify="flex-end" className={classes.root} container>
       <Grid item>
-        <Box mx="auto" fontSize={128} color="secondary.l0" component={icon}/>
+        <Box mx="auto" style={{fontSize: 128}} color="secondary.l0" component={icon}/>
       </Grid>
       <Grid item>
         <Typography variant="h4">
-          <Box fontSize={24} color="onSurface.disabled">{text}</Box>
+          <Box fontSize={20} color="onSurface.disabled">{text}</Box>
         </Typography>
       </Grid>
     </Grid>

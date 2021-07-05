@@ -13,10 +13,12 @@ export const filterRestaurant = createAsyncThunk(
            categoryIds,
            filterIds,
            sortId,
-           areaIds
+           areaIds,
+           cityId = 5,
+           position
          }, thunkAPI) => {
     try {
-      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, undefined, filterIds, areaIds)
+      const data = await RestaurantApi.filter(pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, position, filterIds, areaIds, cityId)
       return {...data, append}
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message)

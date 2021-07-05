@@ -31,13 +31,13 @@ async function setDefaultAddress(customerID, customerAddressID) {
   }
 }
 
-async function fetchDistrict() {
+async function fetchDistrict(cityId) {
   try {
     const res = await axios.post(
       `${BASEURL}/geocode/get-districts`,
-      {cityId: 5},
+      {cityId},
       {headers: authHeader()}
-  );
+    );
     return res.data.data;
   } catch (error) {
     if (error.response) {
@@ -48,8 +48,27 @@ async function fetchDistrict() {
   }
 }
 
+async function getCity(longitude, latitude) {
+  try {
+    const res = await axios.post(
+      `${BASEURL}/geocode/get-city`,
+      {position: {longitude, latitude}},
+      {headers: authHeader()}
+    );
+    return res.data.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("Lỗi máy chủ");
+    } else {
+      throw new Error(`Không có kết nối đến máy chủ`);
+    }
+  }
+}
+
+
 export const SystemApi = {
   fetchMetadata,
   setDefaultAddress,
   fetchDistrict,
+  getCity
 }

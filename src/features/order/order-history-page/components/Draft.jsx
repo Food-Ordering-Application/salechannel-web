@@ -83,7 +83,7 @@ export default function Draft({
       </Box>
       <Box hidden={isLoading}>
         <Box hidden={isLoading || (isSuccess && draft.length !== 0)}>
-          <PlaceHolder icon={ReceiptTwoTone} text={`Không có đơn hàng nào`}/>
+          <PlaceHolder icon={ReceiptTwoTone} text={`Không có đơn hàng`}/>
         </Box>
         {draft.map(({
                       id,
@@ -91,7 +91,7 @@ export default function Draft({
                       subTotal,
                       restaurantId,
                       feedback,
-                      delivery: {restaurantName, restaurantAddress, updatedAt, status},
+                      delivery: {restaurantName, restaurantAddress, deliveredAt, updatedAt, status},
                       invoice
                     }) => (
           <OrderHistoryItem
@@ -99,7 +99,7 @@ export default function Draft({
             status={status}
             name={restaurantName}
             paymentMethod={invoice?.payment?.method}
-            date={updatedAt}
+            date={deliveredAt || updatedAt}
             cost={grandTotal || subTotal}
             onClick={() => onItemClick(id, restaurantId)}
             draftText={draftName}

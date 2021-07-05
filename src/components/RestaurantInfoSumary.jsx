@@ -63,7 +63,7 @@ export default function RestaurantInfoSumary({id, name, address, distance, ratin
             <Grid item>
               <Typography variant="h5">
                 <Box fontSize={12}>
-                  {rating && numRate && `${rating} ${numRateFormatter(rating)}`}
+                  {rating && numRate && `${rating} ${numRateFormatter(numRate)}`}
                 </Box>
               </Typography>
             </Grid>

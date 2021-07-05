@@ -1,8 +1,8 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Avatar, Box, Grid, IconButton, Paper, Typography} from "@material-ui/core";
-import LocationIcon from "../../../../asserts/icons/Location";
 import {Link} from "react-router-dom";
+import {LocationOn} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +43,7 @@ export default function RiderInfo({id, avatar, name, licensePlate, orderId}) {
         </Grid>
         <Grid item>
           <IconButton component={Link} to={`/order/${orderId}/location`}>
-            <LocationIcon color="primary"/>
+            <LocationOn color="primary"/>
           </IconButton>
         </Grid>
       </Grid>

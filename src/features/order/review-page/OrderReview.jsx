@@ -181,12 +181,14 @@ export default function OrderReview() {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Avatar src={order.driverInfo?.avatar} className={classes.avatar}/>
+                  {/*<Avatar src={order.driverInfo?.avatar} className={classes.avatar}/>*/}
+                  <Avatar src={"https://www.shareicon.net/data/128x128/2016/06/27/787157_people_512x512.png"} className={classes.avatar}/>
                 </Grid>
                 <Grid item>
                   <Typography variant="h5">
                     <Box textAlign={`center`} m={2}>
-                      {`Tài xế: ${order.driverInfo?.name}`}
+                      {/*{`Tài xế: ${order.driverInfo?.name}`}*/}
+                      {`Tài xế: ${"Nguyễn Thị Bích Ngọc"}`}
                     </Box>
                   </Typography>
                 </Grid>

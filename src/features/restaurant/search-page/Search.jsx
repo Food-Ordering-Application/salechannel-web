@@ -21,6 +21,7 @@ import Spinner from "../../common/Spinner";
 import {metadataSelector} from "../../home/MetadataSlice";
 import {locationSelector} from "../../home/LocationSlice";
 import RestaurantFilter from "./components/Filter";
+import PlaceHolder from "../../common/PlaceHolder";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,6 +47,7 @@ export default function Search() {
   const classes = useStyles();
   const {
     data: restaurants,
+    isSuccess: rOK,
     isFetching,
     isError,
     errorMessage,
@@ -64,7 +66,17 @@ export default function Search() {
 
   const search = function (name, area) {
     dispatch(clearRestaurantsListState());
-    dispatch(filterRestaurant({pageIndex: 1, area: area, categoryIds, name, sortId, filterIds, areaIds}));
+    dispatch(filterRestaurant({
+      pageIndex: 1,
+      area: area,
+      categoryIds,
+      name,
+      sortId,
+      filterIds,
+      areaIds,
+      cityId: metadata.city?.id,
+      position: userLocation
+    }));
   };
 
   const handleBack = () => {
@@ -105,8 +117,7 @@ export default function Search() {
   }, [])
 
   if (!mReady || !lReady) {
-    history.replace('/')
-    return null
+    history.replace('/location/analyse', {ref: `/search`})
   }
 
   const centerComponent = (
@@ -126,6 +137,9 @@ export default function Search() {
                         centerComponent={centerComponent}
                         bottomComponent={<RestaurantFilter onSubmit={() => search(name, area)}/>}
       />
+      {rOK && restaurants.length === 0 && (
+        <PlaceHolder icon={SearchIcon} text={"Không tìm thấy nhà hàng"}/>
+      )}
       <InfiniteScroll
         next={() => dispatch(filterRestaurant({append: true, pageIndex: 1, area: area, name: ""}))}
         hasMore={false}
