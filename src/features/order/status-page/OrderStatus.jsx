@@ -19,6 +19,7 @@ import {DriverApi} from "../../../api/RiderApi";
 import {ChevronRight, Print} from "@material-ui/icons";
 import {shortTimeFormatter} from "../../../untils/formatter";
 import Ribbon from "../../common/Ribbon";
+import {invoiceStatus} from "../../../constants/invoiceStatus";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -74,7 +75,7 @@ export default function OrderStatus() {
 
   useEffect(() => {
     // if (!isSuccess) {
-      dispatch(fetchOrderData({orderId}));
+    dispatch(fetchOrderData({orderId}));
     // }
   }, []);
 
@@ -207,6 +208,13 @@ export default function OrderStatus() {
                   <MoneyItem label="Thanh toán bằng" rightNode={
                     <Typography variant="h4">
                       <Box fontSize={12}>{paymentConstant[invoice.payment?.method || `PAYPAL`].name}</Box>
+                    </Typography>
+                  }/>
+                </Box>
+                <Box pb={1.5}>
+                  <MoneyItem label="Tình trạng thanh toán" rightNode={
+                    <Typography variant="h4">
+                      <Box fontSize={12}>{invoiceStatus[invoice?.status || `SUCCESS`].name}</Box>
                     </Typography>
                   }/>
                 </Box>

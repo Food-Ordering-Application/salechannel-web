@@ -1,6 +1,8 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import RestaurantApi from "../../api/RestaurantApi";
 
+const ROW_PER_PAGE = 25
+
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
   async ({
