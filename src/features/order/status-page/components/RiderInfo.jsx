@@ -36,7 +36,7 @@ export default function RiderInfo({id, avatar, name, licensePlate, orderId}) {
           <Box pl={1}>
             <Typography variant="h6">
               {/*<Box className={classes.name}>{name}</Box>*/}
-              <Box className={classes.name}>"Nguyễn Thị Bích Ngọc"</Box>
+              <Box className={classes.name}>Nguyễn Thị Bích Ngọc</Box>
             </Typography>
             <Typography variant="h4">
               {/*<Box className={classes.plate}>{licensePlate}</Box>*/}
