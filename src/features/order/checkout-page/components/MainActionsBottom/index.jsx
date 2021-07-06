@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {Box, Button, Divider, Grid, Typography} from '@material-ui/core';
+import {Box, Button, Grid, Typography} from '@material-ui/core';
 import {ExpandLess} from '@material-ui/icons';
 import {currencyFormatter} from '../../../../../untils/formatter';
 import {useSelector} from "react-redux";
@@ -57,7 +57,7 @@ export default function MainActionsBottom({
             <Button variant="text" fullWidth onClick={handlePaymentChange}>
               <Grid container alignItems="center">
                 <Grid item>
-                  <Box component={mapPaymentIcon(paymentType)}/>
+                  <Box component={mapPaymentIcon(paymentType)} style={{width: 40}}/>
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h5">
@@ -107,7 +107,7 @@ export default function MainActionsBottom({
           {paymentType === paymentConstant.PAYPAL.code && <Grid item xs>
             <PayPalButtonComponent orderId={orderId} note={"note"} disabled={disablePlaceOrder}/>
           </Grid>}
-          {paymentType === paymentConstant.ZALOPAY.code&&<Grid item xs>
+          {paymentType === paymentConstant.ZALOPAY.code && <Grid item xs>
             <Button
               variant="contained"
               color="primary"

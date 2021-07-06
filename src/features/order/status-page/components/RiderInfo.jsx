@@ -29,15 +29,18 @@ export default function RiderInfo({id, avatar, name, licensePlate, orderId}) {
     <Paper key={id} className={classes.root}>
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
-          <Avatar src={avatar || `https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg`}/>
+          {/*<Avatar src={avatar || `https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg`}/>*/}
+          <Avatar src="https://www.shareicon.net/data/128x128/2016/06/27/787157_people_512x512.png"/>
         </Grid>
         <Grid item xs>
           <Box pl={1}>
             <Typography variant="h6">
-              <Box className={classes.name}>{name}</Box>
+              {/*<Box className={classes.name}>{name}</Box>*/}
+              <Box className={classes.name}>"Nguyễn Thị Bích Ngọc"</Box>
             </Typography>
             <Typography variant="h4">
-              <Box className={classes.plate}>{licensePlate}</Box>
+              {/*<Box className={classes.plate}>{licensePlate}</Box>*/}
+              <Box className={classes.plate}>{"70LA-0587"}</Box>
             </Typography>
           </Box>
         </Grid>

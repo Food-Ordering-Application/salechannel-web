@@ -73,9 +73,9 @@ export default function OrderStatus() {
   }, []);
 
   useEffect(() => {
-    if (!isSuccess) {
+    // if (!isSuccess) {
       dispatch(fetchOrderData({orderId}));
-    }
+    // }
   }, []);
 
   useEffect(() => {
@@ -101,6 +101,7 @@ export default function OrderStatus() {
     driverInfo,
     restaurantId,
     invoice,
+    feedback,
     delivery: {restaurantName, restaurantAddress, shippingFee, status, driverId, deliveredAt}
   } = data;
 
@@ -220,6 +221,15 @@ export default function OrderStatus() {
             Gọi trợ giúp?
           </BottomButton>
         </Box>
+        {status === orderConstant.COMPLETED.code && !feedback && (
+          <BottomButton
+            variant={`contained`}
+            onClick={() => history.push(`/order/${orderId}/review`, {step: 2})}
+          >
+            Đánh giá nhà hàng
+          </BottomButton>
+        )
+        }
       </Box>
       }
     </>

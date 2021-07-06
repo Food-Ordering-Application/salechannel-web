@@ -141,7 +141,8 @@ export default function OrderReview() {
       OrderApi.rateDriver(orderId, reasonIds, rating, review)
         .then((data) => {
           dispatch(showSuccess("Cảm ơn bạn đã đánh giá tài xế!"))
-          history.replace("/")
+          // history.replace("/")
+          history.goBack()
         })
         .catch((e) => {
           dispatch(showError(e.message))
