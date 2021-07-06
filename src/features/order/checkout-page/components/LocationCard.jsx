@@ -38,9 +38,9 @@ export default function LocationCard({location, handleChange}) {
             </Typography>
           </Grid>
           <Grid item>
-            {/*<Button variant="text" color="primary">*/}
-            {/*  <Box fontSize={12} lineHeight="normal">Thay đổi</Box>*/}
-            {/*</Button>*/}
+            <Button variant="text" color="primary">
+              <Box fontSize={12} lineHeight="normal">Thay đổi</Box>
+            </Button>
           </Grid>
         </Grid>
         <Typography variant="h6">
