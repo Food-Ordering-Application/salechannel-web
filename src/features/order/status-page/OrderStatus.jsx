@@ -20,6 +20,7 @@ import {ChevronRight, Print} from "@material-ui/icons";
 import {shortTimeFormatter} from "../../../untils/formatter";
 import Ribbon from "../../common/Ribbon";
 import {invoiceStatus} from "../../../constants/invoiceStatus";
+import {checkAllowReview} from "../order-history-page/components/Draft";
 
 const useStyles = makeStyles((theme) => ({
   helpBtn: {
@@ -229,7 +230,7 @@ export default function OrderStatus() {
             Gọi trợ giúp?
           </BottomButton>
         </Box>
-        {status === orderConstant.COMPLETED.code && !feedback && (
+        {status === orderConstant.COMPLETED.code && !feedback && checkAllowReview(new Date(updatedAt), new Date()) && (
           <BottomButton
             variant={`contained`}
             onClick={() => history.push(`/order/${orderId}/review`, {step: 2})}

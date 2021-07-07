@@ -7,7 +7,7 @@ const RestaurantApi = {
   filter: async (pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, position, filterIds, areaIds, cityId) => {
     try {
       return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {
-        page: 1,
+        page: pageIndex,
         size: rowsPerPage,
         area: area,
         category: category,

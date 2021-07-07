@@ -78,7 +78,7 @@ export default function OrderReview() {
 
   useEffect(() => {
     if (!mOK) {
-      history.replace('/location/analyse', {ref: location.pathname})
+      history.replace('/location/analyse', {ref: location.pathname, step: location.state?.step})
     } else {
       const {feedbackReason} = mData
       const filtered = feedbackReason

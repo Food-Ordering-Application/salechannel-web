@@ -54,7 +54,8 @@ export default function Search() {
     categoryIds,
     sortId,
     filterIds,
-    areaIds
+    areaIds,
+    hasMore
   } = useSelector(restaurantsListSelector);
   const {isSuccess: mReady, data: metadata} = useSelector(metadataSelector)
   const {isSuccess: lReady, location: userLocation} = useSelector(locationSelector)
@@ -64,8 +65,11 @@ export default function Search() {
 
   const [name, setName] = useState(``);
 
+  const [page, setPage] = useState(1)
+
   const search = function (name, area) {
     dispatch(clearRestaurantsListState());
+    setPage(1)
     dispatch(filterRestaurant({
       pageIndex: 1,
       area: area,
@@ -124,6 +128,8 @@ export default function Search() {
     <InputBase className={classes.textField}
                placeholder="Tìm kiếm cửa hàng, món ăn"
                onChange={handleTextChange}
+               onFocus={(e) => e.target.select()}
+               value={name}
                fullWidth
                autoFocus
     />
@@ -141,11 +147,26 @@ export default function Search() {
         <PlaceHolder icon={SearchIcon} text={"Không tìm thấy nhà hàng"}/>
       )}
       <InfiniteScroll
-        next={() => dispatch(filterRestaurant({append: true, pageIndex: 1, area: area, name: ""}))}
-        hasMore={false}
+        next={() => {
+          setPage(page + 1)
+          dispatch(filterRestaurant({
+            pageIndex: page + 1,
+            area: area,
+            categoryIds,
+            name,
+            sortId,
+            filterIds,
+            areaIds,
+            cityId: metadata.city?.id,
+            position: userLocation,
+            append: true,
+          }));
+        }}
+        hasMore={hasMore}
         loader={<Skeleton height={82} count={10} className={classes.skeleton}/>}
         dataLength={restaurants.length}
         className={classes.container}
+        scrollThreshold={0.60}
       >
         {restaurants.map(({id, name, address, coverImageUrl, rating, numRate, merchantIdInPayPal, position}) => (
           <Box key={id} mb={2}>

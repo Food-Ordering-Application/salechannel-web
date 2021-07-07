@@ -233,8 +233,8 @@ export const OrderApi = {
   fetchDraft: async (offset, limit) => {
     try {
       const response = await axios.post(
-        `${BASEURL}/order/get-drafts`,
-        {offset, limit},
+        `${BASEURL}/order/get-drafts?offset=${offset}&limit=${limit}`,
+        {},
         {headers: authHeader()}
       );
       return response.data.data;
@@ -247,10 +247,10 @@ export const OrderApi = {
       }
     }
   },
-  fetchHistory: async (filter = `COMPLETED`, from = `2021-01-01T17:15:33.558Z`, to = new Date().toISOString()) => {
+  fetchHistory: async (offset, limit, filter = `COMPLETED`, from = `2021-01-01T17:15:33.558Z`, to = new Date().toISOString()) => {
     try {
       const response = await axios.post(
-        `${BASEURL}/order/get-history`,
+        `${BASEURL}/order/get-history?offset=${offset}&limit=${limit}`,
         {filter, from, to},
         {headers: authHeader()}
       );
@@ -267,8 +267,8 @@ export const OrderApi = {
   fetchOnOnGoing: async (offset, limit) => {
     try {
       const response = await axios.post(
-        `${BASEURL}/order/get-ongoing`,
-        {offset, limit},
+        `${BASEURL}/order/get-ongoing?offset=${offset}&limit=${limit}`,
+        {},
         {headers: authHeader()}
       );
       return response.data.data;
@@ -292,7 +292,7 @@ export const OrderApi = {
     } catch (e) {
       const response = e.response;
       if (response) {
-        if(response.status === 400)
+        if (response.status === 400)
           throw new Error('Không thể đánh giá đơn hàng sau 3 ngày')
         throw new Error(`Lỗi máy chủ, vui lòng liên hệ quản trị viên`)
       } else {
@@ -311,7 +311,7 @@ export const OrderApi = {
     } catch (e) {
       const response = e.response;
       if (response) {
-        if(response.status === 400)
+        if (response.status === 400)
           throw new Error('Không thể đánh giá đơn hàng sau 3 ngày')
         throw new Error(`Lỗi máy chủ, vui lòng liên hệ quản trị viên`)
       } else {

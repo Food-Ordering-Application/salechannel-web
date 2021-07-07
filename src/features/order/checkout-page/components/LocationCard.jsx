@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Button, Grid, Typography} from "@material-ui/core";
+import {Box, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import Ribbon from "../../../common/Ribbon";
 
@@ -31,16 +31,16 @@ export default function LocationCard({location, handleChange}) {
         <Typography variant="h4">
           <Box fontSize={12} color="onSurface.mediumEmphasis">Giao đến</Box>
         </Typography>
-        <Grid container alignItems="baseline" justify="space-between">
+        <Grid container alignItems="flex-start" justify="space-between">
           <Grid item>
             <Typography variant="h3">
               <Box fontSize={18} color="onSurface.highEmphasis">{street}</Box>
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="text" color="primary">
-              <Box fontSize={12} lineHeight="normal">Thay đổi</Box>
-            </Button>
+            <Typography variant="h4">
+              <Box fontSize={12} lineHeight="normal" color={"primary.main"}>Thay đổi</Box>
+            </Typography>
           </Grid>
         </Grid>
         <Typography variant="h6">

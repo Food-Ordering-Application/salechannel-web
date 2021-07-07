@@ -6,7 +6,7 @@ const ROW_PER_PAGE = 25
 export const filterRestaurant = createAsyncThunk(
   `restaurants/filter`,
   async ({
-           pageIndex,
+           pageIndex = 1,
            rowsPerPage = 25,
            area,
            category,
@@ -34,13 +34,14 @@ export const restaurantsListSlice = createSlice({
     isFetching: false,
     isSuccess: false,
     isError: false,
+    hasMore: false,
     errorMessage: '',
     position: {
       latitude: null,
       longitude: null,
     },
     data: [],
-    sortId: null,
+    sortId: undefined,
     filterIds: [],
     areaIds: [],
     categoryIds: [],
@@ -84,6 +85,7 @@ export const restaurantsListSlice = createSlice({
     [filterRestaurant.fulfilled]: (state, {meta: {arg}, payload}) => {
       state.isFetching = false;
       state.isSuccess = true;
+      state.hasMore = payload.restaurants.length === ROW_PER_PAGE;
       if (arg?.append) {
         state.data = [...(state.data), ...(payload.restaurants)];
       } else {
