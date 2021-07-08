@@ -6,7 +6,7 @@ const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PR
 const RestaurantApi = {
   filter: async (pageIndex, rowsPerPage, area, category, name, categoryIds, sortId, position, filterIds, areaIds, cityId) => {
     try {
-      return (await axios.post(`${BASEURL}/restaurant/some-restaurant`, {
+      return (await axios.post(`${BASEURL}/restaurant/search`, {
         page: pageIndex,
         size: rowsPerPage,
         area: area,
@@ -16,7 +16,7 @@ const RestaurantApi = {
         categoryIds,
         sortId,
         position,
-        filterIds,
+        // filterIds,
         areaIds
       })).data.data;
     } catch (error) {

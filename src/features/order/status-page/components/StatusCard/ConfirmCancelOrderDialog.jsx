@@ -14,18 +14,27 @@ export default function ConfirmCancelOrderDialog({open, onClose, onConfirm}) {
       </DialogTitle>
       <DialogContent>
         <Typography variant={`body1`}>
-          Bạn có chắc muốn hủy đơn chứ?
+          {/*Bạn có chắc muốn hủy đơn chứ?*/}
+          Chức năng đang hoàn thiện
         </Typography>
       </DialogContent>
       <Box mb={2}/>
       <DialogActions>
+        {/*<Button*/}
+        {/*  onClick={() => onClose()}*/}
+        {/*  children={`Giữ lại`}*/}
+        {/*  color={`primary`}*/}
+        {/*/>*/}
+        {/*<Button*/}
+        {/*  children={`Hủy đơn`}*/}
+        {/*  color={`primary`}*/}
+        {/*  onClick={() => {*/}
+        {/*    onClose();*/}
+        {/*    onConfirm();*/}
+        {/*  }}*/}
+        {/*/>*/}
         <Button
-          onClick={() => onClose()}
-          children={`Giữ lại`}
-          color={`primary`}
-        />
-        <Button
-          children={`Hủy đơn`}
+          children={`OK`}
           color={`primary`}
           onClick={() => {
             onClose();

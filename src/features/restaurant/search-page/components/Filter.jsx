@@ -88,7 +88,7 @@ export default function RestaurantFilter({onSubmit}) {
               </Grid>
               <Grid item xs>
                 <FormControl fullWidth>
-                  <Select value={sortId || ""}
+                  <Select value={sortId}
                           onChange={(event) => {
                             dispatch(changeSort({id: event.target.value}))
                           }}

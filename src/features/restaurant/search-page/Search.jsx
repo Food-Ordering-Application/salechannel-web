@@ -117,7 +117,17 @@ export default function Search() {
 
   useEffect(() => {
     if (categoryIds?.length > 0)
-      dispatch(filterRestaurant({categoryIds}))
+      dispatch(filterRestaurant({
+        pageIndex: 1,
+        area: area,
+        categoryIds,
+        name,
+        sortId,
+        filterIds,
+        areaIds,
+        cityId: metadata.city?.id,
+        position: userLocation
+      }));
   }, [])
 
   if (!mReady || !lReady) {
