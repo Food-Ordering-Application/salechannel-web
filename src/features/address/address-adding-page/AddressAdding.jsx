@@ -15,6 +15,7 @@ import PlaceHolder from "../../common/PlaceHolder";
 import Ribbon from "../../common/Ribbon";
 import AddressItemLarge from "./components/AddressItemLarge";
 import {setDefaultLocation} from "../../home/LocationSlice";
+import {addressToLocationV2} from "../../../helpers/location";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -53,18 +54,18 @@ export default function AddressAdding() {
     //   const location = data.items[0]?.position || {lat: 10.762511912115652, lng: 106.68161304112337};
     //   submitAddress(address, location)
     // })
-    geocodeByAddress(address)
-      .then((geocode) => getLatLng(geocode[0]))
-      .then((location) => submitAddress(address, location))
-      .catch((error) => console.log(error));
-    // addressToLocationV2(address)
-    //   .then(({items}) => {
-    //     submitAddress(address, items[0]?.position)
-    //   })
-    //   .catch((e) => {
-    //     console.log(e)
-    //     history.goBack()
-    //   })
+    // geocodeByAddress(address)
+    //   .then((geocode) => getLatLng(geocode[0]))
+    //   .then((location) => submitAddress(address, location))
+    //   .catch((error) => console.log(error));
+    addressToLocationV2(address)
+      .then(({items}) => {
+        submitAddress(address, items[0]?.position)
+      })
+      .catch((e) => {
+        console.log(e)
+        history.goBack()
+      })
   };
 
   const submitAddress = (address, location) => {

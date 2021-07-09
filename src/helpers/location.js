@@ -27,7 +27,7 @@ export function getCurrentLocation(options) {
 
 export async function getAddress(lng, lat) {
   try {
-    return '280 An Dương Vương, Phường 4, Quận 5, Thành phố Hồ Chí Minh'
+    // return '25 Đường số 3, Đá Hàng, Hiệp Thạnh, Gò Dầu, Tây Ninh'
     const {data: {results}} = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=vi&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
     if (results[0])
       return results[0]?.formatted_address;

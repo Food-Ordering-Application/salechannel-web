@@ -52,8 +52,7 @@ export default function LocationAdding() {
   const history = useHistory();
   const {id: userId} = useSelector(userSelector);
   const {isPending, isError, isSuccess, errorMessage} = useSelector(addressSelector);
-
-  const [location, setLocation] = useState({lat: 10.7626700137507, lng: 106.68162377003272});
+  const [location, setLocation] = useState({lat: 11.151832644585498, lng: 106.23649226818311});
   const [address, setAddress] = useState(``);
 
   const handleSubmitLocation = () => {
